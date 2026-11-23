@@ -25,12 +25,16 @@ def main() -> None:
     snapshot_download(cfg.translation.en_ur_model)
     dest = ROOT / "models"
     dest.mkdir(parents=True, exist_ok=True)
-    path = hf_hub_download(
-        repo_id=cfg.llm.gguf_repo,
-        filename=cfg.llm.gguf_filename,
-        local_dir=str(dest),
-    )
-    print("gguf", path)
+    profiles = cfg.llm.profiles or {
+        "default": {"gguf_repo": cfg.llm.gguf_repo, "gguf_filename": cfg.llm.gguf_filename}
+    }
+    for name, profile in profiles.items():
+        path = hf_hub_download(
+            repo_id=profile["gguf_repo"],
+            filename=profile["gguf_filename"],
+            local_dir=str(dest),
+        )
+        print(name, path)
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 
 from mira.config import Config
 from mira.generate import GenerationCache, build_messages, fit_passages, generate
-from mira.grounding import GroundingResult, ground_answer, parse_citation_ids
+from mira.grounding import GroundingResult, best_extractive_sentence, ground_answer, parse_citation_ids
 from mira.indexing import IndexStore
 from mira.retrieve import search
 from mira.textnorm import detect_language
@@ -45,6 +45,7 @@ class AskResult:
     timings_ms: dict[str, float] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
     cache_hit: bool = False
+    answer_mode: str = "abstain"
 
     def to_dict(self) -> dict:
         return {
@@ -64,6 +65,7 @@ class AskResult:
             "timings_ms": self.timings_ms,
             "warnings": self.warnings,
             "cache_hit": self.cache_hit,
+            "answer_mode": self.answer_mode,
         }
 
 
@@ -117,6 +119,7 @@ def _finish_abstain(
     timings: dict[str, float],
     warnings: list[str],
     raw_answer: str = "",
+    answer_mode: str = "abstain",
 ) -> AskResult:
     return AskResult(
         question=question,
@@ -134,6 +137,7 @@ def _finish_abstain(
         translated_query=translated_query,
         timings_ms=timings,
         warnings=warnings,
+        answer_mode=answer_mode,
     )
 
 
@@ -243,51 +247,107 @@ def ask(
         embedding_threshold=cfg.grounding.embedding_threshold,
         embedding_matrix=embedding_matrix,
         embed_text=embed_text if embedding_matrix is not None else None,
+        question=question,
+        rank_order=[item.chunk.chunk_id for item in retrieved],
     )
     timings["ground"] = (time.perf_counter() - started) * 1000
+    answer_mode = "generated"
+    english_answer = grounded.english_answer
+    judgements = grounded.judgements
+    dropped = grounded.dropped
     if grounded.abstained:
-        return _finish_abstain(
-            question,
-            language,
-            method,
-            grounded.reason or "abstained",
-            retrieved_dicts,
-            translated,
-            timings,
-            warnings,
-            raw_answer=raw,
-        )
+        extracted = None
+        if runtime.embed_claim is not None:
+            extracted = best_extractive_sentence(
+                [(item.chunk.chunk_id, item.chunk.text) for item in retrieved],
+                question,
+                embed_text,
+                cfg.grounding.extractive_min_cosine,
+            )
+        if extracted is None:
+            return _finish_abstain(
+                question,
+                language,
+                method,
+                grounded.reason or "abstained",
+                retrieved_dicts,
+                translated,
+                timings,
+                warnings,
+                raw_answer=raw,
+            )
+        sentence, chunk_id, support = extracted
+        answer_mode = "extractive"
+        english_answer = f"{sentence} [{chunk_id}]"
+        judgements = []
+        dropped = grounded.dropped
+        warnings.append(f"Draft was not usable; showing a retrieved sentence (cosine {support:.2f}).")
 
-    final = grounded.english_answer
-    if language == "ur" and detect_language(final) != "ur":
-        if runtime.translate is None:
-            warnings.append("The answer stayed in English because no Urdu translation model is loaded.")
-        else:
-            started = time.perf_counter()
-            try:
-                final = _translate_preserving_citations(final, runtime.translate)
-            except Exception as exc:
-                warnings.append(f"Urdu answer translation failed ({exc}). The English answer is shown.")
-                final = grounded.english_answer
-            timings["translate_answer"] = (time.perf_counter() - started) * 1000
+    final = english_answer
+    if language == "ur" and detect_language(strip_for_language(final)) != "ur":
+        final = _bilingual_urdu(english_answer, runtime, warnings, timings)
     return AskResult(
         question=question,
         language=language,
         method=method,
         answer=final,
         raw_answer=raw,
-        english_answer=grounded.english_answer,
+        english_answer=english_answer,
         abstained=False,
         abstain_reason=None,
         retrieved=retrieved_dicts,
         citation_ids=parse_citation_ids(final),
-        judgements=[_judgement_dict(item) for item in grounded.judgements],
-        dropped=[_judgement_dict(item) for item in grounded.dropped],
+        judgements=[_judgement_dict(item) for item in judgements],
+        dropped=[_judgement_dict(item) for item in dropped],
+        answer_mode=answer_mode,
         translated_query=translated,
         timings_ms=timings,
         warnings=warnings,
         cache_hit=cache_hit,
     )
+
+
+def strip_for_language(text: str) -> str:
+    from mira.grounding import CITE_RE
+
+    return CITE_RE.sub(" ", text)
+
+
+def _translation_ok(source: str, translated: str) -> bool:
+    import re
+
+    from mira.grounding import strip_citations
+
+    if detect_language(translated) != "ur":
+        return False
+    if sum(ch.isdigit() for ch in translated) >= 8 or translated.count("0") >= 4:
+        return False
+    tokens = re.findall(r"[A-Za-z][A-Za-z0-9\-]{2,}|\d{2,}", strip_citations(source))
+    if not tokens:
+        return True
+    lowered = translated.lower()
+    kept = sum(1 for token in tokens if token.lower() in lowered)
+    return kept / len(tokens) >= 0.34
+
+
+def _bilingual_urdu(english_answer: str, runtime: Runtime, warnings: list[str], timings: dict[str, float]) -> str:
+    from mira.grounding import CITE_RE, strip_citations
+
+    translated = None
+    if runtime.translate is not None:
+        started = time.perf_counter()
+        try:
+            translated = _translate_preserving_citations(english_answer, runtime.translate)
+        except Exception as exc:
+            warnings.append(f"Urdu answer translation failed ({exc}).")
+        timings["translate_answer"] = (time.perf_counter() - started) * 1000
+    if translated and _translation_ok(english_answer, translated):
+        return translated
+    warnings.append("The Urdu wording was unreliable, so the answer keeps the English source sentence.")
+    body = strip_citations(english_answer).strip().rstrip(".")
+    cites = " ".join(f"[{cid}]" for cid in CITE_RE.findall(english_answer))
+    framed = f"انگریزی ماخذ کے مطابق: {body}."
+    return f"{framed} {cites}".strip()
 
 
 def _translate_preserving_citations(text: str, translate) -> str:

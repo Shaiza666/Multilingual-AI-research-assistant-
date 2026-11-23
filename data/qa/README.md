@@ -1,9 +1,9 @@
 # Question set
 
-`gold.json` is the reported test set: 32 questions (12 English answerable, 12 Urdu translations of those questions, 4 English unanswerable, 4 Urdu translations of the unanswerable questions).
+`gold.json` is the reported test set. It contains English questions, Urdu translations of those questions, and unanswerable questions in both languages. The exact counts are in the file's `counts` object.
 
-`pilot.json` has 8 disjoint questions and is used only to choose the evidence-gate threshold. Pilot questions are not scored in the tables.
+`pilot.json` is disjoint. It is used only to set the per-method evidence-gate threshold and is not included in the reported scores.
 
-The three source papers are listed in `data/papers/catalog.json`. Each PDF states a CC BY 4.0 licence. Page numbers are the PDF page numbers, starting at 1. Every answerable item has an `evidence_quotes` field, and the unit tests check that each quotation occurs on a cited page of the extracted text.
+Nine documents are research papers. Three state CC BY 4.0 on the PDF. Six are ACL Anthology papers from 2019–2024; the Anthology licenses materials published in or after 2016 under CC BY 4.0. One further document is the Urdu Wikipedia article مصنوعی ذہانت, revision 11740367, under CC BY-SA 4.0. Questions with `corpus` set to `urdu_doc` ask about that article, including English questions over Urdu text.
 
-Urdu items are translations of the English items, with the same gold pages. There was no second annotator. The set is a project diagnostic, not a community benchmark.
+Urdu items are translations of the English items. There was no second annotator. Each answerable item has an `evidence_quotes` field, and the tests check that the quotation occurs on a cited page.

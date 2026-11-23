@@ -2,6 +2,7 @@ from mira.grounding import (
     citation_existence_precision,
     citation_page_precision,
     ground_answer,
+    is_question_echo,
     is_supported,
     lexical_support,
 )
@@ -38,6 +39,31 @@ def test_lexical_support_and_thresholds():
     assert is_supported(score, None, 0.35, 0.82) is True
     assert is_supported(0.1, 0.9, 0.35, 0.82) is True
     assert is_supported(0.1, 0.5, 0.35, 0.82) is False
+
+
+def test_question_echo_is_dropped_even_if_the_topic_matches():
+    passages = {"paper::p1::c0": "Multi-Index Semantic Hashing learns binary hash codes."}
+    result = ground_answer(
+        "MISH کس کا مخفف ہے۔",
+        passages,
+        question="MISH کس کا مخفف ہے؟",
+    )
+    assert result.abstained is True
+
+
+def test_supported_sentence_cites_the_better_ranked_chunk():
+    text = "Multi-Index Semantic Hashing is an unsupervised hashing model for documents."
+    passages = {
+        "a::p1::c0": text,
+        "b::p9::c0": text + " Extra repeated wording does not change the fact.",
+    }
+    result = ground_answer(
+        "Multi-Index Semantic Hashing is an unsupervised hashing model for documents.",
+        passages,
+        rank_order=["b::p9::c0", "a::p1::c0"],
+    )
+    assert "b::p9::c0" in result.answer
+    assert "a::p1::c0" not in result.answer
 
 
 def test_citation_precision_counts_hallucinated_ids():

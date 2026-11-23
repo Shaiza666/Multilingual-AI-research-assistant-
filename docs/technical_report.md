@@ -10,17 +10,11 @@ The project compares six retrieval methods on one fixed question set and records
 
 ## 2. Corpus and questions
 
-The corpus is three CC BY 4.0 papers downloaded at a pinned arXiv version:
+The corpus is nine research papers and one Urdu encyclopedia article. Three papers state CC BY 4.0 on the PDF: arXiv:2103.14460v1, arXiv:2103.14455v1, and arXiv:2106.16239v9. Six are ACL Anthology papers from 2019–2024 (N19-1423, D19-1410, 2020.acl-main.703, 2020.emnlp-main.550, 2023.acl-short.24, 2024.acl-short.8). The Anthology licenses material published in or after 2016 under CC BY 4.0. The Urdu document is Wikipedia article مصنوعی ذہانت, revision 11740367, under CC BY-SA 4.0.
 
-- Christian Hansen, Casper Hansen, Jakob Grue Simonsen, Stephen Alstrup, and Christina Lioma. *Unsupervised Multi-Index Semantic Hashing.* The Web Conference 2021. arXiv:2103.14460v1. 10 pages.
-- Christian Hansen, Casper Hansen, Jakob Grue Simonsen, and Christina Lioma. *Projected Hamming Dissimilarity for Bit-Level Importance Coding in Collaborative Filtering.* The Web Conference 2021. arXiv:2103.14455v1. 9 pages.
-- Tomasz J. Piotrowski, Renato L. G. Cavalcante, and Mateusz Gabor. *Fixed points of nonnegative neural networks.* Journal of Machine Learning Research 25 (2024) 1–40. arXiv:2106.16239v9.
+PyMuPDF reads each page. Running headers that repeat on at least 60% of pages are removed, line-break hyphenation of lowercase letters is joined, and the text is normalised with Unicode NFKC. Chunks are windows of 160 words with a 40-word overlap, and a chunk never crosses a page boundary. The benchmark index contains 658 chunks.
 
-`scripts/download_papers.py` keeps a file only when the PDF text states CC BY 4.0 or CC BY-SA 4.0. The extracted text is stored with an attribution header so each gold quotation can be checked without the binary PDF.
-
-PyMuPDF reads each page. Running headers that repeat on at least 60% of pages are removed, line-break hyphenation of lowercase letters is joined, and the text is normalised with Unicode NFKC. Chunks are windows of 160 words with a 40-word overlap, and a chunk never crosses a page boundary. The benchmark index contains 289 chunks.
-
-The test file `data/qa/gold.json` has 32 questions. Twelve are English and answerable. Twelve are Urdu translations of those twelve, with the same gold pages and the same English reference stored in `answer_en`. Four English questions and their Urdu translations ask about topics that do not occur in the papers (BLEU, COVID-19 vaccines, LLaMA, photosynthesis). `data/qa/pilot.json` has eight other questions and is used only to set evidence-gate thresholds. There was no second annotator. Unit tests check that every evidence quotation occurs on a cited page and that the pilot and test questions do not overlap.
+`data/qa/gold.json` has 104 test questions: 44 English answerable, 44 Urdu translations, and 8 unanswerable questions in each language. Eight of those questions are about the Urdu article. `data/qa/pilot.json` has 14 disjoint questions and is used only to set evidence-gate thresholds. There was no second annotator. Unit tests check that every evidence quotation occurs on a cited page.
 
 ## 3. Retrieval
 
@@ -32,63 +26,61 @@ Recall@k, MRR, and nDCG@k are defined in `src/mira/metrics.py` and covered by un
 
 ## 4. Generation and grounding
 
-The default generator is `Qwen/Qwen2.5-0.5B-Instruct` in the GGUF file `qwen2.5-0.5b-instruct-q4_k_m.gguf`, loaded by llama.cpp with a 3072-token context, 4 threads, temperature 0, and at most 160 new tokens. The prompt tells the model to answer in the question's language, to cite passage ids, and to reply `NOT_FOUND` when the passages do not contain the answer. `MIRA_LLM_BACKEND=transformers` or `openai` selects the other backends. Missing credentials do not change the default.
+Three local GGUF profiles are compared: Qwen2.5 0.5B (`fast`), 1.5B (`quality`, the default), and 3B (`large`), all Q4_K_M, via llama.cpp with a 3072-token context, 4 threads, temperature 0, and at most 160 new tokens. The prompt asks for the fact in the question's language and forbids repeating the question. `MIRA_LLM_BACKEND=transformers` or `openai` selects the other backends.
 
-After generation, each sentence is compared with the retrieved chunks. It is supported if its content-word overlap is at least 0.35 or its E5 cosine with a chunk is at least 0.82. Supported sentences are shown with the id of the best chunk. If none survive, the system abstains. When the question is Urdu and the grounded draft is English, `Helsinki-NLP/opus-mt-en-ur` translates the sentences and the chunk ids are copied back onto them.
+A sentence is kept when its content-word overlap with a retrieved chunk is at least 0.35 or its E5 cosine is at least 0.82, unless the sentence mostly repeats the question. Among supporting chunks, the citation is the one the retriever ranked first. If no sentence survives, the system may show the retrieved sentence most similar to the question, provided that sentence mentions any long Latin token from the question. Urdu answers that do not preserve those names and numbers are replaced by a bilingual line that keeps the English source sentence.
 
-The raw unsupported rate is measured on the draft, before deletion. Citation page precision is measured on the citations that remain. These are different quantities: grounding can make the shown answer faithful while the raw draft still contained unsupported sentences, and a faithful citation can point at a page that repeats a fact but was not the annotated gold page.
+The evidence gate is fit per method on the pilot. It is enabled only when every finite answerable score is above every finite unanswerable score, and the threshold is the midpoint of that gap. On this pilot only the reranker separated, at threshold −3.24.
 
 ## 5. Results
 
-Hardware, model names, and every table below are taken from `results/metrics.json` produced by `python -m mira.cli evaluate --out results`.
+The machine is an Intel Xeon with 4 logical CPUs at 2.4 GHz and 15.63 GiB RAM, Python 3.12.3, PyTorch 2.15.0+cpu. No question raised an exception. An earlier run on 3 papers and 32 questions, with Qwen2.5 0.5B and the old gate, had best token F1 0.261 and, for hybrid plus reranking, Recall@5 0.917, F1 0.184, coverage 0.625, and citation page precision 0.144. The tables below are the current 104-question run. The sets differ, so this is not a paired delta.
 
-The committed run used an Intel Xeon CPU at 2.4 GHz with 4 logical CPUs and 15.63 GiB RAM, Python 3.12.3, PyTorch 2.15.0+cpu, llama-cpp-python 0.3.37, sentence-transformers 6.3.0, and FAISS 1.16.0. There were no exceptions. The 0.4 second warmup recorded in `results/RESULTS.md` is a one-line prompt issued while the GGUF file was already in the page cache. Per-question generation medians are 3.8–4.6 seconds.
+### Retrieval, 88 answerable questions
 
-### Retrieval, 24 answerable questions
+| method | Recall@5 | 95% CI | English | Urdu | MRR | nDCG@5 |
+| --- | ---: | --- | ---: | ---: | ---: | ---: |
+| bm25 | 0.398 | 0.307–0.511 | 0.591 | 0.205 | 0.244 | 0.275 |
+| dense | 0.727 | 0.636–0.818 | 0.818 | 0.636 | 0.527 | 0.575 |
+| hybrid | 0.648 | 0.545–0.750 | 0.727 | 0.568 | 0.434 | 0.481 |
+| hybrid_rerank | 0.875 | 0.807–0.943 | 0.932 | 0.818 | 0.734 | 0.772 |
+| hybrid_translate | 0.648 | 0.557–0.750 | 0.727 | 0.568 | 0.431 | 0.480 |
+| hybrid_translate_rerank | 0.784 | 0.693–0.864 | 0.932 | 0.636 | 0.641 | 0.670 |
 
-| method | Recall@5 | English | Urdu | MRR | nDCG@5 | Hit@5 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| bm25 | 0.500 | 0.833 | 0.167 | 0.240 | 0.324 | 0.500 |
-| dense | 0.750 | 0.833 | 0.667 | 0.416 | 0.506 | 0.750 |
-| hybrid | 0.750 | 0.917 | 0.583 | 0.401 | 0.506 | 0.750 |
-| hybrid_rerank | 0.917 | 0.917 | 0.917 | 0.724 | 0.767 | 0.917 |
-| hybrid_translate | 0.708 | 0.917 | 0.500 | 0.497 | 0.561 | 0.708 |
-| hybrid_translate_rerank | 0.833 | 0.917 | 0.750 | 0.679 | 0.720 | 0.833 |
+Hybrid plus reranking is the best page finder. Urdu-to-English translation does not improve Urdu Recall@5 (0.568 versus 0.818). On the 8 Urdu-article questions, that reranked method has Recall@5 0.875 and BM25L has 0.500.
 
-Paraphrase Recall@5 was 0.500 (BM25L), 0.833 (dense), and 1.000 (hybrid plus reranking). Lexical Recall@5 was 0.500, 0.667, and 0.833 for the same three methods.
+### Answers, Qwen2.5 1.5B
 
-Hybrid plus the cross-encoder is the best page finder. English Recall@5 ties at 0.917 for every fused method. The gap is on Urdu, where BM25L falls to 0.167 because the Urdu wording does not repeat the English page, while reranking the original Urdu question reaches 0.917 and lifts Urdu MRR from 0.212 (dense) to 0.661. Adding an Urdu-to-English translation to the fused lists lowers Urdu Recall@5 to 0.500, and reranking that translated list reaches only 0.750. On this set the translation is a worse query than the Urdu question.
+Exact match is 0.000 throughout. Semantic score is multilingual-e5 cosine, with abstention scored 0.
 
-### Answers, 32 test questions
+| method | F1 | 95% CI | English | Urdu | semantic | citation page precision | abstention accuracy |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
+| bm25 | 0.110 | 0.072–0.154 | 0.198 | 0.022 | 0.408 | 0.329 | 0.500 |
+| dense | 0.201 | 0.157–0.246 | 0.319 | 0.084 | 0.838 | 0.471 | 0.875 |
+| hybrid | 0.189 | 0.148–0.233 | 0.305 | 0.072 | 0.839 | 0.385 | 0.837 |
+| hybrid_rerank | 0.217 | 0.174–0.264 | 0.360 | 0.074 | 0.817 | 0.669 | 0.942 |
+| hybrid_translate | 0.180 | 0.139–0.226 | 0.305 | 0.056 | 0.839 | 0.397 | 0.837 |
+| hybrid_translate_rerank | 0.205 | 0.158–0.254 | 0.362 | 0.048 | 0.799 | 0.571 | 0.808 |
 
-Token F1 treats an abstention on an answerable question as 0. Exact match was 0.000 for every method.
+Hybrid plus reranking is the best end-to-end method on this set: highest F1, highest abstention accuracy, and citation page precision 0.669. Its pilot gate abstains on 0.938 of unanswerable questions while keeping answerable coverage at 0.943. Generated-only F1 is 0.194, so most of the score comes from the draft rather than the retrieved-sentence fallback. Urdu token F1 remains 0.074, while the Urdu semantic score is 0.787, because many Urdu answers keep an English source sentence when the translation drops names.
 
-| method | F1 | English F1 | Urdu F1 | abstention accuracy | coverage | unanswerable abstention | citation page precision | raw unsupported rate |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| bm25 | 0.204 | 0.400 | 0.007 | 0.625 | 0.542 | 0.875 | 0.590 | 0.038 |
-| dense | 0.231 | 0.376 | 0.086 | 0.875 | 0.833 | 1.000 | 0.371 | 0.025 |
-| hybrid | 0.261 | 0.437 | 0.086 | 0.875 | 0.833 | 1.000 | 0.289 | 0.042 |
-| hybrid_rerank | 0.184 | 0.282 | 0.086 | 0.719 | 0.625 | 1.000 | 0.144 | 0.078 |
-| hybrid_translate | 0.234 | 0.383 | 0.086 | 0.750 | 0.750 | 0.750 | 0.306 | 0.037 |
-| hybrid_translate_rerank | 0.200 | 0.347 | 0.053 | 0.719 | 0.708 | 0.750 | 0.216 | 0.039 |
+### Same retriever, three model sizes
 
-Hybrid retrieval has the highest F1 even though it is not the best retriever. Its evidence gate stayed off, it answered every English answerable question, and it abstained on every unanswerable question. The reranked hybrid list finds more gold pages, but the pilot set a gate (threshold −1.25 on the cross-encoder logit, pilot accuracy 1.00) that also abstains on some answerable questions, and coverage falls to 0.625. Those abstentions score 0 F1, so the better ranking does not become a better answer score with this generator.
+Hybrid plus reranking. Answer scores are the full test set. `results/latency.csv` records generate medians near 0.1 ms because that scoring pass reused cached drafts. Retrieval medians there are BM25L 0.9 ms, dense 8.3 ms, hybrid 9.8 ms, and hybrid plus reranking 523 ms.
 
-Urdu F1 does not rise with retrieval quality. The best value is 0.086. For the Urdu question "MISH کس کا مخفف ہے؟" the grounded output was "MISH کس کا مخفف ہے۔", a restatement of the question. The embedding rule accepted it because the sentence is near a MISH passage, and the Urdu reference (`Multi-Index Semantic Hashing`) shares no tokens with that restatement. Content F1 against the English reference, before any answer translation, peaks at 0.011 on the Urdu slice. BM25L abstains on almost every answerable Urdu question (coverage 0.083), which is preferable to a fabricated expansion and is why its Urdu F1 is 0.007.
+A later cold sample, with the cache off, asked three questions that reached the model. Medians of those three generate times: 0.5B 3.69 s (4.65, 3.36, 3.69), 1.5B 5.92 s (5.92, 4.87, 77.9), 3B 11.0 s (11.4, 9.31, 11.0). The 77.9 s call is one Urdu question while the application process was loading other models. The first 3B warmup prompt took 84.1 s and is the file load, not a per-question time.
 
-Two English failure modes showed up in the saved predictions. The autoencoder question was answered by hybrid retrieval as widths 200, 100, and 784, with the learning rate cited from arXiv:2103.14460 rather than from the neural-network paper; the raw draft's mention of 30 epochs was dropped by the support check. Citation page precision (0.144–0.590) is much lower than Recall@5 because a citation can be lexically supported by a non-gold page that repeats a number or a name. Urdu citation page precision is 0.000 in the aggregate: the citations that remain do not land on the annotated page.
+| model | F1 | English | Urdu | semantic | cold generate median |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0.5B Q4 | 0.159 | 0.279 | 0.039 | 0.806 | 3.69 s |
+| 1.5B Q4 | 0.217 | 0.360 | 0.074 | 0.817 | 5.92 s |
+| 3B Q4 | 0.203 | 0.292 | 0.113 | 0.814 | 11.0 s |
 
-Raw unsupported rates of 0.025–0.078 mean most draft sentences were either copied from a passage or removed. They do not mean the remaining sentence is the answer to the question.
-
-### Latency
-
-Median retrieval is 0.8 ms for BM25L and 9.6–9.7 ms for dense and hybrid search after the encoder is loaded. Reranking adds about 530 ms. Generation medians are 3816–4603 ms. BM25L's end-to-end median (3635 ms) is below its generation median because 12 of 32 questions never called the generator. The same pattern appears for hybrid plus reranking (22 generations) and for translated hybrid search (28 generations).
-
-Charts are in `results/figures/`. Row-level outputs are in `results/predictions.jsonl`.
+1.5B has the best overall F1. 3B has the best Urdu token F1.
 
 ## 6. Limitations
 
-The Urdu questions are translations, so a method can look stronger on Urdu simply by matching English names that the translation kept. The papers are English, so this run does not measure retrieval over Urdu prose. The 0.5B draft model is weak at Urdu generation, and the reported Urdu F1 includes the machine translation of that draft. The pilot has eight questions, so the evidence gate is either clearly separable or left off. mMARCO did not supervise Urdu, so the reranker's Urdu gains are specific to this set until they are repeated elsewhere.
+Urdu items are translations, and Urdu token F1 stays below 0.12. Exact match does not credit a correct fact wrapped in an extra clause. The pilot is 14 questions, and five of the six gates stay off. The Urdu-article slice is 8 questions. mMARCO did not supervise Urdu.
 
 ## 7. Reproducing the run
 
@@ -96,9 +88,8 @@ The Urdu questions are translations, so a method can look stronger on Urdu simpl
 export PYTHONPATH=src
 python scripts/download_models.py
 python scripts/download_papers.py
+python scripts/build_urdu_doc.py
 python -m mira.cli ingest data/papers/pdf --index data/indexes/benchmark
-python -m mira.cli evaluate --out results
+python -m mira.cli evaluate --profiles fast quality large --out results
 pytest
 ```
-
-The machine used for the committed `results/` directory is recorded at the top of `results/RESULTS.md`.

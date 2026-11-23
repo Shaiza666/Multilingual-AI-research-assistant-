@@ -1,7 +1,7 @@
 import math
 
 from mira.evaluate import tune_threshold
-from mira.metrics import exact_match, ndcg_at_k, recall_at_k, reciprocal_rank, token_f1
+from mira.metrics import bootstrap_mean_ci, exact_match, ndcg_at_k, recall_at_k, reciprocal_rank, token_f1
 
 
 def test_page_recall_mrr_and_ndcg():
@@ -26,14 +26,20 @@ def test_token_f1_and_exact_match():
     assert token_f1("", "cat", "en") == 0.0
 
 
-def test_gate_beats_majority_or_stays_off():
-    separated = tune_threshold([(0.9, True), (0.8, True), (0.2, False), (0.1, False)], 0.6)
+def test_gate_uses_the_gap_midpoint_and_stays_off_when_scores_overlap():
+    separated = tune_threshold([(0.9, True), (0.8, True), (0.2, False), (0.1, False)])
     assert separated["enabled"] is True
-    assert separated["threshold"] <= 0.8
-    overlapping = tune_threshold([(0.9, True), (0.4, True), (0.2, True), (0.5, False)], 0.6)
-    # Three of four are answerable, and the unanswerable score sits among them.
+    assert separated["rule"] == "gap_midpoint"
+    assert separated["threshold"] == pytest_approx(0.5)
+    overlapping = tune_threshold([(0.9, True), (0.4, True), (0.2, True), (0.5, False)])
     assert overlapping["majority_baseline"] == 0.75
     assert overlapping["enabled"] is False
+
+
+def test_bootstrap_interval_contains_the_mean():
+    bounds = bootstrap_mean_ci([1.0, 2.0, 3.0, 4.0], n_resamples=200, seed=0)
+    assert bounds["n"] == 4
+    assert bounds["low"] <= bounds["mean"] <= bounds["high"]
 
 
 def pytest_approx(value: float):

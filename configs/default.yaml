@@ -24,9 +24,10 @@ translation:
 llm:
   # local-gguf | transformers | openai
   backend: local-gguf
-  gguf_path: models/qwen2.5-0.5b-instruct-q4_k_m.gguf
-  gguf_repo: Qwen/Qwen2.5-0.5B-Instruct-GGUF
-  gguf_filename: qwen2.5-0.5b-instruct-q4_k_m.gguf
+  profile: quality
+  gguf_path: models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  gguf_repo: Qwen/Qwen2.5-1.5B-Instruct-GGUF
+  gguf_filename: qwen2.5-1.5b-instruct-q4_k_m.gguf
   transformers_model: Qwen/Qwen2.5-0.5B-Instruct
   n_ctx: 3072
   n_threads: 4
@@ -35,6 +36,19 @@ llm:
   repeat_penalty: 1.1
   seed: 0
   passage_chars: 1100
+  profiles:
+    fast:
+      gguf_path: models/qwen2.5-0.5b-instruct-q4_k_m.gguf
+      gguf_repo: Qwen/Qwen2.5-0.5B-Instruct-GGUF
+      gguf_filename: qwen2.5-0.5b-instruct-q4_k_m.gguf
+    quality:
+      gguf_path: models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+      gguf_repo: Qwen/Qwen2.5-1.5B-Instruct-GGUF
+      gguf_filename: qwen2.5-1.5b-instruct-q4_k_m.gguf
+    large:
+      gguf_path: models/qwen2.5-3b-instruct-q4_k_m.gguf
+      gguf_repo: Qwen/Qwen2.5-3B-Instruct-GGUF
+      gguf_filename: qwen2.5-3b-instruct-q4_k_m.gguf
 
 retrieval:
   top_k: 5
@@ -47,6 +61,8 @@ grounding:
   lexical_threshold: 0.35
   embedding_threshold: 0.82
   min_gate_accuracy: 0.6
+  min_gate_coverage: 1.0
+  extractive_min_cosine: 0.72
 
 evaluation:
   primary_k: 5

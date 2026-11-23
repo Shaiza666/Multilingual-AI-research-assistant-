@@ -67,7 +67,7 @@ def main() -> None:
 
     with st.sidebar:
         st.header("Index")
-        default_index = str(REPO / "data" / "indexes" / "benchmark")
+        default_index = "data/indexes/benchmark"
         index_path = st.text_input("Index directory", value=st.session_state.get("index_path", default_index))
         uploads = st.file_uploader("Add PDFs", type=["pdf"], accept_multiple_files=True)
         if st.button("Index uploaded PDFs", disabled=not uploads):
@@ -82,10 +82,10 @@ def main() -> None:
                 chunks = ingest_paths([upload_dir], cfg.chunk.chunk_words, cfg.chunk.overlap_words, cfg.chunk.min_words)
                 out = REPO / "data" / "indexes" / "uploads"
                 build_index(chunks, out, cfg, embed=True)
-            st.session_state["index_path"] = str(out)
-            index_path = str(out)
+            st.session_state["index_path"] = "data/indexes/uploads"
+            index_path = "data/indexes/uploads"
             st.success(f"Indexed {len(chunks)} chunks.")
-        method = st.selectbox("Retrieval", METHODS, index=METHODS.index("hybrid_translate_rerank"))
+        method = st.selectbox("Retrieval", METHODS, index=METHODS.index("hybrid_rerank"))
         top_k = st.slider("Passages", 1, 8, cfg.retrieval.top_k)
         use_gate = st.checkbox("Use pilot-tuned evidence gate", value=True)
         st.caption("The first question loads the CPU models and can take a few minutes.")
@@ -100,6 +100,8 @@ def main() -> None:
             from mira.pipeline import ask
 
             path = Path(index_path)
+            if not path.is_absolute():
+                path = REPO / path
             if not (path / "chunks.jsonl").exists():
                 st.error("No index at that directory. Upload PDFs or run make ingest.")
             else:

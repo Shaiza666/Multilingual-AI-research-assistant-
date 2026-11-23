@@ -1,8 +1,9 @@
-Source: arXiv:2103.14455 version 2103.14455v1
+Document: 2103.14455
 Title: Projected Hamming Dissimilarity for Bit-Level Importance Coding in Collaborative Filtering
 Authors: Christian Hansen, Casper Hansen, Jakob Grue Simonsen, Christina Lioma
 License: CC BY 4.0
 URL: https://arxiv.org/abs/2103.14455v1
+Evidence: The licence statement is printed on the first page of the downloaded PDF.
 Extracted text is included so the benchmark quotations can be checked.
 
 

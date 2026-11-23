@@ -69,12 +69,12 @@ def _latency_chart(path: Path, methods: list[str], retrieve: list[float | None],
     x = np.arange(len(methods))
     fig, ax = plt.subplots(figsize=(10, 4.8))
     width = 0.36
-    ax.bar(x - width / 2, [0 if v is None else v for v in retrieve], width=width, label="retrieve median", color="#1F4E79")
-    ax.bar(x + width / 2, [0 if v is None else v for v in generate], width=width, label="generate median", color="#C47B4A")
+    ax.bar(x, [0 if v is None else v for v in retrieve], width=0.6, label="retrieve median", color="#1F4E79")
     ax.set_xticks(x, methods, rotation=20, ha="right")
     ax.set_ylabel("milliseconds")
-    ax.set_title("Median CPU latency per test question")
+    ax.set_title("Median retrieval time per question")
     ax.legend(frameon=False)
+    del generate
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     fig.tight_layout()
@@ -275,17 +275,21 @@ def write_report(metrics: dict, out_dir: Path) -> None:
         lines.append("## Answers")
         lines.append("")
         lines.append(
-            "| method | group | n | F1 | content F1 | EM | abstention acc. | coverage | unanswerable abstain | citation page precision | raw unsupported rate |"
+            "| method | group | n | F1 | F1 95% CI | semantic | generated-only F1 | EM | abstention acc. | coverage | unanswerable abstain | citation page precision | raw unsupported rate |"
         )
-        lines.append("| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
+        lines.append("| --- | --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
         for row in answer_rows:
+            ci = row.get("f1_ci95")
+            ci_text = "n/a" if not ci else f"{_fmt(ci[0])}–{_fmt(ci[1])}"
             lines.append(
-                "| {method} | {group} | {n} | {f1} | {cf1} | {em} | {ab} | {cov} | {ua} | {cit} | {uns} |".format(
+                "| {method} | {group} | {n} | {f1} | {ci} | {sem} | {gen} | {em} | {ab} | {cov} | {ua} | {cit} | {uns} |".format(
                     method=row["method"],
                     group=row["group"],
                     n=row.get("n"),
                     f1=_fmt(row.get("f1")),
-                    cf1=_fmt(row.get("content_f1")),
+                    ci=ci_text,
+                    sem=_fmt(row.get("semantic")),
+                    gen=_fmt(row.get("f1_generated")),
                     em=_fmt(row.get("exact_match")),
                     ab=_fmt(row.get("abstention_accuracy")),
                     cov=_fmt(row.get("answerable_coverage")),
@@ -297,12 +301,43 @@ def write_report(metrics: dict, out_dir: Path) -> None:
         lines.append("")
         lines.append("## Latency")
         lines.append("")
+        lines.append("Retrieve times below are measured. A generate median near 0.1 ms means the draft was read from the generation cache, not that the model ran in a tenth of a millisecond.")
+        lines.append("")
         lines.append("| method | retrieve median ms | generate median ms | end-to-end median ms | generations |")
         lines.append("| --- | ---: | ---: | ---: | ---: |")
         for row in latency_rows:
             lines.append(
                 f"| {row['method']} | {_fmt(row.get('retrieve_median_ms'), 1)} | {_fmt(row.get('generate_median_ms'), 1)} | "
                 f"{_fmt(row.get('e2e_median_ms'), 1)} | {row.get('n_generated')} |"
+            )
+        lines.append("")
+    by_model = metrics.get("by_model") or {}
+    if len(by_model) > 1 and not metrics.get("skip_generate"):
+        lines.append("## Model comparison")
+        lines.append("")
+        lines.append("Retrieval is shared. Each profile is a different local GGUF model. F1 is the question-language token F1 of the primary hybrid method when that row exists, otherwise the best method for that model.")
+        lines.append("")
+        lines.append("| profile | model | best method by F1 | F1 | English F1 | Urdu F1 | semantic | generate median ms |")
+        lines.append("| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |")
+        for name, block in by_model.items():
+            answers = block.get("answers") or {}
+            best_name = None
+            best_f1 = None
+            for method, groups in answers.items():
+                value = (groups.get("all") or {}).get("f1")
+                if value is None:
+                    continue
+                if best_f1 is None or value > best_f1:
+                    best_f1 = value
+                    best_name = method
+            group = (answers.get(best_name) or {}).get("all") or {} if best_name else {}
+            latency = (block.get("latency_ms") or {}).get(best_name) or {}
+            model_name = str(block.get("llm") or "").rsplit("/", 1)[-1]
+            lines.append(
+                f"| {name} | {model_name} | {best_name or 'n/a'} | {_fmt(group.get('f1'))} | "
+                f"{_fmt((answers.get(best_name) or {}).get('en', {}).get('f1') if best_name else None)} | "
+                f"{_fmt((answers.get(best_name) or {}).get('ur', {}).get('f1') if best_name else None)} | "
+                f"{_fmt(group.get('semantic'))} | {_fmt(latency.get('generate_median_ms'), 1)} |"
             )
         lines.append("")
     lines.append("## Reading the numbers")

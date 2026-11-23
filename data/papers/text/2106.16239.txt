@@ -1,8 +1,9 @@
-Source: arXiv:2106.16239 version 2106.16239v9
+Document: 2106.16239
 Title: Fixed points of nonnegative neural networks
 Authors: Tomasz J. Piotrowski, Renato L. G. Cavalcante, Mateusz Gabor
 License: CC BY 4.0
 URL: https://arxiv.org/abs/2106.16239v9
+Evidence: The licence statement is printed on the first page of the downloaded PDF.
 Extracted text is included so the benchmark quotations can be checked.
 
 

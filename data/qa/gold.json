@@ -1,16 +1,25 @@
 {
-  "name": "mira-mini-test",
-  "version": 1,
+  "name": "mira-test",
+  "version": 2,
   "built": "2026-11-23",
   "counts": {
-    "papers": 3,
-    "test_items": 32,
-    "answerable_en": 12,
-    "answerable_ur": 12,
-    "unanswerable_en": 4,
-    "unanswerable_ur": 4
+    "papers": 9,
+    "urdu_documents": 1,
+    "test_items": 104,
+    "answerable_en": 44,
+    "answerable_ur": 44,
+    "unanswerable_en": 8,
+    "unanswerable_ur": 8
   },
-  "construction": "Questions were written against the extracted text of three papers whose PDFs state a CC BY 4.0 licence (see data/papers/MANIFEST.json). Page numbers are 1-based PDF pages. Each answerable item includes a short quotation that occurs on every cited page after whitespace is collapsed. Urdu questions and Urdu reference answers are translations of the paired English items and use the same gold pages; they were not collected as independent field questions. There was no second annotator and no inter-annotator agreement. Unanswerable questions ask about topics that do not occur in the three papers (BLEU, COVID-19 vaccines, LLaMA, photosynthesis). The disjoint pilot file is used only to set the evidence-gate threshold. Scores are reported on this test file only. This is a small project benchmark, not a community dataset.",
+  "absent_terms": [
+    "photosynthesis",
+    "cricket",
+    "piano",
+    "shakespeare",
+    "bitcoin",
+    "sourdough"
+  ],
+  "construction": "The test set has English questions, Urdu translations of those questions, and unanswerable questions in both languages. Gold pages are 1-based pages of the ingested PDF. Every answerable item stores a short quotation that occurs on a cited page. Urdu questions and Urdu reference answers were written as translations of the English items; they are not an independently collected Urdu information-need study, and there was no second annotator. Nine documents are research papers. Three state CC BY 4.0 inside the PDF (arXiv 2103.14460v1, 2103.14455v1, and 2106.16239v9). Six are ACL Anthology papers from 2019-2024. The Anthology states that materials published in or after 2016 are under CC BY 4.0 (https://aclanthology.org/). One additional document is the Urdu Wikipedia article مصنوعی ذہانت, revision 11740367, under CC BY-SA 4.0. Questions tagged corpus=urdu_doc are about that article, including English questions over Urdu text. The pilot file is disjoint and is used only to set evidence-gate thresholds. It is not scored in the reported tables. This is a project benchmark, not a community dataset.",
   "items": [
     {
       "id": "mish-en-1",
@@ -20,9 +29,17 @@
       "question": "What does MISH stand for?",
       "answer": "Multi-Index Semantic Hashing",
       "answer_en": "Multi-Index Semantic Hashing",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 1}],
-      "evidence_quotes": ["Multi-Index Semantic Hashing (MISH)"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Multi-Index Semantic Hashing (MISH)"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "mish-ur-1",
@@ -32,9 +49,17 @@
       "question": "MISH کس کا مخفف ہے؟",
       "answer": "Multi-Index Semantic Hashing",
       "answer_en": "Multi-Index Semantic Hashing",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 1}],
-      "evidence_quotes": ["Multi-Index Semantic Hashing (MISH)"],
-      "translation_of": "mish-en-1"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Multi-Index Semantic Hashing (MISH)"
+      ],
+      "translation_of": "mish-en-1",
+      "corpus": "papers"
     },
     {
       "id": "mish-en-2",
@@ -44,9 +69,17 @@
       "question": "When multi-index hashing is used, by what margin were the baseline methods slower than the proposed model?",
       "answer": "The baselines are upwards of 33% slower than MISH.",
       "answer_en": "The baselines are upwards of 33% slower than MISH.",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 1}],
-      "evidence_quotes": ["upwards of 33% slower than MISH"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "upwards of 33% slower than MISH"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "mish-ur-2",
@@ -56,9 +89,17 @@
       "question": "جب ملٹی انڈیکس ہیشنگ استعمال کی جائے تو مقابلے کے طریقے تجویز کردہ ماڈل سے کتنے سست تھے؟",
       "answer": "مقابلے کے طریقے MISH سے 33 فیصد تک سست ہیں۔",
       "answer_en": "The baselines are upwards of 33% slower than MISH.",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 1}],
-      "evidence_quotes": ["upwards of 33% slower than MISH"],
-      "translation_of": "mish-en-2"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "upwards of 33% slower than MISH"
+      ],
+      "translation_of": "mish-en-2",
+      "corpus": "papers"
     },
     {
       "id": "mish-en-3",
@@ -68,9 +109,17 @@
       "question": "Which three datasets were used to evaluate MISH?",
       "answer": "TMC, Agnews, and reuters.",
       "answer_en": "TMC, Agnews, and reuters.",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 5}],
-      "evidence_quotes": ["TMC consists of multi-class air traffic reports"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 5
+        }
+      ],
+      "evidence_quotes": [
+        "TMC consists of multi-class air traffic reports"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "mish-ur-3",
@@ -80,9 +129,17 @@
       "question": "MISH کے جائزے کے لیے کون سے تین ڈیٹا سیٹ استعمال ہوئے؟",
       "answer": "TMC، Agnews، اور reuters۔",
       "answer_en": "TMC, Agnews, and reuters.",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 5}],
-      "evidence_quotes": ["TMC consists of multi-class air traffic reports"],
-      "translation_of": "mish-en-3"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 5
+        }
+      ],
+      "evidence_quotes": [
+        "TMC consists of multi-class air traffic reports"
+      ],
+      "translation_of": "mish-en-3",
+      "corpus": "papers"
     },
     {
       "id": "mish-en-4",
@@ -92,9 +149,18 @@
       "question": "How was the document collection divided before training, and which word weighting was used?",
       "answer": "Documents are TF-IDF vectors, split into 80% training, 10% validation, and 10% testing.",
       "answer_en": "Documents are TF-IDF vectors, split into 80% training, 10% validation, and 10% testing.",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 6}],
-      "evidence_quotes": ["training (80%), validation (10%), and testing (10%)", "TF-IDF vectors"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 6
+        }
+      ],
+      "evidence_quotes": [
+        "training (80%), validation (10%), and testing (10%)",
+        "TF-IDF vectors"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "mish-ur-4",
@@ -104,9 +170,18 @@
       "question": "دستاویزات کو تربیت سے پہلے کس تناسب سے تقسیم کیا گیا اور الفاظ کی کون سی وزن کاری استعمال ہوئی؟",
       "answer": "دستاویزات TF-IDF ویکٹرز ہیں اور تقسیم 80 فیصد تربیت، 10 فیصد توثیق، اور 10 فیصد جانچ ہے۔",
       "answer_en": "Documents are TF-IDF vectors, split into 80% training, 10% validation, and 10% testing.",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 6}],
-      "evidence_quotes": ["training (80%), validation (10%), and testing (10%)", "TF-IDF vectors"],
-      "translation_of": "mish-en-4"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 6
+        }
+      ],
+      "evidence_quotes": [
+        "training (80%), validation (10%), and testing (10%)",
+        "TF-IDF vectors"
+      ],
+      "translation_of": "mish-en-4",
+      "corpus": "papers"
     },
     {
       "id": "phd-en-1",
@@ -116,9 +191,17 @@
       "question": "What effectiveness gains does projected Hamming dissimilarity report over hashing-based collaborative filtering baselines?",
       "answer": "Up to +7% in NDCG and +14% in MRR.",
       "answer_en": "Up to +7% in NDCG and +14% in MRR.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 1}],
-      "evidence_quotes": ["+7% in NDCG and +14% in MRR"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "+7% in NDCG and +14% in MRR"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "phd-ur-1",
@@ -128,9 +211,17 @@
       "question": "پروجیکٹڈ ہیمِنگ ڈسِسِملیرٹی، ہیشنگ پر مبنی کولیبوریٹو فلٹرنگ کے مقابلے میں کتنی بہتری بتاتی ہے؟",
       "answer": "NDCG میں +7% تک اور MRR میں +14% تک۔",
       "answer_en": "Up to +7% in NDCG and +14% in MRR.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 1}],
-      "evidence_quotes": ["+7% in NDCG and +14% in MRR"],
-      "translation_of": "phd-en-1"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "+7% in NDCG and +14% in MRR"
+      ],
+      "translation_of": "phd-en-1",
+      "corpus": "papers"
     },
     {
       "id": "phd-en-2",
@@ -140,9 +231,19 @@
       "question": "Which public rating collections were used in the collaborative filtering experiments?",
       "answer": "Movielens 1M, Movielens 10M, Yelp, and Amazon.",
       "answer_en": "Movielens 1M, Movielens 10M, Yelp, and Amazon.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 4}],
-      "evidence_quotes": ["movie rating datasets, Movielens 1M", "a Yelp dataset", "from Amazon"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 4
+        }
+      ],
+      "evidence_quotes": [
+        "movie rating datasets, Movielens 1M",
+        "a Yelp dataset",
+        "from Amazon"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "phd-ur-2",
@@ -152,9 +253,19 @@
       "question": "کولیبوریٹو فلٹرنگ کے تجربات میں کون سے عوامی درجہ بندی کے مجموعے استعمال ہوئے؟",
       "answer": "Movielens 1M، Movielens 10M، Yelp، اور Amazon۔",
       "answer_en": "Movielens 1M, Movielens 10M, Yelp, and Amazon.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 4}],
-      "evidence_quotes": ["movie rating datasets, Movielens 1M", "a Yelp dataset", "from Amazon"],
-      "translation_of": "phd-en-2"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 4
+        }
+      ],
+      "evidence_quotes": [
+        "movie rating datasets, Movielens 1M",
+        "a Yelp dataset",
+        "from Amazon"
+      ],
+      "translation_of": "phd-en-2",
+      "corpus": "papers"
     },
     {
       "id": "phd-en-3",
@@ -164,9 +275,18 @@
       "question": "What name is given to the variational hashing model that optimizes projected Hamming dissimilarity, and which bit lengths were tested?",
       "answer": "The model is denoted VHPHD, and hash codes of 32 and 64 bits were tested.",
       "answer_en": "The model is denoted VHPHD, and hash codes of 32 and 64 bits were tested.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 5}],
-      "evidence_quotes": ["denoted VHPHD", "hash code lengths of 32 and 64 bits"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 5
+        }
+      ],
+      "evidence_quotes": [
+        "denoted VHPHD",
+        "hash code lengths of 32 and 64 bits"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "phd-ur-3",
@@ -176,9 +296,18 @@
       "question": "پروجیکٹڈ ہیمِنگ ڈسِسِملیرٹی کو بہتر بنانے والے ویریشنل ہیشنگ ماڈل کا نام کیا ہے اور کون سی بٹ لمبائیاں آزمائی گئیں؟",
       "answer": "ماڈل کو VHPHD کہا گیا ہے اور 32 اور 64 بٹ کے ہیش کوڈز آزمائے گئے۔",
       "answer_en": "The model is denoted VHPHD, and hash codes of 32 and 64 bits were tested.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 5}],
-      "evidence_quotes": ["denoted VHPHD", "hash code lengths of 32 and 64 bits"],
-      "translation_of": "phd-en-3"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 5
+        }
+      ],
+      "evidence_quotes": [
+        "denoted VHPHD",
+        "hash code lengths of 32 and 64 bits"
+      ],
+      "translation_of": "phd-en-3",
+      "corpus": "papers"
     },
     {
       "id": "phd-en-4",
@@ -188,9 +317,17 @@
       "question": "How long did one training batch take for both distance functions, and what batch size was used in that timing?",
       "answer": "Approximately 0.007 seconds for a batch size of 400.",
       "answer_en": "Approximately 0.007 seconds for a batch size of 400.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 8}],
-      "evidence_quotes": ["approximately 0.007 seconds for a batch size of 400"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 8
+        }
+      ],
+      "evidence_quotes": [
+        "approximately 0.007 seconds for a batch size of 400"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "phd-ur-4",
@@ -200,9 +337,17 @@
       "question": "دونوں فاصلاتی فنکشنز کے لیے ایک تربیتی بیچ میں کتنا وقت لگا اور بیچ سائز کیا تھا؟",
       "answer": "بیچ سائز 400 پر تقریباً 0.007 سیکنڈ۔",
       "answer_en": "Approximately 0.007 seconds for a batch size of 400.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 8}],
-      "evidence_quotes": ["approximately 0.007 seconds for a batch size of 400"],
-      "translation_of": "phd-en-4"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 8
+        }
+      ],
+      "evidence_quotes": [
+        "approximately 0.007 seconds for a batch size of 400"
+      ],
+      "translation_of": "phd-en-4",
+      "corpus": "papers"
     },
     {
       "id": "nn-en-1",
@@ -212,9 +357,17 @@
       "question": "How does the paper define a nonnegative neural network?",
       "answer": "A neural network that maps nonnegative vectors to nonnegative vectors.",
       "answer_en": "A neural network that maps nonnegative vectors to nonnegative vectors.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 1}],
-      "evidence_quotes": ["map nonnegative vectors to nonnegative vectors"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "map nonnegative vectors to nonnegative vectors"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "nn-ur-1",
@@ -224,9 +377,17 @@
       "question": "یہ مقالہ نان نیگیٹو نیورل نیٹ ورک کی تعریف کیسے کرتا ہے؟",
       "answer": "ایسا نیورل نیٹ ورک جو غیر منفی ویکٹرز کو غیر منفی ویکٹرز پر نقش کرتا ہے۔",
       "answer_en": "A neural network that maps nonnegative vectors to nonnegative vectors.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 1}],
-      "evidence_quotes": ["map nonnegative vectors to nonnegative vectors"],
-      "translation_of": "nn-en-1"
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "map nonnegative vectors to nonnegative vectors"
+      ],
+      "translation_of": "nn-en-1",
+      "corpus": "papers"
     },
     {
       "id": "nn-en-2",
@@ -236,9 +397,19 @@
       "question": "In the autoencoder experiments, what were the layer widths, the optimizer, the learning rate, and the number of epochs?",
       "answer": "A two-layer autoencoder with input and output dimension 784 and a hidden layer of 200 units was trained for 30 epochs with ADAM at a learning rate of 0.005.",
       "answer_en": "A two-layer autoencoder with input and output dimension 784 and a hidden layer of 200 units was trained for 30 epochs with ADAM at a learning rate of 0.005.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 21}],
-      "evidence_quotes": ["dimension k = 784 and hidden layer with k1 = 200", "trained for 30 epochs", "learning rate of 0.005"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 21
+        }
+      ],
+      "evidence_quotes": [
+        "dimension k = 784 and hidden layer with k1 = 200",
+        "trained for 30 epochs",
+        "learning rate of 0.005"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "nn-ur-2",
@@ -248,9 +419,19 @@
       "question": "آٹو اینکوڈر کے تجربات میں پرتوں کی چوڑائی، آپٹیمائزر، لرننگ ریٹ، اور ایپکس کی تعداد کیا تھی؟",
       "answer": "دو پرتوں والا آٹو اینکوڈر، ان پٹ اور آؤٹ پٹ 784، پوشیدہ پرت 200، 30 ایپکس، ADAM، لرننگ ریٹ 0.005۔",
       "answer_en": "A two-layer autoencoder with input and output dimension 784 and a hidden layer of 200 units was trained for 30 epochs with ADAM at a learning rate of 0.005.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 21}],
-      "evidence_quotes": ["dimension k = 784 and hidden layer with k1 = 200", "trained for 30 epochs", "learning rate of 0.005"],
-      "translation_of": "nn-en-2"
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 21
+        }
+      ],
+      "evidence_quotes": [
+        "dimension k = 784 and hidden layer with k1 = 200",
+        "trained for 30 epochs",
+        "learning rate of 0.005"
+      ],
+      "translation_of": "nn-en-2",
+      "corpus": "papers"
     },
     {
       "id": "nn-en-3",
@@ -260,9 +441,18 @@
       "question": "What do the labels NN, PN, NR, and RR mean for the autoencoders?",
       "answer": "NN has nonnegative weights and nonnegative biases; PN has positive weights and nonnegative biases; NR has nonnegative weights and real-valued biases; RR has real-valued weights and real-valued biases.",
       "answer_en": "NN has nonnegative weights and nonnegative biases; PN has positive weights and nonnegative biases; NR has nonnegative weights and real-valued biases; RR has real-valued weights and real-valued biases.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 22}],
-      "evidence_quotes": ["NN denotes an autoencoder with nonnegative weights and nonnegative biases", "RR denotes an autoencoder with real-valued weights and real-valued biases"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 22
+        }
+      ],
+      "evidence_quotes": [
+        "NN denotes an autoencoder with nonnegative weights and nonnegative biases",
+        "RR denotes an autoencoder with real-valued weights and real-valued biases"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "nn-ur-3",
@@ -272,9 +462,18 @@
       "question": "آٹو اینکوڈرز کے لیبل NN، PN، NR، اور RR کا کیا مطلب ہے؟",
       "answer": "NN غیر منفی وزن اور غیر منفی بائیس؛ PN مثبت وزن اور غیر منفی بائیس؛ NR غیر منفی وزن اور حقیقی بائیس؛ RR حقیقی وزن اور حقیقی بائیس۔",
       "answer_en": "NN has nonnegative weights and nonnegative biases; PN has positive weights and nonnegative biases; NR has nonnegative weights and real-valued biases; RR has real-valued weights and real-valued biases.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 22}],
-      "evidence_quotes": ["NN denotes an autoencoder with nonnegative weights and nonnegative biases", "RR denotes an autoencoder with real-valued weights and real-valued biases"],
-      "translation_of": "nn-en-3"
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 22
+        }
+      ],
+      "evidence_quotes": [
+        "NN denotes an autoencoder with nonnegative weights and nonnegative biases",
+        "RR denotes an autoencoder with real-valued weights and real-valued biases"
+      ],
+      "translation_of": "nn-en-3",
+      "corpus": "papers"
     },
     {
       "id": "nn-en-4",
@@ -284,9 +483,19 @@
       "question": "Which journal published this work, who edited it, and what shape do the authors prove for the set of fixed points of nonnegative networks with nonnegative weights and biases?",
       "answer": "Journal of Machine Learning Research, volume 25 (2024), edited by Aryeh Kontorovich. The fixed point set is an interval, which under mild conditions degenerates to a point.",
       "answer_en": "Journal of Machine Learning Research, volume 25 (2024), edited by Aryeh Kontorovich. The fixed point set is an interval, which under mild conditions degenerates to a point.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 1}],
-      "evidence_quotes": ["Journal of Machine Learning Research 25 (2024)", "Aryeh Kontorovich", "degenerates to a point"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Journal of Machine Learning Research 25 (2024)",
+        "Aryeh Kontorovich",
+        "degenerates to a point"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "nn-ur-4",
@@ -296,84 +505,1312 @@
       "question": "یہ کام کس جریدے میں شائع ہوا، مدیر کون تھا، اور غیر منفی وزن و بائیس والے نیٹ ورکس کے فکسڈ پوائنٹ سیٹ کی شکل کیا ہے؟",
       "answer": "Journal of Machine Learning Research، جلد 25 (2024)، مدیر Aryeh Kontorovich۔ فکسڈ پوائنٹ سیٹ ایک وقفہ ہے جو نرم شرائط میں ایک نقطے تک سمٹ جاتا ہے۔",
       "answer_en": "Journal of Machine Learning Research, volume 25 (2024), edited by Aryeh Kontorovich. The fixed point set is an interval, which under mild conditions degenerates to a point.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 1}],
-      "evidence_quotes": ["Journal of Machine Learning Research 25 (2024)", "Aryeh Kontorovich", "degenerates to a point"],
-      "translation_of": "nn-en-4"
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Journal of Machine Learning Research 25 (2024)",
+        "Aryeh Kontorovich",
+        "degenerates to a point"
+      ],
+      "translation_of": "nn-en-4",
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-en-1",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "What does BERT stand for?",
+      "answer": "Bidirectional Encoder Representations from Transformers",
+      "answer_en": "Bidirectional Encoder Representations from Transformers",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Bidirectional Encoder Representations from Transformers"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-ur-1",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "BERT کس کا مخفف ہے؟",
+      "answer": "Bidirectional Encoder Representations from Transformers",
+      "answer_en": "Bidirectional Encoder Representations from Transformers",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Bidirectional Encoder Representations from Transformers"
+      ],
+      "answerable": true,
+      "translation_of": "bert-en-1",
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-en-2",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Which two text collections were used to pre-train BERT, and how large are they?",
+      "answer": "The BooksCorpus has 800M words and English Wikipedia has 2,500M words.",
+      "answer_en": "The BooksCorpus has 800M words and English Wikipedia has 2,500M words.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 5
+        }
+      ],
+      "evidence_quotes": [
+        "BooksCorpus (800M words)",
+        "English Wikipedia (2,500M words)"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-ur-2",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "BERT کی پیشگی تربیت کے لیے کون سے دو متنی مجموعے استعمال ہوئے اور وہ کتنے بڑے ہیں؟",
+      "answer": "BooksCorpus میں 800M الفاظ ہیں اور English Wikipedia میں 2,500M الفاظ ہیں۔",
+      "answer_en": "The BooksCorpus has 800M words and English Wikipedia has 2,500M words.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 5
+        }
+      ],
+      "evidence_quotes": [
+        "BooksCorpus (800M words)",
+        "English Wikipedia (2,500M words)"
+      ],
+      "answerable": true,
+      "translation_of": "bert-en-2",
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-en-3",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "How many parameters do BERTBASE and BERTLARGE have?",
+      "answer": "BERTBASE has 110M parameters and BERTLARGE has 340M parameters.",
+      "answer_en": "BERTBASE has 110M parameters and BERTLARGE has 340M parameters.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 3
+        }
+      ],
+      "evidence_quotes": [
+        "110M",
+        "Total Parameters=340M"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-ur-3",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "BERTBASE اور BERTLARGE میں کتنے پیرامیٹرز ہیں؟",
+      "answer": "BERTBASE میں 110M اور BERTLARGE میں 340M پیرامیٹرز ہیں۔",
+      "answer_en": "BERTBASE has 110M parameters and BERTLARGE has 340M parameters.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 3
+        }
+      ],
+      "evidence_quotes": [
+        "110M",
+        "Total Parameters=340M"
+      ],
+      "answerable": true,
+      "translation_of": "bert-en-3",
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-en-4",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "What does BERT's masked language model do to some input tokens?",
+      "answer": "It randomly masks some tokens and predicts the original vocabulary id.",
+      "answer_en": "It randomly masks some tokens and predicts the original vocabulary id.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "masked language model randomly masks some of the tokens"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-ur-4",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "BERT کا masked language model کچھ ان پٹ ٹوکنز کے ساتھ کیا کرتا ہے؟",
+      "answer": "وہ کچھ ٹوکنز کو بے ترتیب چھپاتا ہے اور اصل vocabulary id کی پیش گوئی کرتا ہے۔",
+      "answer_en": "It randomly masks some tokens and predicts the original vocabulary id.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "masked language model randomly masks some of the tokens"
+      ],
+      "answerable": true,
+      "translation_of": "bert-en-4",
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-en-5",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Who are the authors of the BERT paper, and which lab are they from?",
+      "answer": "Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova at Google AI Language.",
+      "answer_en": "Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova at Google AI Language.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Jacob Devlin",
+        "Google AI Language"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-ur-5",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "BERT کے مقالے کے مصنف کون ہیں اور وہ کس لیب سے ہیں؟",
+      "answer": "Jacob Devlin، Ming-Wei Chang، Kenton Lee، اور Kristina Toutanova، Google AI Language سے۔",
+      "answer_en": "Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova at Google AI Language.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Jacob Devlin",
+        "Google AI Language"
+      ],
+      "answerable": true,
+      "translation_of": "bert-en-5",
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-en-1",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "What does the title say Sentence-BERT uses to build sentence embeddings?",
+      "answer": "Siamese BERT-Networks",
+      "answer_en": "Siamese BERT-Networks",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Sentence Embeddings using Siamese BERT-Networks"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-ur-1",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "Sentence-BERT جملوں کے ایمبیڈنگز کے لیے کس ڈھانچے کا استعمال کرتا ہے؟",
+      "answer": "Siamese BERT-Networks",
+      "answer_en": "Siamese BERT-Networks",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Sentence Embeddings using Siamese BERT-Networks"
+      ],
+      "answerable": true,
+      "translation_of": "sbert-en-1",
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-en-2",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "How expensive is it for BERT to find the most similar pair among 10,000 sentences?",
+      "answer": "About 50 million inference computations, roughly 65 hours.",
+      "answer_en": "About 50 million inference computations, roughly 65 hours.",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "10,000 sentences requires about 50 million",
+        "(~65 hours) with BERT"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-ur-2",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "10,000 جملوں میں سب سے ملتا جلتا جوڑا ڈھونڈنے کے لیے BERT کتنا مہنگا ہے؟",
+      "answer": "تقریباً 50 ملین انفرنس حسابات، یعنی قریب 65 گھنٹے۔",
+      "answer_en": "About 50 million inference computations, roughly 65 hours.",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "10,000 sentences requires about 50 million",
+        "(~65 hours) with BERT"
+      ],
+      "answerable": true,
+      "translation_of": "sbert-en-2",
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-en-3",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Who wrote Sentence-BERT?",
+      "answer": "Nils Reimers and Iryna Gurevych",
+      "answer_en": "Nils Reimers and Iryna Gurevych",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Nils Reimers and Iryna Gurevych"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-ur-3",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "Sentence-BERT کس نے لکھا؟",
+      "answer": "Nils Reimers اور Iryna Gurevych",
+      "answer_en": "Nils Reimers and Iryna Gurevych",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Nils Reimers and Iryna Gurevych"
+      ],
+      "answerable": true,
+      "translation_of": "sbert-en-3",
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-en-4",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Where was the Sentence-BERT paper presented?",
+      "answer": "EMNLP-IJCNLP 2019 in Hong Kong, 3-7 November 2019.",
+      "answer_en": "EMNLP-IJCNLP 2019 in Hong Kong, 3-7 November 2019.",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Hong Kong, China, November 3–7, 2019"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "sbert-ur-4",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "Sentence-BERT کا مقالہ کہاں پیش کیا گیا؟",
+      "answer": "EMNLP-IJCNLP 2019، ہانگ کانگ، 3 تا 7 نومبر 2019۔",
+      "answer_en": "EMNLP-IJCNLP 2019 in Hong Kong, 3-7 November 2019.",
+      "gold_pages": [
+        {
+          "doc_id": "D19-1410",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Hong Kong, China, November 3–7, 2019"
+      ],
+      "answerable": true,
+      "translation_of": "sbert-en-4",
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-en-1",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "How is BART trained, in one sentence from the abstract?",
+      "answer": "BART is a denoising autoencoder that corrupts text and learns to reconstruct it.",
+      "answer_en": "BART is a denoising autoencoder that corrupts text and learns to reconstruct it.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "BART, a denoising autoencoder for pretraining sequence-to-sequence models"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-ur-1",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "خلاصے کے مطابق BART کی تربیت کیسے ہوتی ہے؟",
+      "answer": "BART ایک denoising autoencoder ہے جو متن کو خراب کر کے اصل متن دوبارہ بناتا ہے۔",
+      "answer_en": "BART is a denoising autoencoder that corrupts text and learns to reconstruct it.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "BART, a denoising autoencoder for pretraining sequence-to-sequence models"
+      ],
+      "answerable": true,
+      "translation_of": "bart-en-1",
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-en-2",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "On which benchmarks does BART match RoBERTa?",
+      "answer": "GLUE and SQuAD",
+      "answer_en": "GLUE and SQuAD",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "matches the performance of RoBERTa on GLUE and SQuAD"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-ur-2",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "BART کن بینچ مارکس پر RoBERTa کے برابر کارکردگی دکھاتا ہے؟",
+      "answer": "GLUE اور SQuAD",
+      "answer_en": "GLUE and SQuAD",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "matches the performance of RoBERTa on GLUE and SQuAD"
+      ],
+      "answerable": true,
+      "translation_of": "bart-en-2",
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-en-3",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Which organisation produced BART?",
+      "answer": "Facebook AI",
+      "answer_en": "Facebook AI",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Facebook AI"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-ur-3",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "BART کس ادارے نے بنایا؟",
+      "answer": "Facebook AI",
+      "answer_en": "Facebook AI",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Facebook AI"
+      ],
+      "answerable": true,
+      "translation_of": "bart-en-3",
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-en-4",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Who is the first listed author of the BART paper?",
+      "answer": "Mike Lewis",
+      "answer_en": "Mike Lewis",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Mike Lewis"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-ur-4",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "BART کے مقالے کا پہلا مصنف کون ہے؟",
+      "answer": "Mike Lewis",
+      "answer_en": "Mike Lewis",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Mike Lewis"
+      ],
+      "answerable": true,
+      "translation_of": "bart-en-4",
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-en-5",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "What summarization gain does the BART abstract report?",
+      "answer": "Gains of up to 3.5 ROUGE.",
+      "answer_en": "Gains of up to 3.5 ROUGE.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "gains of up to 3.5"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bart-ur-5",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "BART کا خلاصہ خلاصہ سازی میں کتنا فائدہ بتاتا ہے؟",
+      "answer": "3.5 ROUGE تک کا فائدہ۔",
+      "answer_en": "Gains of up to 3.5 ROUGE.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.acl-main.703",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "gains of up to 3.5"
+      ],
+      "answerable": true,
+      "translation_of": "bart-en-5",
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-en-6",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "How much task-specific architecture does BERT need at fine-tuning time?",
+      "answer": "Just one additional output layer.",
+      "answer_en": "Just one additional output layer.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "one additional output layer"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "bert-ur-6",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "فائن ٹیوننگ کے وقت BERT کو کتنی اضافی تہہ درکار ہوتی ہے؟",
+      "answer": "صرف ایک اضافی آؤٹ پٹ تہہ۔",
+      "answer_en": "Just one additional output layer.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "one additional output layer"
+      ],
+      "answerable": true,
+      "translation_of": "bert-en-6",
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-en-5",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Which lab produced the dense passage retrieval paper?",
+      "answer": "Facebook AI",
+      "answer_en": "Facebook AI",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Facebook AI"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-ur-5",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "dense passage retrieval کا مقالہ کس لیب نے بنایا؟",
+      "answer": "Facebook AI",
+      "answer_en": "Facebook AI",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Facebook AI"
+      ],
+      "answerable": true,
+      "translation_of": "dpr-en-5",
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-en-1",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "By how much does the dense retriever beat a strong Lucene-BM25 system on top-20 passage retrieval?",
+      "answer": "By 9% to 19% absolute.",
+      "answer_en": "By 9% to 19% absolute.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "9%-19% absolute in terms of top-20 passage retrieval accuracy"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-ur-1",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "dense retriever، Lucene-BM25 سے top-20 passage retrieval پر کتنا آگے ہے؟",
+      "answer": "9% سے 19% مطلق۔",
+      "answer_en": "By 9% to 19% absolute.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "9%-19% absolute in terms of top-20 passage retrieval accuracy"
+      ],
+      "answerable": true,
+      "translation_of": "dpr-en-1",
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-en-2",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Which open-domain QA setting is used when the paper compares end-to-end accuracy with ORQA?",
+      "answer": "The open Natural Questions setting.",
+      "answer_en": "The open Natural Questions setting.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 2
+        }
+      ],
+      "evidence_quotes": [
+        "open Natural Questions setting"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-ur-2",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "ORQA سے آخری سوال جواب کی درستگی کا موازنہ کس ترتیب میں کیا گیا؟",
+      "answer": "open Natural Questions کی ترتیب۔",
+      "answer_en": "The open Natural Questions setting.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 2
+        }
+      ],
+      "evidence_quotes": [
+        "open Natural Questions setting"
+      ],
+      "answerable": true,
+      "translation_of": "dpr-en-2",
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-en-3",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Who is the first listed author of Dense Passage Retrieval?",
+      "answer": "Vladimir Karpukhin",
+      "answer_en": "Vladimir Karpukhin",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Vladimir Karpukhin"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-ur-3",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "Dense Passage Retrieval کا پہلا مصنف کون ہے؟",
+      "answer": "Vladimir Karpukhin",
+      "answer_en": "Vladimir Karpukhin",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Vladimir Karpukhin"
+      ],
+      "answerable": true,
+      "translation_of": "dpr-en-3",
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-en-4",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Where and when was the dense passage retrieval paper presented?",
+      "answer": "EMNLP 2020, 16-20 November 2020.",
+      "answer_en": "EMNLP 2020, 16-20 November 2020.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "November 16–20, 2020"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "dpr-ur-4",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "dense passage retrieval کا مقالہ کب پیش کیا گیا؟",
+      "answer": "EMNLP 2020، 16 تا 20 نومبر 2020۔",
+      "answer_en": "EMNLP 2020, 16-20 November 2020.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "November 16–20, 2020"
+      ],
+      "answerable": true,
+      "translation_of": "dpr-en-4",
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-en-1",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Which digit of an n-digit by m-digit product can LLMs often predict without chain of thought?",
+      "answer": "The first digit.",
+      "answer_en": "The first digit.",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "predict the first digit of n-digit by m-digit multiplication"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-ur-1",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "chain of thought کے بغیر ماڈل ضرب کے کس ہندسے کی اکثر پیش گوئی کر لیتے ہیں؟",
+      "answer": "پہلا ہندسہ۔",
+      "answer_en": "The first digit.",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "predict the first digit of n-digit by m-digit multiplication"
+      ],
+      "answerable": true,
+      "translation_of": "arith-en-1",
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-en-2",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Which digit of a long multiplication do the authors say models often fail to predict?",
+      "answer": "The last digit, a task equivalent to 1-digit by 1-digit multiplication.",
+      "answer_en": "The last digit, a task equivalent to 1-digit by 1-digit multiplication.",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "predict the last digit of an n-digit by m-digit multiplication"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-ur-2",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "مصنفین کے مطابق لمبی ضرب کا کون سا ہندسہ ماڈل اکثر غلط بتاتے ہیں؟",
+      "answer": "آخری ہندسہ، جو ایک ہندسے کو ایک ہندسے سے ضرب دینے کے برابر ہے۔",
+      "answer_en": "The last digit, a task equivalent to 1-digit by 1-digit multiplication.",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "predict the last digit of an n-digit by m-digit multiplication"
+      ],
+      "answerable": true,
+      "translation_of": "arith-en-2",
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-en-3",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Which university are the arithmetic-paper authors from?",
+      "answer": "The University of Tokyo.",
+      "answer_en": "The University of Tokyo.",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "University of Tokyo"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-ur-3",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "حساب کے مقالے کے مصنف کس یونیورسٹی سے ہیں؟",
+      "answer": "University of Tokyo",
+      "answer_en": "The University of Tokyo.",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "University of Tokyo"
+      ],
+      "answerable": true,
+      "translation_of": "arith-en-3",
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-en-4",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Who is the first listed author of the arithmetic short paper?",
+      "answer": "Andrew Gambardella",
+      "answer_en": "Andrew Gambardella",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Andrew Gambardella"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "arith-ur-4",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "حساب والے مختصر مقالے کا پہلا مصنف کون ہے؟",
+      "answer": "Andrew Gambardella",
+      "answer_en": "Andrew Gambardella",
+      "gold_pages": [
+        {
+          "doc_id": "2024.acl-short.8",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Andrew Gambardella"
+      ],
+      "answerable": true,
+      "translation_of": "arith-en-4",
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-en-1",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "What lightweight parameters does the paper give as an example that can be stored and shared?",
+      "answer": "Adapters.",
+      "answer_en": "Adapters.",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "parameters, such as adapters, can be easily stored and shared"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-ur-1",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "مقالہ کن ہلکے پیرامیٹرز کی مثال دیتا ہے جنہیں محفوظ اور شیئر کیا جا سکتا ہے؟",
+      "answer": "Adapters",
+      "answer_en": "Adapters.",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "parameters, such as adapters, can be easily stored and shared"
+      ],
+      "answerable": true,
+      "translation_of": "peft-en-1",
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-en-2",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "What is the title claim about parameter-efficient weight ensembling?",
+      "answer": "It facilitates task-level knowledge transfer.",
+      "answer_en": "It facilitates task-level knowledge transfer.",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Parameter-efficient Weight Ensembling Facilitates Task-level Knowledge Transfer"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-ur-2",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "parameter-efficient weight ensembling کے عنوان کا دعویٰ کیا ہے؟",
+      "answer": "یہ task-level knowledge transfer کو آسان بناتا ہے۔",
+      "answer_en": "It facilitates task-level knowledge transfer.",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Parameter-efficient Weight Ensembling Facilitates Task-level Knowledge Transfer"
+      ],
+      "answerable": true,
+      "translation_of": "peft-en-2",
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-en-3",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "Which university are the weight-ensembling authors affiliated with?",
+      "answer": "Tsinghua University.",
+      "answer_en": "Tsinghua University.",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Tsinghua University"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-ur-3",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "weight ensembling کے مصنف کس یونیورسٹی سے وابستہ ہیں؟",
+      "answer": "Tsinghua University",
+      "answer_en": "Tsinghua University.",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Tsinghua University"
+      ],
+      "answerable": true,
+      "translation_of": "peft-en-3",
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-en-4",
+      "language": "en",
+      "query_type": "paraphrase",
+      "question": "Who is the first listed author of the weight-ensembling short paper?",
+      "answer": "Xingtai Lv",
+      "answer_en": "Xingtai Lv",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Xingtai Lv"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "peft-ur-4",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "question": "weight ensembling والے مختصر مقالے کا پہلا مصنف کون ہے؟",
+      "answer": "Xingtai Lv",
+      "answer_en": "Xingtai Lv",
+      "gold_pages": [
+        {
+          "doc_id": "2023.acl-short.24",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Xingtai Lv"
+      ],
+      "answerable": true,
+      "translation_of": "peft-en-4",
+      "corpus": "papers"
+    },
+    {
+      "id": "urdu-en-1",
+      "language": "en",
+      "query_type": "lexical",
+      "corpus": "urdu_doc",
+      "question": "In which year did Alan Turing propose the Turing test, according to the Urdu article?",
+      "answer": "1950",
+      "answer_en": "1950",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "1950ء میں ایلن ٹورنگ نے ٹورنگ ٹیسٹ"
+      ],
+      "answerable": true,
+      "translation_of": null
+    },
+    {
+      "id": "urdu-ur-1",
+      "language": "ur",
+      "query_type": "lexical",
+      "corpus": "urdu_doc",
+      "question": "اردو مضمون کے مطابق ایلن ٹورنگ نے ٹورنگ ٹیسٹ کس سال تجویز کیا؟",
+      "answer": "1950",
+      "answer_en": "1950",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "1950ء میں ایلن ٹورنگ نے ٹورنگ ٹیسٹ"
+      ],
+      "answerable": true,
+      "translation_of": "urdu-en-1"
+    },
+    {
+      "id": "urdu-en-2",
+      "language": "en",
+      "query_type": "paraphrase",
+      "corpus": "urdu_doc",
+      "question": "At which conference was the term artificial intelligence coined, and in what year?",
+      "answer": "The Dartmouth conference in 1956.",
+      "answer_en": "The Dartmouth conference in 1956.",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "1956ء میں ڈارٹ ماتھ کانفرنس"
+      ],
+      "answerable": true,
+      "translation_of": null
+    },
+    {
+      "id": "urdu-ur-2",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "corpus": "urdu_doc",
+      "question": "مصنوعی ذہانت کی اصطلاح کس کانفرنس میں اور کس سال وضع ہوئی؟",
+      "answer": "1956 میں ڈارٹ ماتھ کانفرنس میں۔",
+      "answer_en": "The Dartmouth conference in 1956.",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "1956ء میں ڈارٹ ماتھ کانفرنس"
+      ],
+      "answerable": true,
+      "translation_of": "urdu-en-2"
+    },
+    {
+      "id": "urdu-en-3",
+      "language": "en",
+      "query_type": "lexical",
+      "corpus": "urdu_doc",
+      "question": "What does the Urdu article say machine learning is, relative to artificial intelligence?",
+      "answer": "A subfield of artificial intelligence.",
+      "answer_en": "A subfield of artificial intelligence.",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "مشین لرننگ ہے، جو مصنوعی ذہانت کا ایک ذیلی شعبہ"
+      ],
+      "answerable": true,
+      "translation_of": null
+    },
+    {
+      "id": "urdu-ur-3",
+      "language": "ur",
+      "query_type": "lexical",
+      "corpus": "urdu_doc",
+      "question": "اردو مضمون مشین لرننگ کو مصنوعی ذہانت کے مقابلے میں کیا کہتا ہے؟",
+      "answer": "مصنوعی ذہانت کا ایک ذیلی شعبہ۔",
+      "answer_en": "A subfield of artificial intelligence.",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "مشین لرننگ ہے، جو مصنوعی ذہانت کا ایک ذیلی شعبہ"
+      ],
+      "answerable": true,
+      "translation_of": "urdu-en-3"
+    },
+    {
+      "id": "urdu-en-4",
+      "language": "en",
+      "query_type": "paraphrase",
+      "corpus": "urdu_doc",
+      "question": "How many types of artificial intelligence does the Urdu article list, and what is the first type called in English?",
+      "answer": "Four types. The first is Reactive Machines.",
+      "answer_en": "Four types. The first is Reactive Machines.",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 2
+        }
+      ],
+      "evidence_quotes": [
+        "چار اقسام میں تقسیم",
+        "رد عمل مشینیں (Reactive Machines)"
+      ],
+      "answerable": true,
+      "translation_of": null
+    },
+    {
+      "id": "urdu-ur-4",
+      "language": "ur",
+      "query_type": "paraphrase",
+      "corpus": "urdu_doc",
+      "question": "اردو مضمون مصنوعی ذہانت کی کتنی اقسام بتاتا ہے اور انگریزی میں پہلی قسم کا نام کیا ہے؟",
+      "answer": "چار اقسام۔ پہلی Reactive Machines ہے۔",
+      "answer_en": "Four types. The first is Reactive Machines.",
+      "gold_pages": [
+        {
+          "doc_id": "urdu-ai",
+          "page": 2
+        }
+      ],
+      "evidence_quotes": [
+        "چار اقسام میں تقسیم",
+        "رد عمل مشینیں (Reactive Machines)"
+      ],
+      "answerable": true,
+      "translation_of": "urdu-en-4"
     },
     {
       "id": "u-en-1",
-      "language": "en",
-      "query_type": "unanswerable",
-      "answerable": false,
-      "question": "What BLEU score did the authors report for English-to-Urdu translation?",
-      "answer": "",
-      "answer_en": "",
-      "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": null
-    },
-    {
-      "id": "u-ur-1",
-      "language": "ur",
-      "query_type": "unanswerable",
-      "answerable": false,
-      "question": "مصنفین نے انگریزی سے اردو ترجمہ کے لیے کون سا BLEU اسکور رپورٹ کیا؟",
-      "answer": "",
-      "answer_en": "",
-      "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": "u-en-1"
-    },
-    {
-      "id": "u-en-2",
-      "language": "en",
-      "query_type": "unanswerable",
-      "answerable": false,
-      "question": "Which COVID-19 vaccine efficacy is analyzed in these papers?",
-      "answer": "",
-      "answer_en": "",
-      "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": null
-    },
-    {
-      "id": "u-ur-2",
-      "language": "ur",
-      "query_type": "unanswerable",
-      "answerable": false,
-      "question": "ان مقالوں میں کووڈ-19 کی کس ویکسین کی افادیت کا تجزیہ کیا گیا ہے؟",
-      "answer": "",
-      "answer_en": "",
-      "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": "u-en-2"
-    },
-    {
-      "id": "u-en-3",
-      "language": "en",
-      "query_type": "unanswerable",
-      "answerable": false,
-      "question": "How many parameters does LLaMA have according to this corpus?",
-      "answer": "",
-      "answer_en": "",
-      "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": null
-    },
-    {
-      "id": "u-ur-3",
-      "language": "ur",
-      "query_type": "unanswerable",
-      "answerable": false,
-      "question": "اس مجموعے کے مطابق LLaMA میں کتنے پیرامیٹرز ہیں؟",
-      "answer": "",
-      "answer_en": "",
-      "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": "u-en-3"
-    },
-    {
-      "id": "u-en-4",
       "language": "en",
       "query_type": "unanswerable",
       "answerable": false,
@@ -381,11 +1818,103 @@
       "answer": "",
       "answer_en": "",
       "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": null
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
     },
     {
-      "id": "u-ur-4",
+      "id": "u-en-2",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "Which cricket World Cup final does the corpus describe?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-en-3",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "What piano sonata do the authors analyze?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-en-4",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "Which Shakespeare play is used as a running example?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-en-5",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "What bitcoin price do the authors forecast?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-en-6",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "Which COVID-19 vaccine efficacy is reported?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-en-7",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "How many moons of Jupiter does the paper catalogue?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-en-8",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "What sourdough hydration do the authors recommend?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-1",
       "language": "ur",
       "query_type": "unanswerable",
       "answerable": false,
@@ -393,8 +1922,100 @@
       "answer": "",
       "answer_en": "",
       "gold_pages": [],
-      "evidence_quotes": [],
-      "translation_of": "u-en-4"
+      "translation_of": "u-en-1",
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-2",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "یہ مجموعہ کرکٹ ورلڈ کپ کے کس فائنل کو بیان کرتا ہے؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "u-en-2",
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-3",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "مصنفین کس پیانو سوناٹا کا تجزیہ کرتے ہیں؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "u-en-3",
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-4",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "مثال کے طور پر شیکسپیئر کا کون سا ڈرامہ استعمال ہوا ہے؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "u-en-4",
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-5",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "مصنفین بٹ کوائن کی کون سی قیمت کی پیش گوئی کرتے ہیں؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "u-en-5",
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-6",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "کووڈ-19 کی کس ویکسین کی افادیت بیان کی گئی ہے؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "u-en-6",
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-7",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "مقالہ مشتری کے کتنے چاند گنتا ہے؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "u-en-7",
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "u-ur-8",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "مصنفین ساورڈو کی کون سی ہائیڈریشن تجویز کرتے ہیں؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "u-en-8",
+      "corpus": "papers",
+      "evidence_quotes": []
     }
   ]
 }

@@ -1,9 +1,11 @@
 {
-  "name": "mira-mini-pilot",
-  "version": 1,
+  "name": "mira-pilot",
+  "version": 2,
   "built": "2026-11-23",
-  "counts": {"pilot_items": 8},
-  "construction": "Disjoint from data/qa/gold.json. These eight questions are used only to choose the per-method evidence-gate threshold. They are not included in the reported test scores. Urdu items are translations of the English items.",
+  "counts": {
+    "pilot_items": 14
+  },
+  "construction": "Disjoint from gold.json. Used only to choose per-method evidence-gate thresholds. Not included in reported scores.",
   "items": [
     {
       "id": "p-mish-en",
@@ -13,9 +15,17 @@
       "question": "Where is the MISH source code released?",
       "answer": "https://github.com/Varyn/MISH",
       "answer_en": "https://github.com/Varyn/MISH",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 6}],
-      "evidence_quotes": ["github.com/Varyn/MISH"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 6
+        }
+      ],
+      "evidence_quotes": [
+        "github.com/Varyn/MISH"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "p-mish-ur",
@@ -25,9 +35,17 @@
       "question": "MISH کا سورس کوڈ کہاں جاری کیا گیا ہے؟",
       "answer": "https://github.com/Varyn/MISH",
       "answer_en": "https://github.com/Varyn/MISH",
-      "gold_pages": [{"doc_id": "2103.14460", "page": 6}],
-      "evidence_quotes": ["github.com/Varyn/MISH"],
-      "translation_of": "p-mish-en"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14460",
+          "page": 6
+        }
+      ],
+      "evidence_quotes": [
+        "github.com/Varyn/MISH"
+      ],
+      "translation_of": "p-mish-en",
+      "corpus": "papers"
     },
     {
       "id": "p-phd-en",
@@ -37,9 +55,17 @@
       "question": "In which city was the projected Hamming dissimilarity paper presented?",
       "answer": "Ljubljana, Slovenia.",
       "answer_en": "Ljubljana, Slovenia.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 1}],
-      "evidence_quotes": ["Ljubljana"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Ljubljana"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "p-phd-ur",
@@ -49,9 +75,17 @@
       "question": "پروجیکٹڈ ہیمِنگ ڈسِسِملیرٹی کا مقالہ کس شہر میں پیش کیا گیا؟",
       "answer": "لیوبلیانا، سلووینیا۔",
       "answer_en": "Ljubljana, Slovenia.",
-      "gold_pages": [{"doc_id": "2103.14455", "page": 1}],
-      "evidence_quotes": ["Ljubljana"],
-      "translation_of": "p-phd-en"
+      "gold_pages": [
+        {
+          "doc_id": "2103.14455",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Ljubljana"
+      ],
+      "translation_of": "p-phd-en",
+      "corpus": "papers"
     },
     {
       "id": "p-nn-en",
@@ -61,9 +95,18 @@
       "question": "What batch size and loss function were used to train the nonnegative autoencoders?",
       "answer": "The batch size was 64 and the loss was mean squared error.",
       "answer_en": "The batch size was 64 and the loss was mean squared error.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 21}],
-      "evidence_quotes": ["batch size was set to 64", "mean squared error"],
-      "translation_of": null
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 21
+        }
+      ],
+      "evidence_quotes": [
+        "batch size was set to 64",
+        "mean squared error"
+      ],
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "p-nn-ur",
@@ -73,9 +116,18 @@
       "question": "نان نیگیٹو آٹو اینکوڈرز کی تربیت میں بیچ سائز اور لاس فنکشن کیا تھے؟",
       "answer": "بیچ سائز 64 تھا اور لاس اوسط مربع خطا تھا۔",
       "answer_en": "The batch size was 64 and the loss was mean squared error.",
-      "gold_pages": [{"doc_id": "2106.16239", "page": 21}],
-      "evidence_quotes": ["batch size was set to 64", "mean squared error"],
-      "translation_of": "p-nn-en"
+      "gold_pages": [
+        {
+          "doc_id": "2106.16239",
+          "page": 21
+        }
+      ],
+      "evidence_quotes": [
+        "batch size was set to 64",
+        "mean squared error"
+      ],
+      "translation_of": "p-nn-en",
+      "corpus": "papers"
     },
     {
       "id": "p-u-en",
@@ -87,7 +139,8 @@
       "answer_en": "",
       "gold_pages": [],
       "evidence_quotes": [],
-      "translation_of": null
+      "translation_of": null,
+      "corpus": "papers"
     },
     {
       "id": "p-u-ur",
@@ -99,7 +152,114 @@
       "answer_en": "",
       "gold_pages": [],
       "evidence_quotes": [],
-      "translation_of": "p-u-en"
+      "translation_of": "p-u-en",
+      "corpus": "papers"
+    },
+    {
+      "id": "p-bert-en",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "In which city and year was the BERT paper presented?",
+      "answer": "Minneapolis, Minnesota, in June 2019.",
+      "answer_en": "Minneapolis, Minnesota, in June 2019.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Minneapolis, Minnesota, June 2 - June 7, 2019"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "p-bert-ur",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "BERT کا مقالہ کس شہر اور کس سال پیش کیا گیا؟",
+      "answer": "جون 2019 میں Minneapolis، Minnesota میں۔",
+      "answer_en": "Minneapolis, Minnesota, in June 2019.",
+      "gold_pages": [
+        {
+          "doc_id": "N19-1423",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "Minneapolis, Minnesota, June 2 - June 7, 2019"
+      ],
+      "answerable": true,
+      "translation_of": "p-bert-en",
+      "corpus": "papers"
+    },
+    {
+      "id": "p-dpr-en",
+      "language": "en",
+      "query_type": "lexical",
+      "question": "What absolute top-20 gain over Lucene-BM25 does the dense retriever report?",
+      "answer": "9% to 19%.",
+      "answer_en": "9% to 19%.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "9%-19% absolute"
+      ],
+      "answerable": true,
+      "translation_of": null,
+      "corpus": "papers"
+    },
+    {
+      "id": "p-dpr-ur",
+      "language": "ur",
+      "query_type": "lexical",
+      "question": "dense retriever Lucene-BM25 پر top-20 میں کتنا مطلق اضافہ بتاتا ہے؟",
+      "answer": "9% سے 19%۔",
+      "answer_en": "9% to 19%.",
+      "gold_pages": [
+        {
+          "doc_id": "2020.emnlp-main.550",
+          "page": 1
+        }
+      ],
+      "evidence_quotes": [
+        "9%-19% absolute"
+      ],
+      "answerable": true,
+      "translation_of": "p-dpr-en",
+      "corpus": "papers"
+    },
+    {
+      "id": "p-u-en-2",
+      "language": "en",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "Which sourdough starter schedule do the authors publish?",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": null,
+      "corpus": "papers",
+      "evidence_quotes": []
+    },
+    {
+      "id": "p-u-ur-2",
+      "language": "ur",
+      "query_type": "unanswerable",
+      "answerable": false,
+      "question": "مصنفین ساورڈو سٹارٹر کا کون سا شیڈول شائع کرتے ہیں؟",
+      "answer": "",
+      "answer_en": "",
+      "gold_pages": [],
+      "translation_of": "p-u-en-2",
+      "corpus": "papers",
+      "evidence_quotes": []
     }
   ]
 }

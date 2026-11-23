@@ -19,34 +19,48 @@ from mira.grounding import ABSTAIN_TOKEN
 
 logger = logging.getLogger("mira.generate")
 
-PROMPT_VERSION = "mira-prompt-v1"
+PROMPT_VERSION = "mira-prompt-v2"
 
 _SYSTEM = (
     "You answer questions about research papers using only the passages. "
     f"If the passages do not contain the answer, reply with exactly {ABSTAIN_TOKEN}. "
-    "Use the same language as the question. "
-    "After each sentence, cite the passage id in square brackets. "
+    "Answer in the same language as the question. "
+    "Do not repeat or translate the question. State the fact the question asks for. "
+    "After the answer, cite one passage id in square brackets. "
     "Do not use knowledge that is not in the passages."
 )
 
 
 def build_messages(question: str, language: str, passages: list[tuple[str, str]]) -> list[dict]:
     lang_name = "Urdu" if language == "ur" else "English"
-    example_user = (
-        "Passages:\n"
-        "[demo::p1::c0] Batch normalization normalizes layer inputs using the mean and variance of the current mini-batch.\n\n"
-        "Question (English): What statistics does batch normalization use?\n\n"
-        f"Write a short answer in English. Cite passage ids. If the answer is not in the passages, reply {ABSTAIN_TOKEN}."
-    )
-    example_assistant = (
-        "Batch normalization uses the mean and variance of the current mini-batch. [demo::p1::c0]"
-    )
+    if language == "ur":
+        example_user = (
+            "Passages:\n"
+            "[demo::p1::c0] Batch normalization normalizes layer inputs using the mean and variance of the current mini-batch.\n\n"
+            "Question (Urdu): بیچ نارملائزیشن کون سے اعداد و شمار استعمال کرتی ہے؟\n\n"
+            f"Write the fact in Urdu. Do not repeat the question. Cite one passage id. "
+            f"If the answer is not in the passages, reply {ABSTAIN_TOKEN}."
+        )
+        example_assistant = (
+            "بیچ نارملائزیشن موجودہ منی بیچ کا اوسط اور ویریئنس استعمال کرتی ہے۔ [demo::p1::c0]"
+        )
+    else:
+        example_user = (
+            "Passages:\n"
+            "[demo::p1::c0] Batch normalization normalizes layer inputs using the mean and variance of the current mini-batch.\n\n"
+            "Question (English): What statistics does batch normalization use?\n\n"
+            f"Write the fact in English. Do not repeat the question. Cite one passage id. "
+            f"If the answer is not in the passages, reply {ABSTAIN_TOKEN}."
+        )
+        example_assistant = (
+            "Batch normalization uses the mean and variance of the current mini-batch. [demo::p1::c0]"
+        )
     blocks = [f"[{chunk_id}] {text}" for chunk_id, text in passages]
     user = (
         "Passages:\n"
         + "\n\n".join(blocks)
         + f"\n\nQuestion ({lang_name}): {question}\n\n"
-        + f"Write a short answer in {lang_name}. Cite passage ids. "
+        + f"Write a short answer in {lang_name}. Do not repeat the question. Cite one passage id. "
         + f"If the answer is not in the passages, reply {ABSTAIN_TOKEN}."
     )
     return [

@@ -18,7 +18,8 @@
       "pdf_url": "https://arxiv.org/pdf/2103.14460v1.pdf",
       "pages": 10,
       "sha256": "ea9a3274be75e261a7ba44141c3ff2055c0fdc1dd94ab971bdcb4996e9c82ac5",
-      "venue": "The Web Conference 2021 (WWW '21)"
+      "venue": "The Web Conference 2021",
+      "source": "arxiv"
     },
     {
       "doc_id": "2103.14455",
@@ -37,7 +38,8 @@
       "pdf_url": "https://arxiv.org/pdf/2103.14455v1.pdf",
       "pages": 9,
       "sha256": "67fe36aee5c0a7992ff910a6331bf07fdaf77b04ac6ce060550863dea0b26d96",
-      "venue": "The Web Conference 2021 (WWW '21)"
+      "venue": "The Web Conference 2021",
+      "source": "arxiv"
     },
     {
       "doc_id": "2106.16239",
@@ -55,7 +57,116 @@
       "pdf_url": "https://arxiv.org/pdf/2106.16239v9.pdf",
       "pages": 40,
       "sha256": "5d5caa94c388b2e797e0983146f5d61dca6ceb74aebeee9fba8ee3a7deb3e763",
-      "venue": "Journal of Machine Learning Research 25 (2024) 1-40"
+      "venue": "Journal of Machine Learning Research 25 (2024)",
+      "source": "arxiv"
+    },
+    {
+      "doc_id": "N19-1423",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "authors": [
+        "Jacob Devlin",
+        "Ming-Wei Chang",
+        "Kenton Lee",
+        "Kristina Toutanova"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The ACL Anthology states that materials published in or after 2016 are licensed under CC BY 4.0 (https://aclanthology.org/). This PDF is that anthology version and is dated 2019.",
+      "pdf_url": "https://aclanthology.org/N19-1423.pdf",
+      "pages": 16,
+      "sha256": "987545ffb087f1ece898142c403a516baeabeb70ce19089397fac6f7db12c3d4",
+      "venue": "NAACL-HLT 2019",
+      "source": "acl"
+    },
+    {
+      "doc_id": "D19-1410",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "authors": [
+        "Nils Reimers",
+        "Iryna Gurevych"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The ACL Anthology states that materials published in or after 2016 are licensed under CC BY 4.0 (https://aclanthology.org/). This PDF is that anthology version and is dated 2019.",
+      "pdf_url": "https://aclanthology.org/D19-1410.pdf",
+      "pages": 11,
+      "sha256": "e2703128039850ba7e098bfc6c7d9f3f3e75e6318815c5dd90af71085b1d384e",
+      "venue": "EMNLP-IJCNLP 2019",
+      "source": "acl"
+    },
+    {
+      "doc_id": "2020.acl-main.703",
+      "title": "BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension",
+      "authors": [
+        "Mike Lewis",
+        "Yinhan Liu",
+        "Naman Goyal",
+        "Marjan Ghazvininejad",
+        "Abdelrahman Mohamed",
+        "Omer Levy",
+        "Ves Stoyanov",
+        "Luke Zettlemoyer"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The ACL Anthology states that materials published in or after 2016 are licensed under CC BY 4.0 (https://aclanthology.org/). This PDF is that anthology version and is dated 2020.",
+      "pdf_url": "https://aclanthology.org/2020.acl-main.703.pdf",
+      "pages": 10,
+      "sha256": "3562c723fe7bebb8b362533122b3ca5c065037c8e8d67460654cf3740652bb59",
+      "venue": "ACL 2020",
+      "source": "acl"
+    },
+    {
+      "doc_id": "2020.emnlp-main.550",
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "authors": [
+        "Vladimir Karpukhin",
+        "Barlas Oguz",
+        "Sewon Min",
+        "Patrick Lewis",
+        "Ledell Wu",
+        "Sergey Edunov",
+        "Danqi Chen",
+        "Wen-tau Yih"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The ACL Anthology states that materials published in or after 2016 are licensed under CC BY 4.0 (https://aclanthology.org/). This PDF is that anthology version and is dated 2020.",
+      "pdf_url": "https://aclanthology.org/2020.emnlp-main.550.pdf",
+      "pages": 13,
+      "sha256": "2abfc7991519be2b8ce30215905516fdb593218b7bf59e50ece0d8a088a7c4d5",
+      "venue": "EMNLP 2020",
+      "source": "acl"
+    },
+    {
+      "doc_id": "2023.acl-short.24",
+      "title": "Parameter-efficient Weight Ensembling Facilitates Task-level Knowledge Transfer",
+      "authors": [
+        "Xingtai Lv",
+        "Ning Ding",
+        "Yujia Qin",
+        "Zhiyuan Liu",
+        "Maosong Sun"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The ACL Anthology states that materials published in or after 2016 are licensed under CC BY 4.0 (https://aclanthology.org/). This PDF is that anthology version and is dated 2023.",
+      "pdf_url": "https://aclanthology.org/2023.acl-short.24.pdf",
+      "pages": 13,
+      "sha256": "fd7132f2ebfbd40c1f6b4ebd84202baacf61ff3a5acfdef1f59903032e8a846d",
+      "venue": "ACL 2023 short papers",
+      "source": "acl"
+    },
+    {
+      "doc_id": "2024.acl-short.8",
+      "title": "Language Models Do Hard Arithmetic Tasks Easily and Hardly Do Easy Arithmetic Tasks",
+      "authors": [
+        "Andrew Gambardella",
+        "Yusuke Iwasawa",
+        "Yutaka Matsuo"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The ACL Anthology states that materials published in or after 2016 are licensed under CC BY 4.0 (https://aclanthology.org/). This PDF is that anthology version and is dated 2024.",
+      "pdf_url": "https://aclanthology.org/2024.acl-short.8.pdf",
+      "pages": 7,
+      "sha256": "4147a431a9152c491db62ff8401dd44c52a749824367f9c3352209aa41acc84e",
+      "venue": "ACL 2024 short papers",
+      "source": "acl"
     }
   ]
 }

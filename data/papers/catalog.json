@@ -1,44 +1,86 @@
 {
-  "note": "Pinned arXiv versions whose PDFs state a CC BY 4.0 licence for the paper. The download script checks that statement again.",
+  "note": "Pinned documents. arXiv entries are kept only when the PDF itself states CC BY 4.0. ACL Anthology entries are papers from 2016 or later, which the Anthology licenses under CC BY 4.0.",
   "papers": [
     {
+      "source": "arxiv",
       "doc_id": "2103.14460",
       "arxiv_id": "2103.14460",
       "version": "2103.14460v1",
       "title": "Unsupervised Multi-Index Semantic Hashing",
-      "authors": [
-        "Christian Hansen",
-        "Casper Hansen",
-        "Jakob Grue Simonsen",
-        "Stephen Alstrup",
-        "Christina Lioma"
-      ],
-      "venue": "The Web Conference 2021 (WWW '21)"
+      "authors": ["Christian Hansen", "Casper Hansen", "Jakob Grue Simonsen", "Stephen Alstrup", "Christina Lioma"],
+      "venue": "The Web Conference 2021"
     },
     {
+      "source": "arxiv",
       "doc_id": "2103.14455",
       "arxiv_id": "2103.14455",
       "version": "2103.14455v1",
       "title": "Projected Hamming Dissimilarity for Bit-Level Importance Coding in Collaborative Filtering",
-      "authors": [
-        "Christian Hansen",
-        "Casper Hansen",
-        "Jakob Grue Simonsen",
-        "Christina Lioma"
-      ],
-      "venue": "The Web Conference 2021 (WWW '21)"
+      "authors": ["Christian Hansen", "Casper Hansen", "Jakob Grue Simonsen", "Christina Lioma"],
+      "venue": "The Web Conference 2021"
     },
     {
+      "source": "arxiv",
       "doc_id": "2106.16239",
       "arxiv_id": "2106.16239",
       "version": "2106.16239v9",
       "title": "Fixed points of nonnegative neural networks",
-      "authors": [
-        "Tomasz J. Piotrowski",
-        "Renato L. G. Cavalcante",
-        "Mateusz Gabor"
-      ],
-      "venue": "Journal of Machine Learning Research 25 (2024) 1-40"
+      "authors": ["Tomasz J. Piotrowski", "Renato L. G. Cavalcante", "Mateusz Gabor"],
+      "venue": "Journal of Machine Learning Research 25 (2024)"
+    },
+    {
+      "source": "acl",
+      "doc_id": "N19-1423",
+      "year": 2019,
+      "url": "https://aclanthology.org/N19-1423.pdf",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "authors": ["Jacob Devlin", "Ming-Wei Chang", "Kenton Lee", "Kristina Toutanova"],
+      "venue": "NAACL-HLT 2019"
+    },
+    {
+      "source": "acl",
+      "doc_id": "D19-1410",
+      "year": 2019,
+      "url": "https://aclanthology.org/D19-1410.pdf",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "authors": ["Nils Reimers", "Iryna Gurevych"],
+      "venue": "EMNLP-IJCNLP 2019"
+    },
+    {
+      "source": "acl",
+      "doc_id": "2020.acl-main.703",
+      "year": 2020,
+      "url": "https://aclanthology.org/2020.acl-main.703.pdf",
+      "title": "BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension",
+      "authors": ["Mike Lewis", "Yinhan Liu", "Naman Goyal", "Marjan Ghazvininejad", "Abdelrahman Mohamed", "Omer Levy", "Ves Stoyanov", "Luke Zettlemoyer"],
+      "venue": "ACL 2020"
+    },
+    {
+      "source": "acl",
+      "doc_id": "2020.emnlp-main.550",
+      "year": 2020,
+      "url": "https://aclanthology.org/2020.emnlp-main.550.pdf",
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "authors": ["Vladimir Karpukhin", "Barlas Oguz", "Sewon Min", "Patrick Lewis", "Ledell Wu", "Sergey Edunov", "Danqi Chen", "Wen-tau Yih"],
+      "venue": "EMNLP 2020"
+    },
+    {
+      "source": "acl",
+      "doc_id": "2023.acl-short.24",
+      "year": 2023,
+      "url": "https://aclanthology.org/2023.acl-short.24.pdf",
+      "title": "Parameter-efficient Weight Ensembling Facilitates Task-level Knowledge Transfer",
+      "authors": ["Xingtai Lv", "Ning Ding", "Yujia Qin", "Zhiyuan Liu", "Maosong Sun"],
+      "venue": "ACL 2023 short papers"
+    },
+    {
+      "source": "acl",
+      "doc_id": "2024.acl-short.8",
+      "year": 2024,
+      "url": "https://aclanthology.org/2024.acl-short.8.pdf",
+      "title": "Language Models Do Hard Arithmetic Tasks Easily and Hardly Do Easy Arithmetic Tasks",
+      "authors": ["Andrew Gambardella", "Yusuke Iwasawa", "Yutaka Matsuo"],
+      "venue": "ACL 2024 short papers"
     }
   ]
 }

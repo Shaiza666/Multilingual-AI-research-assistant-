@@ -1,8 +1,9 @@
-Source: arXiv:2103.14460 version 2103.14460v1
+Document: 2103.14460
 Title: Unsupervised Multi-Index Semantic Hashing
 Authors: Christian Hansen, Casper Hansen, Jakob Grue Simonsen, Stephen Alstrup, Christina Lioma
 License: CC BY 4.0
 URL: https://arxiv.org/abs/2103.14460v1
+Evidence: The licence statement is printed on the first page of the downloaded PDF.
 Extracted text is included so the benchmark quotations can be checked.
 
 

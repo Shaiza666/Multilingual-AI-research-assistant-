@@ -58,6 +58,8 @@ class LLMConfig:
     repeat_penalty: float = 1.1
     seed: int = 0
     passage_chars: int = 1100
+    profile: str = "quality"
+    profiles: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -72,6 +74,8 @@ class GroundingConfig:
     lexical_threshold: float = 0.35
     embedding_threshold: float = 0.82
     min_gate_accuracy: float = 0.6
+    min_gate_coverage: float = 1.0
+    extractive_min_cosine: float = 0.72
 
 
 @dataclass
@@ -153,6 +157,20 @@ def _apply_env(cfg: Config) -> None:
     threads = os.environ.get("MIRA_THREADS")
     if threads:
         cfg.llm.n_threads = int(threads)
+
+
+def apply_profile(cfg: Config, name: str) -> None:
+    profiles = cfg.llm.profiles or {}
+    if name not in profiles:
+        known = ", ".join(sorted(profiles)) or "(none)"
+        raise MiraError(f"Unknown model profile '{name}'. Known profiles: {known}")
+    chosen = profiles[name]
+    cfg.llm.profile = name
+    cfg.llm.gguf_path = str(chosen["gguf_path"])
+    if chosen.get("gguf_repo"):
+        cfg.llm.gguf_repo = str(chosen["gguf_repo"])
+    if chosen.get("gguf_filename"):
+        cfg.llm.gguf_filename = str(chosen["gguf_filename"])
 
 
 def setup_logging(verbose: bool = False) -> None:

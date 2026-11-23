@@ -7,7 +7,7 @@ import json
 import logging
 from pathlib import Path
 
-from mira.config import load_config, setup_logging
+from mira.config import apply_profile, load_config, setup_logging
 from mira.errors import MiraError
 from mira.hardware import collect_hardware
 
@@ -32,6 +32,8 @@ def _cmd_ask(args: argparse.Namespace) -> int:
     from mira.pipeline import ask
 
     cfg = load_config(args.config)
+    if args.profile:
+        apply_profile(cfg, args.profile)
     index = IndexStore.load(args.index)
     thresholds = None
     threshold_path = Path(args.thresholds) if args.thresholds else Path(cfg.results_dir) / "thresholds.json"
@@ -83,6 +85,7 @@ def _cmd_evaluate(args: argparse.Namespace) -> int:
         methods=args.methods,
         limit=args.limit,
         skip_generate=args.skip_generate,
+        profiles=args.profiles,
     )
     logger.info("Wrote %s", Path(args.out) / "RESULTS.md")
     print(Path(args.out) / "RESULTS.md")
@@ -119,6 +122,7 @@ def build_parser() -> argparse.ArgumentParser:
     ask.add_argument("--retrieve-only", action="store_true")
     ask.add_argument("--show-passages", action="store_true")
     ask.add_argument("--cache", default="data/cache/generations.jsonl")
+    ask.add_argument("--profile", default=None, help="fast, quality, or large")
     ask.set_defaults(func=_cmd_ask)
 
     evaluate = sub.add_parser("evaluate", help="Score retrieval and answers on the benchmark")
@@ -130,6 +134,7 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--methods", nargs="*", default=None)
     evaluate.add_argument("--limit", type=int, default=None)
     evaluate.add_argument("--skip-generate", action="store_true")
+    evaluate.add_argument("--profiles", nargs="*", default=None, help="Model profiles, default quality")
     evaluate.set_defaults(func=_cmd_evaluate)
 
     hardware = sub.add_parser("hardware", help="Print CPU and package versions")

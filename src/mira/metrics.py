@@ -108,3 +108,23 @@ def mean(values: list[float]) -> float | None:
 def macro_average(rows: list[dict], key: str) -> float | None:
     values = [float(row[key]) for row in rows if row.get(key) is not None]
     return mean(values)
+
+
+def bootstrap_mean_ci(values: list[float], n_resamples: int = 1000, seed: int = 0, alpha: float = 0.05) -> dict:
+    """Percentile bootstrap of the mean. Returns None bounds when the sample is empty."""
+    if not values:
+        return {"mean": None, "low": None, "high": None, "n": 0}
+    import numpy as np
+
+    array = np.asarray(values, dtype=np.float64)
+    rng = np.random.default_rng(seed)
+    draws = rng.choice(array, size=(n_resamples, array.size), replace=True).mean(axis=1)
+    draws.sort()
+    low_index = int(alpha / 2 * n_resamples)
+    high_index = min(n_resamples - 1, int((1 - alpha / 2) * n_resamples))
+    return {
+        "mean": float(array.mean()),
+        "low": float(draws[low_index]),
+        "high": float(draws[high_index]),
+        "n": int(array.size),
+    }

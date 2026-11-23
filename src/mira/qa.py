@@ -22,6 +22,7 @@ class QAItem:
     query_type: str
     evidence_quotes: list[str] = field(default_factory=list)
     split: str = "test"
+    corpus: str = "papers"
 
     def gold_set(self) -> set[tuple[str, int]]:
         return set(self.gold_pages)
@@ -51,6 +52,7 @@ def _parse_item(raw: dict, split: str) -> QAItem:
         query_type=str(raw.get("query_type") or ("unanswerable" if not answerable else "lexical")),
         evidence_quotes=[str(q) for q in raw.get("evidence_quotes") or []],
         split=split,
+        corpus=str(raw.get("corpus") or "papers"),
     )
 
 
