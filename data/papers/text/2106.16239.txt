@@ -1,0 +1,1956 @@
+Source: arXiv:2106.16239 version 2106.16239v9
+Title: Fixed points of nonnegative neural networks
+Authors: Tomasz J. Piotrowski, Renato L. G. Cavalcante, Mateusz Gabor
+License: CC BY 4.0
+URL: https://arxiv.org/abs/2106.16239v9
+Extracted text is included so the benchmark quotations can be checked.
+
+
+===== PAGE 1 =====
+Journal of Machine Learning Research 25 (2024) 1-40
+Submitted 2/23; Revised 3/24; Published 5/24
+Fixed points of nonnegative neural networks
+Tomasz J. Piotrowski
+tpiotrowski@umk.pl
+Faculty of Physics, Astronomy and Informatics,
+Nicolaus Copernicus University,
+Grudziądzka 5/7, 87-100 Toruń, Poland
+Renato L. G. Cavalcante
+renato.cavalcante@hhi.fraunhofer.de
+Fraunhofer Heinrich Hertz Institute,
+Einsteinufer 37, 10587 Berlin, Germany
+Mateusz Gabor
+mateusz.gabor@pwr.edu.pl
+Faculty of Electronics, Photonics, and Microsystems,
+Wrocław University of Science and Technology,
+Wybrzeze Wyspianskiego 27, 50-370 Wrocław, Poland
+Editor: Aryeh Kontorovich
+Abstract
+We use fixed point theory to analyze nonnegative neural networks, which we define as
+neural networks that map nonnegative vectors to nonnegative vectors. We first show that
+nonnegative neural networks with nonnegative weights and biases can be recognized as
+monotonic and (weakly) scalable mappings within the framework of nonlinear Perron-
+Frobenius theory.
+This fact enables us to provide conditions for the existence of fixed
+points of nonnegative neural networks having inputs and outputs of the same dimension,
+and these conditions are weaker than those recently obtained using arguments in convex
+analysis. Furthermore, we prove that the shape of the fixed point set of nonnegative neural
+networks with nonnegative weights and biases is an interval, which under mild conditions
+degenerates to a point. These results are then used to obtain the existence of fixed points
+of more general nonnegative neural networks. From a practical perspective, our results
+contribute to the understanding of the behavior of autoencoders, and we also offer valuable
+mathematical machinery for future developments in deep equilibrium models.
+Keywords:
+Nonnegative neural networks, nonlinear Perron-Frobenius theory, monotonic
+and (weakly) scalable mappings, fixed point analysis, convergence analysis.
+1. Introduction
+Neural networks consist of multiple layers that are able to extract patterns of input signals
+for decision-making without any human intervention. This fact has profound consequences
+in a wide range of wireless communications, image recognition, and speech processing tasks,
+where neural networks set high standards of performance LeCun et al. (2015); Goodfellow
+et al. (2016); Samek et al. (2021). Neural networks have also been recently introduced as
+efficient iterative regularization methods in inverse problems, which opens a vista of new
+applications, especially in medical imaging Adler and Öktem (2017); Benning and Burger
+(2018); Ongie et al. (2020).
+©2024 Tomasz J. Piotrowski, Renato L. G. Cavalcante, Mateusz Gabor.
+License: CC-BY 4.0, see https://creativecommons.org/licenses/by/4.0/. Attribution requirements are provided
+at http://jmlr.org/papers/v25/23-0167.html.
+arXiv:2106.16239v9  [stat.ML]  17 Jun 2024
+
+
+===== PAGE 2 =====
+Piotrowski, Cavalcante, Gabor
+Our study is specifically focused on nonnegative neural networks, defined as neural net-
+works that map nonnegative vectors to nonnegative vectors.
+These networks have been
+widely used in many applications such as spectral analysis, image processing, and text pro-
+cessing Lemme et al. (2012); Nguyen et al. (2013); Chorowski and Zurada (2015); Hosseini-
+Asl et al. (2015); Zhou et al. (2016); Ali and Yangyu (2017); Ayinde and Zurada (2018); Su
+et al. (2018); Chen et al. (2019); Yu et al. (2019); Palsson et al. (2019). Nonnegative net-
+works can be designed to decompose input signals into additive sparse components, leading
+to the formation of an interpretable hierarchical representation of the input data, mirroring
+the way the human brain processes sensory inputs Lee and Seung (1999); Shashanka et al.
+(2008); Lemme et al. (2012); Nguyen et al. (2013); Chorowski and Zurada (2015); Ayinde
+and Zurada (2018). This principle has been exploited in autoencoders with nonnegative
+weights, which aims to break down input data into additive features within the encoding
+layer, which are then additively recombined in the decoding layer to reconstruct the origi-
+nal data Lemme et al. (2012); Ayinde and Zurada (2018). In some scenarios, the gains in
+transparency and interpretation obtained by restricting the weights of the neural network
+to be nonnegative do not translate into a significant loss of predictive power Nguyen et al.
+(2013); Chorowski and Zurada (2015).
+Neural networks with nonnegative weights have also been increasingly gaining atten-
+tion in recent years because of the resurgence of analog neural networks, which have been
+demonstrated to be both readily implementable and more energy efficient than their digital
+counterparts Kendall et al. (2020); Paliy et al. (2021). In analog networks, the weight pa-
+rameters are physically encoded in the conductance of programmable resistors. Thus, these
+analog neural networks are examples of neural networks that are nonnegative because of the
+laws of physics. Moreover, various approaches can be used to mitigate the loss of predictive
+power caused by the physical nonnegative constraints Kendall et al. (2020). These results
+are consistent with those obtained with the digital neural networks in Nguyen et al. (2013);
+Chorowski and Zurada (2015).
+With the objective of improving our understanding of nonnegative neural networks,
+we shed light on questions related to the existence of fixed points and the shape of the
+fixed point set of nonnegative neural networks (with matching input and output spaces).
+To illustrate the importance of fixed point analysis using concrete examples, let us first
+consider autoencoders, which can be seen as self-mappings taking the form T : Rk →Rk
+with x 7→T1(T2(x)), where T1 : Rk →Rl with k > l is a mapping (encoder) used to
+learn compact representations of typical inputs, and T2 : Rl →Rk is a mapping (decoder)
+used to reconstruct the input from the compact representation obtained with T1. From this
+mathematical perspective, the fixed points of an autoencoder T are exactly the inputs that
+can be perfectly reconstructed. It is therefore important to determine whether the fixed
+point set of an autoencoder is nonempty, and, if so, how rich this set is (i.e., determine its
+shape).
+As a second example of the significance of fixed point analysis in neural networks, we
+mention deep equilibrium (DEQ) models Bai et al. (2019, 2020); Gilton et al. (2021); Huang
+et al. (2021); Tsuchida and Ong (2023), which have been increasingly gaining attention from
+the machine learning community in recent years. The core concept of implicit models is
+that, instead of designing layers explicitly, as usually done, it suffices to define a layer’s
+objective (target) functional equation to hold, without actually specifying how such a layer
+2
+
+
+===== PAGE 3 =====
+title
+should achieve this goal. More precisely, a DEQ layer maps an input x ∈Rk to an output
+z⋆∈Fix(gx) ⊂Rk, where gx : Rk →Rk is an explicit mapping parameterized by x. In the
+above definition, closed-form expressions for the implicit function x 7→z⋆∈Fix(gx) are not
+required, and the numerical scheme used to compute the output z⋆∈Fix(gx) from a given
+input x is not specified. As a result, to ensure that the implicit function x 7→z⋆∈Fix(gx)
+is well-defined and independent of the numerical scheme used to compute the output, it is
+natural to require Fix(gx) to be a singleton for every x ⊂X. This fixed point formulation
+also allows for direct implicit differentiation, which is crucial for the efficiency of training of
+DEQ models Bai et al. (2019).
+Fixed point analysis in neural networks is also important in the context of inverse prob-
+lems, which are often formulated as optimization problems with the objective of minimizing
+a cost function f : Rk →R. These problems are typically solved with algorithms that can
+be interpreted as fixed point iterations of mappings determined by f.
+For example, to
+minimize a cost function f : Rk →R, we can use the standard gradient descent method:
+xn+1 = (Id −α∇f)(xn), n = 0, 1, 2, . . . . The objective of this algorithm is to locate a
+point x⋆satisfying ∇f(x∗) = 0, which is also a fixed-point of the mapping (Id −α∇f),
+where Id: Rk →Rk : x 7→x is the identity mapping. Many other iterative algorithms for
+optimization have a similar interpretation: they can be seen as fixed point algorithms based
+on a particular instance of the Mann iteration Yamada et al. (2011). One potential limita-
+tion of this traditional mathematical approach for inverse problems is that the function f
+is often imperfectly known (e.g., owing to the uncertainty about the noise distribution), so,
+in machine learning, data is used to train a neural network that is used as the mapping of a
+Mann iteration. In this approach, known as loop unrolling, the number of layers is directly
+related to the number of fixed point iterations. As a result, these neural networks effectively
+emulate a fixed-point seeking algorithm.
+In light of the above discussion, it is clear that studying the properties of the fixed point
+set of neural networks is crucial for the development of general theory able to explain their
+behavior in many applications. To this end, we show that, for nonnegative neural networks
+with nonnegative weights and biases, one of the tractable paths for establishing the existence
+and the shape of fixed point sets is the nonlinear Perron-Frobenius (PF) theory Lemmens
+and Nussbaum (2012), which is used to study monotonic and weakly scalable mappings
+defined on a cone (e.g., the nonnegative orthant). As shown in this manuscript, nonnegative
+neural networks with nonnegative weights and biases can be considered as instances of
+these mappings under mild and natural assumptions, which opens up the possibility for
+establishing the existence of fixed points of general nonnegative neural networks. In more
+detail, we organize the discussion of our results as follows:
+1. In Section 2 we introduce notation and key concepts.
+2. Section 3 contains the key technical contributions of our study:
+• We first show that nonnegative neural networks with nonnegative weights and
+biases are, under mild assumptions, both monotonic and (weakly) scalable in the
+sense of Definition 1 introduced later.
+This result is a major departure from
+a recent line of research Chen et al. (2019); Combettes and Pesquet (2020a,b)
+3
+
+
+===== PAGE 4 =====
+Piotrowski, Cavalcante, Gabor
+that has used convex analysis in Hilbert spaces to study the behavior of neural
+networks.1
+• Using the monotonicity and weak scalability properties of nonnegative neural
+networks with nonnegative weights and biases, we then proceed to characterize
+the shape of the fixed point set of these neural networks in the interior of the
+nonnegative cone Rk
++. In particular, we prove that the shape of the fixed point set
+is often an interval, which degenerates to a point if the neural network is not only
+weakly scalable, but also scalable. We show that these conditions are weaker than
+those found in some previous studies, which typically use arguments based on the
+nonexpansivity of activation functions in Hilbert spaces and operator norms of
+weight operators Combettes and Pesquet (2020a,b).
+3. In Section 4, we give conditions that guarantee that general monotonic nonnegative
+neural networks have at least one fixed point, and we show that the standard fixed
+point iteration converges to a fixed point.
+4. In Section 5, we provide conditions for the existence of fixed point(s) of general nonneg-
+ative neural networks in settings where Brouwer’s fixed point theorem is not directly
+applicable.
+5. In Section 6, we illustrate the main theoretical results via numerical simulations, where
+we evaluate the reconstruction performance of various nonnegative autoencoders. We
+also discuss how the theoretical contributions of this study provide us with a powerful
+mathematical machinery for designing efficient DEQ models. Results in this direction
+are already available in Gabor et al. (2024).
+6. In Section 7, we outline and discuss future research directions, which build on both
+the theoretical and numerical results provided in Sections 3-6.
+2. Key concepts
+We start by introducing key concepts and definitions pertaining to vectors and mappings on
+the nonnegative cone Rk
++. Let u, v ∈Rk
++; then, u ≤v denotes the partial ordering induced
+by the nonnegative cone, i.e., u ≤v ⇔v −u ∈Rk
++. Similarly, u < v means that v −u ∈Rk
++
+and u̸ = v, while u ≪v means that v −u ∈int(Rk
++), where int(Rk
++) denotes the interior of
+the nonnegative cone Rk
++.
+Definition 1 A continuous mapping f : Rs
++ →Rp is said to be
+(A0) nonnegative if
+∀x ∈Rs
++
+f(x) ∈Rp
++,
+(1)
+1. In the framework of nonlinear PF theory, monotonicity and (weak) scalability have been widely exploited
+in the context of wireless networks Boche and Schubert (2008); Schubert and Boche (2011); Shindoh
+(2019, 2020); Cavalcante et al. (2016); Cavalcante and Stańczak (2019); Cavalcante et al. (2019, 2014,
+2017); You and Yuan (2020), economic studies Oshime (1992); Woodford (2022), and biological systems
+Krause (2015), to cite a few fields.
+4
+
+
+===== PAGE 5 =====
+title
+(A1) monotonic if
+∀x, ˜x ∈Rs
++
+x ≤˜x =⇒f(x) ≤f(˜x),
+(2)
+(A2) weakly scalable if
+∀x ∈Rs
++
+∀ρ ≥1
+f(ρx) ≤ρf(x),
+(3)
+(A3) scalable if
+∀x ∈Rs
++
+∀ρ > 1
+f(ρx) ≪ρf(x).
+(4)
+We use the convention that each subscript applied to A refers to one of the above properties,
+so that, for example:
+• continuous and nonnegative mappings are (A0)-mappings;
+• continuous, nonnegative, and monotonic mappings are (A0,1)-mappings;
+• continuous, nonnegative, monotonic, and weakly scalable mappings are (A0,1,2)-mappings;
+and
+• continuous, nonnegative, monotonic, and scalable mappings are (A0,1,2,3)-mappings.
+The above classes of mappings satisfy the relations A0,1,2,3 ⊂A0,1,2 ⊂A0,1 ⊂A0 by
+definition. We will also use the class A0,2 of continuous, nonnegative, and weakly scalable
+mappings in conjunction with a stricter than A1 notion of monotonicity.
+Definition 2 An (A0)-mapping f : Rs
++ →Rp
++ is said to be strictly monotonic if
+∀x, ˜x ∈Rs
++
+x < ˜x =⇒f(x) < f(˜x)
+and
+x ≪˜x =⇒f(x) ≪f(˜x).
+(5)
+We now introduce the standard definition of a neural network.
+Definition 3 Let Ti : Rki−1 →Rki of the form Ti(xi−1)
+df.= σi(Wixi−1 + bi) be the i-th layer
+of an n-layered feed forward neural network, i = 1, . . . , n, where xi−1 ∈Rki−1 is the input to
+the layer, Wi : Rki−1 →Rki is the linear weight operator (matrix), bi ∈Rki is the bias, and
+σi : Rki →Rki is the activation function. A neural network T is then the composition
+T
+df.= Tn ◦· · · ◦T1,
+(6)
+with the zeroth layer corresponding to the input to the network. Hereafter, we assume that
+the input and output layers have the same dimension k
+df.= k0 = kn, which enables us to
+consider traditional recurrent neural networks and autoencoders as particular cases.
+We also assume that the layers of a neural network T taking the form in (6) use separable
+activation functions in the sense defined below.
+5
+
+
+===== PAGE 6 =====
+Piotrowski, Cavalcante, Gabor
+Definition 4 Let Ti be the i-th layer of a neural network T in (6). An activation function
+σi : Rki →Rki for this layer is composed of ki scalar activation functions σij : R →R
+(j = 1, 2, . . . , ki), and its operation is defined as
+σi(yi) =
+ki
+X
+j=1
+(σij(yij))eij,
+(7)
+where yij ∈R is the j-th coefficient of the vector yi
+df.= Wixi−1 + bi ∈Rki and eij is the
+j-th coefficient of the canonical basis of Rki for j = 1, 2, . . . , ki. For later reference, we
+equivalently express a layer Ti with the activation function σi in (7) as
+Ti(xi−1) = σi(yi) =
+
+σi1(yi1), σi2(yi2), . . . , σiki(yiki)
+
+,
+(8)
+where σij are scalar activation functions for j = 1, 2, . . . , ki.
+We are now ready to study the set of fixed points of nonnegative neural networks, which
+are networks that have already been used in the literature and that are increasingly gaining
+attention because of the new trends in analog computation Nguyen et al. (2013); Lemme
+et al. (2012); Ayinde and Zurada (2018); Chorowski and Zurada (2015); Hosseini-Asl et al.
+(2015); Chen et al. (2019); Ali and Yangyu (2017); Palsson et al. (2019); Su et al. (2018);
+Kendall et al. (2020); Paliy et al. (2021). With the theory we develop in Sections 3 and 4,
+we can, for example, understand some limitations of autoenconders and gain insights into
+useful approaches for improving their reconstruction performance.
+3. Fixed points of (A0,1,2)-neural networks
+We begin with the following assumption.
+Assumption 5 In Section 3 we assume that, for all layers i = 1, . . . , n:
+1. the weight matrices Wi and biases bi have nonnegative coefficients; and
+2. the activation functions σi are (A0,1,2)-mappings.
+In Corollary 9 below, we show that Assumption 5 guarantees that the resulting network is
+an (A0,1,2)-neural network, and, in certain cases, even an (A0,1,2,3)-neural network. However,
+we first demonstrate that Assumption 5.2 holds for activation functions constructed with
+commonly used scalar activation functions, and we show an explicit construction of neural
+networks satisfying Assumption 5.
+3.1 Construction of (A0,1,2)-activation functions
+Many commonly used scalar activation functions (σij in Definition 4) are continuous and con-
+cave in the nonnegative orthant. Therefore, in light of [Lemma 1]Cavalcante and Stańczak
+(2019), they belong to a proper subclass of (A0,1,2)-scalar activation functions. Some of
+them are listed below.
+6
+
+
+===== PAGE 7 =====
+title
+Remark 6 The following two lists provide examples of widely-used continuous scalar con-
+cave activation functions (with their domains restricted to ξ ∈R+), and, hence, (A0,1,2)-
+scalar activation functions. We divide them into two classes:
+• functions satisfying limξ→∞σ′(ξ) = 0, and
+• functions satisfying limξ→∞σ′(ξ) = 1.
+(L1) continuous scalar concave activation functions satisfying limξ→∞σ′(ξ) = 0:
+• (sigmoid) ξ 7→
+1
+1+exp (−ξ)
+• (capped ReLU) ξ 7→min{ξ, β}, β > 0
+• (saturated linear) ξ 7→
+ 1,
+if ξ > 1;
+ξ,
+if 0 ≤ξ ≤1
+• (inverse square root unit) ξ 7→
+ξ
+√
+1+ξ2
+• (arctangent) ξ 7→(2/π) arctan ξ
+• (hyperbolic tangent) ξ 7→tanh ξ
+• (inverse hyperbolic sine) ξ 7→arcsinh ξ
+• (Elliot) ξ 7→
+ξ
+1+ξ
+• (logarithmic) ξ 7→log(1 + ξ)
+(L2) continuous scalar concave activation function satisfying limξ→∞σ′(ξ) = 1:
+• (ReLU, inverse square root linear unit) ξ 7→ξ
+The above lists are by no means exhaustive. Indeed, a variety of the commonly used
+scalar activation functions reduce to a certain function from the above two lists if restricted
+to R+, so we do not list all variations here. For example, various versions of the ReLU (e.g.,
+parameterized, exponential), including the original ReLU listed above, and also the inverse
+square root linear unit, reduce to the identity mapping on R+.
+The following fact enables us to establish scalability and strict monotonicity of activation
+functions, and it will be useful later in Section 3.2.
+Fact 7 Consider an (A0,1,2)-activation function σi constructed with continuous scalar con-
+cave activation functions listed in Remark 6. Then:
+• if all scalar activation functions σij are such that σij(0) > 0 for j ∈{1, 2, . . . , ki},
+then, by (Cavalcante et al., 2016, Proposition 1), σi in (7) is an (A0,1,2,3)-activation
+function. Thus, limiting the choice to scalar activation functions from lists (L1)-(L2)
+in Remark 6, we obtain that σi in (7) is an (A0,1,2,3)-activation function only if it is
+constructed with the sigmoid scalar activation function; and
+• σi in (7) is strictly monotonic if it is constructed with scalar activation functions from
+lists (L1)-(L2) in Remark 6, except for the capped ReLU and the saturated linear scalar
+activation functions.
+7
+
+
+===== PAGE 8 =====
+Piotrowski, Cavalcante, Gabor
+3.2 Construction of (A0,1,2)-neural networks
+We now prove that the neural networks satisfying Assumption 5 are in the (A0,1,2) class.
+Namely, the following lemma provides simple sufficient conditions to construct such net-
+works.
+Lemma 8 Consider a neural network T of the form in (6), and let Ti : Rki−1 →Rki : xi−1 7→
+σi(Wixi−1 + bi) be its i-th layer. Then:
+1. if the affine mapping yi = Wixi−1 + bi has nonnegative weights Wi and biases bi, then
+it is in (A0,1,2);
+2. if the affine mapping yi = Wixi−1 + bi has nonnegative weights Wi and positive biases
+bi, then it is in (A0,1,2,3);
+3. if the affine mapping yi = Wixi−1 + bi is in (A0,1,2) and the activation function σi is
+also in (A0,1,2), then the layer Ti is in (A0,1,2);
+4. if the affine mapping yi = Wixi−1 + bi is in (A0,1,2) and the activation function σi is
+in (A0,1,2,3), then the layer Ti is in (A0,1,2,3);
+5. if the affine mapping yi = Wixi−1 + bi is in (A0,1,2,3), and the activation function σi
+is strictly monotonic and is in the class (A0,2), then the layer Ti is in (A0,1,2,3);
+6. if all layers Ti for i = 1, 2, . . . , n are in (A0,1,2), then T is an (A0,1,2)-neural network;
+7. if Ti0 is in (A0,1,2,3) for some 1 ≤i0 ≤n, Ti are in (A0,1,2) for i = 1, . . . , i0 −1,
+and Ti are strictly monotonic and are in (A0,2) for i = i0 + 1, . . . , n, then T is an
+(A0,1,2,3)-neural network.
+Proof See Appendix C.
+Corollary 9 Suppose that a neural network T with the general structure in (6) satisfies
+Assumption 5. Then:
+1. T is an (A0,1,2)-neural network;
+2. if, in addition, the n-th layer Tn has a bias vector bn such that bn ≫0, and it uses a
+strictly monotonic activation function, then T is an (A0,1,2,3)-neural network; or
+3. if, in addition, the n-th layer Tn uses only (A0,1,2,3) activation functions (e.g., sigmoid
+scalar activation functions), then T is an (A0,1,2,3)-neural network.
+Proof By Assumption 5 and Lemma 8, points 1 and 3, the layers Ti are in (A0,1,2) for
+i = 1, . . . , n. By Lemma 8, point 6, T is an (A0,1,2)-neural network, which establishes point 1
+above. Furthermore, if the additional assumption of point 2 above is used, from Lemma 8,
+points 2 and 5, we obtain that the layer Tn is in (A0,1,2,3). In Lemma 8, point 7, we set i0 = n
+to obtain the assertion of point 2 above. Similarly, if the additional assumption of point
+3 above is used, from the first point in Fact 7 we obtain that σn is an (A0,1,2,3)-activation
+function. Thus, from Lemma 8, point 4, we conclude that Tn is in (A0,1,2,3). For i0 = n,
+from Lemma 8, point 7, we conclude that T is an (A0,1,2,3)-neural network. ■
+8
+
+
+===== PAGE 9 =====
+title
+3.3 Existence and uniqueness of fixed points of (A0,1,2)-neural networks
+Next, we prove the following key properties of (A0,1,2)-neural networks, which, as shown in
+the previous section, include as a subset neural networks satisfying Assumption 5:
+1. We provide conditions for the existence of fixed points of an (A0,1,2)-neural network
+(Corollary 14).
+2. We provide conditions for the uniqueness of the fixed point of a neural network T in
+cases where T is:
+(a) an (A0,1,2,3)-neural network (Corollary 15),
+(b) a strongly primitive2 (A0,1,2)-neural network, and with its activation functions
+constructed with the continuous scalar concave activation functions listed in Re-
+mark 6 (Corollary 20).
+3. We show that the condition for the existence of a fixed point of an (A0,1,2)-neural net-
+work (Corollary 14) is weaker than those obtained using arguments in convex analysis
+(Remark 17).
+4. We provide numerically efficient methods for verifying the existence and uniqueness of
+fixed point(s) of (A0,1,2)-neural networks (Proposition 19 and Corollary 20).
+3.3.1 Nonlinear spectral radius of an (A0,1,2)-neural network
+The path toward obtaining the main results of Section 3.3 is via the concept of the asymptotic
+mapping associated with an (A0,1,2)-neural network (Definition 10), and we provide a closed
+algebraic form of the asymptotic mapping of an (A0,1,2)-neural network in Proposition 11.
+This result is then used to determine the (nonlinear) spectral radius of an (A0,1,2)-neural
+network in Corollary 13.
+Definition 10 Let T : Rk
++ →Rk
++ be an (A0,1,2)-neural network of the form (6).
+The
+asymptotic mapping associated with T is the mapping defined by
+T∞: Rk
++ →Rk
++ : x 7→lim
+p→∞
+1
+pT(px).
+(9)
+We recall that the above limit always exists Cavalcante et al. (2019).
+We now prove that the asymptotic mapping T∞associated with an (A0,1,2)-neural net-
+work T is linear, even if the activation functions are possibly nonlinear. This property is
+very special because asymptotic mappings are nonlinear in general Cavalcante et al. (2019),
+and linearity is a property that can be exploited to simplify the analysis of the set of fixed
+points of (A0,1,2)-neural networks.
+For the common case of a nonnegative neural network with activation functions con-
+structed with continuous scalar concave activation functions listed in Remark 6, we have
+the following result:
+2. The definition of strong primitivity is given in Definition 18 below.
+9
+
+
+===== PAGE 10 =====
+Piotrowski, Cavalcante, Gabor
+Proposition 11 Consider a neural network T of the form in (6) with nonnegative weight
+matrices and biases. Assume that the activation functions are constructed with continuous
+scalar concave activation functions from lists (L1)-(L2) in Remark 6. Then T is an (A0,1,2)-
+neural network. Moreover:
+1. If all layers use continuous scalar concave activation functions from list (L2) in Re-
+mark 6, then the asymptotic mapping of T is given by T∞(x) = Q1
+i=n Wix.
+2. On the other hand, if at least one layer of T uses only continuous scalar concave
+activation functions from list (L1) in Remark 6, then T∞(x) = 0.
+Proof From Remark 6 we obtain that σi are (A0,1,2)-activation functions for i = 1, 2, . . . , n.
+Thus, T satisfies both parts of Assumption 5, and, hence, from Corollary 9, point 1, we
+obtain that T is an (A0,1,2)-neural network.
+Case 1) : Define
+T1∞(x)
+df.= lim
+p→∞
+1
+pT1(px) = lim
+p→∞
+σ1(W1px + b1)
+p
+.
+Applying L’Hôpital’s rule to the coordinate continuous scalar concave activation functions
+(σ1j : R →R)j∈{1,...,k1} from list (L2) in Remark 6, with the scalar p as their arguments
+with x fixed, we deduce
+T1∞(x) = lim
+p→∞σ′
+1(W1px + b1)W1x = W1x.
+Analogously, for the second layer we have
+T1,2∞(x)
+df.= lim
+p→∞
+1
+pT2(T1(px)) = lim
+p→∞
+σ2
+
+W2
+ σ1(W1px + b1)
+
++ b2
+
+p
+.
+Then, applying L’Hôpital’s rule to the coordinate functions (σ2j : R →R)j∈{1,...,k2} from list
+(L2) in Remark 6, we obtain
+T1,2∞(x) = lim
+p→∞σ′
+2
+
+W2
+ σ1(W1px + b1)
+
++ b2
+
+W2σ′
+1(W1px + b1)W1x = W2W1x.
+(10)
+Proceeding as above for the remaining layers, we conclude that T∞(x) = Q1
+i=n Wix.
+Case 2) : If σi is composed only of continuous scalar concave activation functions from
+list (L1) in Remark 6 for some 1 ≤i ≤n, then limp→∞σ′
+i(p) = 0. In such a case, we obtain
+T∞(x) = 0, as can be deduced from the special case n = 2 in (10). ■
+The asymptotic mapping obtained in Proposition 11 associated with an (A0,1,2)-neural
+network T can be used to define the (nonlinear) spectral radius of T as follows:
+Definition 12 The (nonlinear) spectral radius of an (A0,1,2)-neural network T of the form
+(6) is given by the largest eigenvalue of the corresponding (linear) asymptotic mapping Os-
+hime (1992); Cavalcante et al. (2019):
+ρ(T∞) = max{λ ∈R+ : ∃x ∈Rk
++\{0} s.t. T∞(x) = λx} ∈R+.
+10
+
+
+===== PAGE 11 =====
+title
+From Proposition 11 and Definition 12 we obtain the following corollary yielding the
+desired result of this section.
+Corollary 13 Consider a neural network T of the form (6) with nonnegative weight matri-
+ces and biases. Assume that the activation functions are constructed with continuous scalar
+concave activation functions from lists (L1)-(L2) in Remark 6 [from Proposition 11, T is an
+(A0,1,2)-neural network]. Then the spectral radius of T is given by
+ρ(T∞) = max{λ ∈R+ : ∃x ∈Rk
++\{0} s.t.
+1
+Y
+i=n
+Wix = λx}
+(11)
+if all layers i = 1, 2, . . . , n use continuous scalar concave activation function from list (L2) in
+Remark 6. On the other hand, if at least one layer of T uses only continuous scalar concave
+activation functions from list (L1) in Remark 6, then ρ(T∞) = 0.
+3.3.2 Conditions for existence of fixed points of (A0,1,2)-neural networks
+The following corollary of Proposition 38 gives a sufficient condition for (A0,1,2)-neural net-
+works to have a nonempty fixed point set.
+Corollary 14 Consider an (A0,1,2)-neural network T of the form (6). Assume that ρ(T∞) <
+1. Then, from Proposition 38, we have that Fix(T)̸ = ∅.
+Furthermore, the following corollary shows that for (A0,1,2,3)-neural networks, the asser-
+tion of Corollary 14 can be significantly strengthened. More precisely, in this setting the
+condition ρ(T∞) < 1 is not only sufficient but also necessary to prove the existence and
+uniqueness of the fixed point.
+Corollary 15 Consider an (A0,1,2,3)-neural network T of the form (6). Then, from Propo-
+sition 39, the neural network T has a fixed point if and only if ρ(T∞) < 1. Furthermore,
+from Proposition 40 the fixed point is unique, and it is also positive as a consequence of the
+scalability of T.
+3.3.3 Comparison of the assumptions implying the existence of fixed points
+of (A0,1,2)-neural networks
+In this subsection, we emphasize that the results of Proposition 11, Corollary 14, and Corol-
+lary 15 yield weaker conditions for the existence of fixed points of (A0,1,2)-neural networks
+than existing conditions based on arguments in convex analysis. To establish this claim, we
+use the following fact.
+Fact 16 Consider a neural network T of the form (6) with nonnegative weight matrices and
+biases. Assume that the activation functions are constructed with continuous scalar concave
+activation functions from lists (L1)-(L2) in Remark 6 [from Proposition 11, T is an (A0,1,2)-
+neural network]. A standard result is that the spectral radius of a matrix, in the conventional
+11
+
+
+===== PAGE 12 =====
+Piotrowski, Cavalcante, Gabor
+sense in linear algebra, is the infimum of all matrix operator norms, so the spectral radius
+ρ(W) of the nonnegative matrix W, given by
+Rk×k ∋W
+df.=
+1
+Y
+i=n
+Wi,
+can be equivalently written as ρ(W) = inf{∥W∥: ∥·∥- operator norm of W}. Therefore, if
+all layers i = 1, 2, . . . , n use continuous scalar concave activation function from list (L2) in
+Remark 6, from Corollary 13 and arguments in classical Perron-Frobenius theory (Meyer,
+2000, p. 670) we obtain that
+ρ(T∞) = ρ(W) ≤∥W∥≤
+n
+Y
+i=1
+∥Wi∥,
+(12)
+where the matrix norm ∥· ∥in (12) is an arbitrary operator norm. The second inequality
+follows from the submultiplicativity property of operator norms.
+We are now able to provide concrete examples of (A0,1,2)-neural networks for which the
+existence of fixed points can be established using the above results, but not from previous
+arguments based on convex analysis. We summarize them in the following remark.
+Remark 17 Let T be a neural network of the form in (6) with nonnegative weight matrices
+and biases. Assume that the activation functions are selected from the continuous scalar
+concave activation functions in lists (L1)-(L2) in Remark 6 [from Proposition 11, T is an
+(A0,1,2)-neural network]. Then:
+• From Proposition 11 and Corollary 14, we conclude that if at least one layer of T
+uses only continuous scalar concave activation functions from list (L1) in Remark 6,
+then T has a nonempty fixed point set for arbitrary (finite) nonnegative weights. No
+assumptions on the (operator or other) norms of the weight matrices are necessary to
+guarantee the existence of fixed points.
+• From Fact 16, we obtain that, even if all layers i = 1, 2, . . . , n use exclusively continu-
+ous scalar concave activation functions from list (L2) in Remark 6, the conditions for
+the existence of a nonempty fixed point set stated in Corollaries 14 and 15 are weaker
+than those obtained using arguments in convex analysis Combettes and Pesquet (2020a)
+[see also the bounds on the Lipschitz constant of a neural network with nonnegative
+weights in (Combettes and Pesquet, 2020b, Section 5.3)].
+3.3.4 Numerically efficient methods for verifying the existence of fixed
+points of strongly primitive (A0,1,2)-neural networks
+We now introduce the concepts of primitivity and strong primitivity of (A0,1,2)-neural net-
+works. The former is used in Section 3.4.2,3 and the latter is used in Proposition 19 and
+Corollary 20 below to obtain numerically efficient methods for verifying the existence and
+uniqueness of fixed points of neural networks.
+3. We present both definitions here because they are closely related.
+12
+
+
+===== PAGE 13 =====
+title
+Definition 18 We say that an (A0,1,2)-neural network T : Rk
++ →Rk
++ is primitive if
+∀x ∈Rk
++\{0}
+∃m ∈N s.t. T m(x) ≫0.
+Similarly, we say that T is strongly primitive if
+∀x ∈Rk
++
+∃m ∈N s.t. T m(x) ≫0.
+Proposition 19 Consider an (A0,1,2)-neural network T : Rk
++ →Rk
++. In addition, assume
+that there exists m ∈N such that T m(0) ≫0. Then each of the following holds:
+1. T is strongly primitive.
+2. If ρ(T∞) < 1, then ∅̸ = Fix(T) ⊂int(Rk
++). In contrast, if ρ(T∞) > 1, then Fix(T) = ∅.
+3. If H : Rk
++ →Rk
++ : x 7→T m(x) is an (A0,1,2,3)-neural network and T is as in
+Proposition 11, then T has a fixed point if and only if ρ(T∞) < 1. Furthermore,
+Fix(T) = Fix(H), and the fixed point of T is unique and positive.
+4. If H : Rk
++ →Rk
++ : x 7→T m(x) is an (A0,1,2,3)-neural network and T is as in Proposi-
+tion 11 with ρ(T∞) < 1, then the sequence (xn)n∈N generated via xn+1 = T(xn), with
+x1 ∈Rk
++ arbitrarily chosen, converges to the unique fixed point of T.
+Proof 1) By assumption, ∃m ∈N such that T m(0) ≫0. Let x ∈Rk
++. From the monotonicity
+of T, one has ∀n ≥m T n(x) ≥T n(0) ≫0, and the desired result follows.
+2) The first statement is immediate from Corollary 14 and strong primitivity of T. Now,
+for the sake of contradiction, assume that ρ(T∞) > 1 and the network has a fixed point
+denoted by x ∈Fix(T). Part 1) of the proposition shows that x = T m(x) ≫0, which
+is a contradiction because (Cavalcante and Stańczak, 2019, Proposition 2) asserts that a
+monotonic and weakly scalable T with ρ(T∞) > 1 has no fixed points in int(Rk
++).
+3) From the definition of H, we verify that Fix(T) ⊆Fix(H), because if x⋆is such that
+T(x⋆) = x⋆, then H(x⋆) = T m(x⋆) = x⋆. By repeating the proof of Proposition 11 for H, we
+obtain that H∞(x) = W m(x) if and only if T∞(x) = Q1
+i=n Wix, where W
+df.= Q1
+i=n Wi, and
+H∞(x) = 0 if and only if T∞(x) = 0. Then, for the first case, the equality ρ(H∞) = (ρ(T∞))m
+is obtained from (Johnson and Bru, 1990, Theorem 1), whereas it is immediate for the second
+case. Hence, in particular, ρ(T∞) < 1 if and only if ρ(H∞) < 1.
+Now consider the case ρ(T∞) < 1. Then, we conclude that the extended neural net-
+work H has a unique (positive) fixed point as a consequence of the statement in Corol-
+lary 15.
+Moreover, Part 2) of the proposition guarantees that Fix(T)̸ = ∅, so we must
+have Fix(H) = Fix(T) because Fix(H) is a singleton and ∅̸ = Fix(T) ⊆Fix(H). Similarly,
+for the case ρ(T∞) ≥1, we deduce ρ(H∞) = (ρ(T∞))m ≥1, which implies Fix(H) = ∅
+from the statement of Corollary 15.
+Therefore, T cannot have a fixed point because
+Fix(T) ⊆Fix(H) = ∅, and the proof is complete.
+4) Part 3) of the proposition and the assumptions of Part 4) guarantee that T and H have
+a common unique positive fixed point that we denote by x⋆∈int(Rk
++). We also note that, as
+T is monotonic and weakly scalable on int(Rk
++), by (Lemmens and Nussbaum, 2012, Lemma
+13
+
+
+===== PAGE 14 =====
+Piotrowski, Cavalcante, Gabor
+2.1.7) it is nonexpansive in the Thompson metric space (int(Rk
++), dT ), see Definition 37. Let
+i ∈N and let k ≥im. Then
+∀x ∈Rk
++
+∀k ≥im
+dT (T k(x), x⋆) = dT (T k(x), T k−im(x⋆)) ≤dT (T im(x), x⋆),
+where the last inequality follows from the nonexpansivity of T w.r.t. dT . We note that for
+k ≥im if i →∞then k →∞. Thus, we obtain that
+∀x ∈Rk
++
+lim
+k→∞dT (T k(x), x⋆) ≤lim
+i→∞dT (T im(x), x⋆) = lim
+i→∞dT (Hi(x), x⋆) = 0,
+where the last equality follows from (Cavalcante et al., 2019, Fact 1(iv)). ■
+One of the practical implications of Proposition 19 is that we can obtain a simple numeri-
+cal certificate of uniqueness of the fixed point of a monotonic and weakly scalable nonnegative
+neural network T with concave activation functions, by simply computing T m(0) for some
+sufficiently large m, as formally described below. It is also important to note that in such a
+case, the network T needs only to be monotonic and weakly scalable to have a unique fixed
+point if ρ(T∞) < 1, which is a stronger result than the one given in Corollary 15, which
+requires scalability of the network.
+Corollary 20 Consider a neural network T of the form (6) with nonnegative weight matri-
+ces and biases. Assume that the activation functions are selected from the continuous scalar
+concave activation functions in lists (L1)-(L2) in Remark 6 [from Proposition 11, T is an
+(A0,1,2)-neural network]. If there exists m ∈N such that T m(0) ≫0, then T has a fixed
+point if and only if ρ(T∞) < 1. Furthermore, the fixed point is unique and positive.
+Proof Let f1, f2 : Rk1
++ →R+ be nonnegative concave functions and let t ∈(0, 1). We
+note that, by [Lemma 1]Cavalcante and Stańczak (2019), they are (A0,1,2)-functions. From
+concavity of f1 one has
+f1(tx1 + (1 −t)x2) ≥tf1(x1) + (1 −t)f1(x2).
+Hence, monotonicity of f2 implies that
+f2[f1(tx1 + (1 −t)x2)] ≥f2[tf1(x1) + (1 −t)f1(x2)].
+From the concavity of f2 we deduce
+f2[tf1(x1) + (1 −t)f1(x2)] ≥tf2(f1(x1)) + (1 −t)f2(f1(x2)).
+By combining the above two inequalities, we conclude that
+(f2 ◦f1)(tx1 + (1 −t)x2) ≥t(f2 ◦f1)(x1) + (1 −t)(f2 ◦f1)(x2),
+establishing that f2 ◦f1 is also a nonnegative concave function. We can use induction to
+extend the validity of the above arguments to an arbitrary number of nonnegative concave
+functions. By definition, a mapping F
+df.= (f1 . . . , fk2): Rk1
++ →Rk2
++ is said to be nonnegative
+concave if all coordinate functions (f1 . . . , fk2) are nonnegative concave functions. Thus, we
+conclude that the layers of T are nonnegative concave mappings because they are constructed
+14
+
+
+===== PAGE 15 =====
+title
+by composing nonnegative affine mappings with nonnegative concave activation functions.
+Hence, the neural network T is itself a nonnegative concave mapping as a composition of
+n nonnegative concave layers. Furthermore, H : Rk
++ →Rk
++ : x 7→T m(x) is a nonnegative
+concave mapping because it is the m-fold composition of T with itself. We also deduce that
+H is necessarily a positive mapping because, by the monotonicity of T, ∀x ∈Rk
++ H(x) =
+T m(x) ≥T m(0) ≫0. Concavity and positivity of H in the nonnegative orthant imply
+that H is an (A0,1,2,3)-neural network (Cavalcante et al., 2016, Proposition 1). Thus, from
+Proposition 19, point 3, we obtain that T has a fixed point if and only if ρ(T∞) < 1.
+Furthermore, this fixed point is unique and positive. ■
+3.4 The shape of fixed point sets of (A0,1,2)-neural networks
+In the previous sections, we provided conditions for the existence and uniqueness of fixed
+points of (A0,1,2)-neural networks under different mild assumptions. However, if the fixed
+point set is not a singleton, we have not yet established the shape of this set. In the following,
+we address this limitation of the analysis done so far. In more detail, in this section, we
+show the following results:
+1. First, in Section 3.4.1:
+(a) in Proposition 22, we show the shape of the fixed point set of a generic (A0,1,2)-
+mapping under the assumption of lower- and upper-primitivity (see Definition 21
+below) at its fixed points; and
+(b) we show that the condition of lower- and upper-primitivity is essential to obtain
+a meaningful shape of the fixed point set of a generic (A0,1,2)-mapping, otherwise
+the fixed point set of such a mapping can be in principle arbitrary (Examples 1
+and 2).
+2. Afterwards, in Section 3.4.2, we specialize the results of Section 3.4.1 to the case of
+(A0,1,2)-neural networks. More precisely:
+(a) we compare the results in Section 3.3.2 and Section 3.4.1 related to the shape of
+the fixed point set of (A0,1,2)-neural networks (Remark 25);
+(b) we derive a numerically verifiable sufficient condition for an (A0,1,2)-neural net-
+work to be lower- and upper-primitive at its fixed points (Lemma 26).
+3.4.1 Nonlinear Perron-Frobenius Theory
+The results of this section establish the shape of the fixed point sets of (A0,1,2)-mappings
+f : Rk
++ →Rk
++ in the interior of the Rk
++ cone. They are derived using tools from nonlinear
+Perron-Frobenius theory, and the following definition is required to state the main contri-
+butions:
+Definition 21 (Lemmens and Nussbaum, 2012, Definition 6.5.2) Let f : int(Rk
++) →int(Rk
++).
+We say that f is lower-primitive at x ∈int(Rk
++) if there exists an open neighbourhood
+U ⊆int(Rk
++) of x such that for each y ∈U with y < x there exists an integer py ≥1 with
+fpy(y) ≪fpy(x). Likewise, we say that f is upper-primitive at x ∈int(Rk
++) if there exists
+15
+
+
+===== PAGE 16 =====
+Piotrowski, Cavalcante, Gabor
+an open neighbourhood U ⊆int(Rk
++) of x such that for each y ∈U with x < y there exists
+an integer py ≥1 with fpy(x) ≪fpy(y).
+The following proposition provides the shape of the fixed point set of an (A0,1,2)-mapping
+under the conditions of lower- and upper-primitivity. It extends (Cavalcante and Stańczak,
+2019, Proposition 3) to the case x ∈int(Rk
++), and it can be seen as a corollary of (Lemmens
+and Nussbaum, 2012, Theorem 6.5.6). For clarity, we provide a proof that quotes parts of
+the original proof of (Lemmens and Nussbaum, 2012, Theorem 6.5.6).
+Proposition 22 (cf. Theorem 6.5.6 in Lemmens and Nussbaum (2012)) Let us de-
+fine f : int(Rk
++) →int(Rk
++) to be the restriction of an (A0,1,2)-mapping to the positive orthant.
+Furthermore, let Fix(f)̸ = ∅and let f satisfy the conditions of lower- and upper-primitivity
+at u ∈Fix(f). Let x ∈int(Rk
++). Then, there exists λx > 0 such that limp→∞fp(x) = λxu ∈
+Fix(f). Moreover, define
+s0
+df.= inf{λ > 0 : λu ∈Fix(f)},
+and
+t0
+df.= sup{λ > 0 : λu ∈Fix(f)}.
+Then:
+if s0 > 0 and t0 < ∞⇒Fix(f) = {λu : s0 ≤λ ≤t0};
+if s0 = 0 and t0 < ∞⇒Fix(f) = {λu : 0 < λ ≤t0};
+if s0 > 0 and t0 = ∞⇒Fix(f) = {λu : s0 ≤λ}; and
+if s0 = 0 and t0 = ∞⇒Fix(f) = {λu : 0 < λ}.
+(13)
+Proof Let u ∈Fix(f) and let x ∈int(Rk
++). As f is monotonic and weakly scalable on
+int(Rk
++), by (Lemmens and Nussbaum, 2012, Lemma 2.1.7) it is nonexpansive in the Thomp-
+son metric space (int(Rk
++), dT ) (see Definition 37), which is a complete metric space (Lem-
+mens and Nussbaum, 2012, Proposition 2.5.2). We further note from (Piotrowski and Cav-
+alcante, 2022, Remark 3 and Corollary 1) that (int(Rk
++), dT ) is also a proper metric space
+in the sense that every closed ball in (int(Rk
++), dT ) is compact.
+Denote the orbit of f at x by O(x; f)
+df.= {fp(x) :
+p = 0, 1, 2, . . . } with f0(x)
+df.= x.
+Then, the orbit O(u; f) = {u} is bounded, thus, by Całka’s Theorem (Lemmens and Nuss-
+baum, 2012, Theorem 3.1.7), O(x; f) is also bounded in (int(Rk
++), dT ). The closure O(x; f)
+of O(x; f) consists of O(x; f) and the bounded set of all limit points of subsequences of
+O(x; f). Hence, by (Piotrowski and Cavalcante, 2022, Corollary 1), O(x; f) is compact in
+(int(Rk
++), dT ). Then, from (Lemmens and Nussbaum, 2012, Lemma 3.1.2), one has that
+f(ω(x; f)) = ω(x; f), where ω(x; f)
+df.= {y ∈int(Rk
++) : fpi(x) →y for some (pi)i with pi →
+∞}, and, consequently, fp(ω(x; f)) = ω(x; f) for any p ∈N.
+Furthermore, by our assumptions on f, we can apply (Lemmens and Nussbaum, 2012,
+Lemma 6.5.4) to f and conclude that there are two cases: either there exists 0 < αx ≤1
+such that m(y/u) = αx for all y ∈ω(x; f), or there exists βx ≥1 such that M(y/u) = βx for
+all y ∈ω(x; f), where m(y/u)
+df.= sup{γ > 0 : γu ≤y} and M(y/u)
+df.= inf{γ > 0 : y ≤γu}.
+We note that for y, u ∈int(Rk
++) one has simply m(y/u) = mini=1,...,k{yi/ui} and M(y/u) =
+maxi=1,...,k{yi/ui}, see (Lemmens and Nussbaum, 2012, eqs.(2.8),(2.9)).
+16
+
+
+===== PAGE 17 =====
+title
+We now show that, in the first case, ω(x; f) = {αxu}. To obtain a contradiction, we
+assume that there exists z ∈ω(x; f) with z̸ = αxu such that m(z/u) = αx. Then zi ≥αxui
+for i = 1, . . . , k, and there exists i0 ∈{1, . . . , k} such that zi0 > αxui0, hence αxu < z. Since
+f is upper-primitive at u, there exists p ∈N such that
+αxu = αxfp(u) ≪αxfp(α−1
+x z) ≤fp(z),
+where the second inequality follows from the weak scalability of f. Consequently, αxu ≪
+fp(z). It follows that m(fp(z)/u) = sup{γ > 0 : γu ≤fp(z)} > αx, which is impossible, as
+fp(z) ∈ω(x; f). In a similar way, it can be shown that, in the second case, ω(x; f) = {βxu}.
+Thus, we have proved that there exists λx > 0 such that ω(x; f) = {λxu}.
+Consequently, since f(ω(x; f)) = ω(x; f), we have f(λxu) = λxu, thus λxu ∈Fix(f).
+We also note that, if v ∈Fix(f) is such that v̸ = u, we obtain that ω(v; f) = {v}, and thus
+it must be either v = αvu or v = βvu, where 0 < αv ≤1 and 1 ≤βv.
+Furthermore, as αxu ≤u ≤βxu for each x ∈int(Rk
++), from (Lemmens and Nussbaum,
+2012, Lemma 6.5.5) we obtain that Fix(f) is in this case one of the intervals in (13). More-
+over, from (Lemmens and Nussbaum, 2012, Lemma 3.1.3) for a periodic point with period 1,
+one has that
+lim
+p→∞fp(x) = λxu ∈Fix(f). ■
+The conditions of lower- and upper-primitivity are important, as the following examples
+demonstrate.
+Example 1 Let f : int(R2
++) →int(R2
++) be defined as f(x) = (x1, min{2, x2}) for x =
+(x1, x2) ∈int(R2
++). Then f is an (A0,1,2)-mapping that is also subadditive, see (Oshime,
+1992, Example 2.4).
+We can check that Fix(f) = int(R+) × (0, 2]. However, neither of
+the conditions of lower- and upper-primitivity are satisfied by f on Fix(f), as the following
+analysis shows.
+Let u = (u1, u2) ∈Fix(f), and let x = (2u1, u2). Then x ∈Fix(f) and u < x because
+x̸ = u and x −u = (u1, 0) ∈R2
++. However, for all px ≥1, we have fpx(u) = u̸ ≪fkx(x) = x
+because x −u = (u1, 0) /∈int(R2
++). Similarly, if x = (u1/2, u2) ∈Fix(f), then x < u because
+u̸ = x and u−x = (u1/2, 0) ∈R2
++. However, for all px ≥1, we have fpx(x) = x̸ ≪fpx(u) =
+u because u −x = (u1/2, 0) /∈int(R2
++).
+Example 2 Let f : int(R2
++) →int(R2
++) be the Gauss arithmetic-geometric mean given by
+f(x) = (x1+x2
+2
+, √x1x2) for x = (x1, x2) ∈int(R2
++). Then f is an (A0,1,2)-mapping, and, for
+each x ∈int(R2), there exists λ > 0 such that limp→∞fp(x1, x2) = (λ, λ) (Lemmens and
+Nussbaum, 2012, Section 1.4). Indeed, it is clear that Fix(f) = {x ∈int(R2
++) | x1 = x2},
+and, from the properties of arithmetic and geometric means, we verify that f is both lower-
+and upper-primitive at each u ∈Fix(f). Hence, let u = (λ, λ) for some λ > 0, and let
+x ∈int(R2
++). Then, from Proposition 22 we conclude that there exists λx > 0 such that
+limp→∞fp(x) = (λxλ, λxλ). It is also seen that, in this case, Fix(f) = {(γ, γ), γ > 0},
+see (13).
+We close this section with the following remarks, which will be useful later in this study.
+Remark 23 From the proof of Proposition 22 it is seen that, if f is both lower- and upper-
+primitive at any u ∈Fix(f), then it satisfies these conditions on the whole Fix(f).
+17
+
+
+===== PAGE 18 =====
+Piotrowski, Cavalcante, Gabor
+Remark 24 Every (A0,1,2)-mapping f : int(Rk
++) →int(Rk
++) has a continuous extension
+fext : Rk
++ →Rk
++ that is also an (A0,1,2)-mapping (Burbanks et al., 2003, Theorem 3.10).
+This fact justifies calling f itself an (A0,1,2)-mapping in the sense of Definition 1.
+3.4.2 Applications to neural networks
+We now specialize the results derived above to neural networks.
+Remark 25 From Corollary 15, we verify that, if a neural network T of the form (6) is in
+(A0,1,2,3), then Fix(T) is either the empty set or a singleton. Moreover, from Corollary 14
+and Proposition 22, we conclude that Fix(T) remains simple if T is more generally an
+(A0,1,2)-neural network, because in this case Fix(T) is an interval. This result is obtained in
+Proposition 22 under the assumption that T grows “fast enough” at its fixed points, i.e., it
+satisfies the conditions of lower- and upper-primitivity on ∅̸ = Fix(T) ⊂int(Rk
++).
+From the above remark, we note that providing an easily verifiable sufficient condition of
+lower- and upper-primitivity to hold at an arbitrary u ∈Fix(T) is important for obtaining
+information about the shape of the fixed point set of neural networks. Fortunately, for neural
+networks that are differentiable at their fixed points, the following sufficient condition exists.
+We note that, in view of Remark 23, it is sufficient to verify this condition for a particular
+fixed point u ∈Fix(T) to guarantee that it holds for every other point in Fix(T).
+Lemma 26 Consider an (A0,1,2)-neural network T : int(Rk
++) →int(Rk
++) of the form (6)
+along with its continuous extension (see Remark 24). Let T have a fixed point u ∈int(Rk
++),
+and let T be differentiable at u ∈int(Rk
++). Then T is both lower- and upper-primitive at u if
+the Jacobian matrix of T evaluated at u is primitive.
+Proof Since T is differentiable at u ∈int(Rk
++), it is Fréchet differentiable at u ∈int(Rk
++) with
+DTu(v) = JT (u)v for v ∈Rk, where DTu : Rk →Rk is the Fréchet derivative of T at u, and
+JT (u) is the Jacobian matrix of T evaluated at u. Then the assertion of the lemma follows
+from (Lemmens and Nussbaum, 2012, Lemma 6.5.7) specialized to a Fréchet-differentiable
+mapping at u. ■
+Remark 27 With notation as in Lemma 26, the Jacobian JT (x) of T evaluated at x ∈
+int(Rk
++) is nonnegative owing to the monotonicity of T. Moreover, JT (x) is primitive in the
+sense of Definition 18 if and only if ∃p ∈N s.t. Jp
+T (x) is positive, i.e., all of its entries are
+strictly positive.
+We close Section 3 by anticipating that, later in Fact 31 in Section 4, we establish
+convergence of the fixed point iteration of any (A0,1)-neural network (and, hence, of any
+(A0,1,2)-neural network) to its fixed point.
+4. Fixed points of (A0,1)-neural networks
+The results of Section 3 provide a largely complete answer to the problem of determining
+fixed point(s) of (A0,1,2)-neural networks satisfying Assumption 5 in Section 3. We now
+proceed to relax the assumptions imposed on the neural networks studied so far. In partic-
+ular, we extend the concepts of nonnegativity and monotonicity to mappings defined on the
+whole space as follows:
+18
+
+
+===== PAGE 19 =====
+title
+Definition 28 A continuous mapping f : Rs →Rp is said to be
+(A′
+0) globally nonnegative if
+∀x ∈Rs
+f(x) ∈Rp
++,
+(14)
+(A′
+1) globally monotonic if
+∀x, ˜x ∈Rs
+x ≤˜x =⇒f(x) ≤f(˜x),
+(15)
+where u ≤v ⇔v −u ∈Rs
++ for u, v ∈Rs.
+We note that, with ζ ∈R, the sigmoid: ζ 7→
+1
+1+exp (−ζ) and ReLU: ζ 7→0 for ζ < 0 and
+ζ 7→ζ for ζ ≥0 are activation functions that are in (A0′,1′).
+Below, we replace Assumption 5 with the following assumptions, which, in particular, lift
+the restriction of nonnegative biases in all layers and enlarge the class of possible activation
+functions.
+Assumption 29 For all layers i = 1, . . . , n:
+1. The weight matrices Wi have nonnegative coefficients.
+2. Let S ∈2{1...,n}, where 2{1...,n} denotes the power set of {1, . . . , n}, be the set of layers
+with activation functions σs that belong to the class (A0′,1′) (e.g., layers constructed
+with the ReLU or sigmoid scalar activation functions), where s ∈S. The biases bs are
+allowed to be negative.
+3. Define P
+df.= {1, . . . , n}\S. Then, the activation functions σp for p ∈P are required to
+be in the class (A0,1). The biases bp are assumed to be nonnegative.
+To emphasize that Assumption 29 covers well-known activation functions that have not
+been considered in our analysis until this moment, we list the following activation functions,
+which are in (A0,1) but not in (A0,1,2) for ξ ∈R+:
+(L3) scalar (A0,1)-activation functions:
+• (Mish) ξ 7→ξ tanh(log(1 + exp(ξ)))
+• (Swish) ξ 7→
+ξ
+1+exp (−ξ)
+• (GELU) ξ 7→ξΦ(ξ), where Φ(ξ)
+df.= P(X ≤ξ),
+X ∼N(0, 1).
+Corollary 30 If a neural network T of the form (6) satisfies Assumption 29, then T is an
+(A0,1)-neural network.
+Proof If S̸ = ∅, then nonnegativity of layers TS for s ∈S is implied by the assumption that
+the activation functions σs are nonnegative on the whole Rks. To establish monotonicity
+of Ts for s ∈S, let x, ˜x ∈Rks−1
++
+such that x ≤˜x. Then, by Assumption 29, point 1,
+Wsx ≤Ws˜x, and by Assumption 29, point 2, σs(Wsx + b) ≤σs(Ws˜x + b) for any b ∈Rks.
+Similarly, if P̸ = ∅, then Tp for p ∈P is an (A0,1)-layer from Lemma 8, point 1, followed by
+19
+
+
+===== PAGE 20 =====
+Piotrowski, Cavalcante, Gabor
+an application of Lemma 41, point 2(a). The fact that T is an (A0,1)-neural network now
+follows by application of Lemma 41, point 2(a), across layers. ■
+As the following examples show, we may leverage the results of Section 3 together with
+Fact 34 from Section 5 below to establish the existence of fixed points of (A0,1)-neural
+networks.
+Example 3 Assume that T2 : Rk
++ →Rk
++ satisfies Assumption 29 with S = {1, . . . , n} and
+P = ∅and such that the (A0′,1′)-activation functions σs are in (A0,1,2) if their domains are
+restricted to Rks
++ , e.g., composed of ReLU or sigmoid activation functions for s ∈S. Define
+L: Rk
++ →Rk
++ by replacing the negative biases on layers S with arbitrary nonnegative values.
+Such an L is an (A0,1,2)-neural network by Lemma 8, point 3, followed by Lemma 8, point
+6, and we have that ∀x ∈Rk
++ T2(x) ≤L(x). We may now use Corollary 14 and Fact 34 to
+conclude that, if ρ(L∞) < 1, then Fix(T2)̸ = ∅.
+Example 4 Assume that T2 : Rk
++ →Rk
++ satisfies Assumption 29 with S = ∅and P =
+{1, . . . , n}. Construct a neural network L: Rk
++ →Rk
++ from T2 by replacing the activation
+functions in layers P with pointwise upper-bounding (A0,1,2)-activation functions, e.g., by
+replacing the Swish, Mish, or GELU activation functions with the ReLU function. Then,
+analogously as in the previous example, the neural network L is an (A0,1,2)-neural network
+by Lemma 8, point 3, and Lemma 8, point 6, and such that ∀x ∈Rk
++ T2(x) ≤L(x). We can
+now use Corollary 14 and Fact 34 to conclude that Fix(T2)̸ = ∅if ρ(L∞) < 1.
+If T2 satisfies Assumption 29 with ∅̸ = S ⊊{1, . . . , n}, then the previous two examples
+can be combined to obtain a pointwise upper-bounding network L that can be used to infer
+the existence of fixed points of T2 if ρ(L∞) < 1.
+We close Section 4 with the following fact yielding convergence of the fixed point iteration
+of an (A0,1)-neural network to its fixed point. This fact is well-known, and it can be obtained,
+for example, by following the proof of (Cavalcante and Stańczak, 2019, Proposition 3). We
+remark that, although the statement of (Cavalcante and Stańczak, 2019, Proposition 3)
+considers mappings in class (A0,1,2), the proof uses only the assumptions of continuity and
+monotonicity of the mappings under consideration.
+Fact 31 (Cavalcante and Stańczak (2019)) Let T be an (A0,1)-neural network of the
+form (6) with Fix(T)̸ = ∅. Then, there exists x⋆∈Fix(T) such that, for all y ∈Fix(T), we
+have x⋆≤y. Furthermore, this least fixed point x⋆is obtained as the limit of the fixed point
+iteration xn+1
+df.= T(xn) of T with x1 = 0.
+5. Fixed points of (A0)-neural networks
+In Section 5, we further relax the assumptions made so far to include in our analysis neural
+networks that are only nonnegative. More specifically, we replace Assumption 5 with the
+following:
+Assumption 32 The final n-th layer of the neural network has an (A′
+0)-activation function
+σn. All other layers are only required to be constructed with continuous activation functions.
+20
+
+
+===== PAGE 21 =====
+title
+We emphasize that Assumption 32 imposes no restrictions on the weight matrices or
+biases. They can have arbitrary real coefficients in any layer. As an immediate consequence
+of Assumption 32, we have the following result.
+Corollary 33 If a neural network T of the form (6) satisfies Assumption 32, then T is an
+(A0)-neural network.
+We close the analytical derivations of this paper with a simple result establishing the
+existence of a fixed point of an (A0)-neural network.
+Fact 34 Let L: Rk
++ →Rk
++ be an (A0,1)-neural network. Assume that Fix(L)̸ = ∅. Let T2 :
+Rk
++ →Rk
++ be an (A0)-neural network such that ∀x ∈Rk
++ T2(x) ≤L(x). Then Fix(T2)̸ = ∅.
+Proof Define F
+df.= {x ∈Rk
++ : x ≤x⋆}, where x⋆∈Fix(L). We note that F is convex and
+compact in the standard Euclidean metric space. Therefore,
+∀x ∈F
+Rk
++ ∋T2(x) ≤L(x) ≤L(x⋆) = x⋆,
+(16)
+which proves that T2(x) ∈F for all x ∈F. As a result, T2|F is a continuous self-mapping on
+F, and, by Brouwer’s fixed point theorem, it possesses a fixed point in F. ■
+Remark 35 From Fact 34, we conclude that, in order to establish the existence of fixed
+points of an (A0)-neural network T2 of the form (6), it suffices to upper-bound T2 by an
+(A0,1)-neural network L, which could be, for example, one satisfying Assumption 29 (see
+Corollary 30). Then, the existence of fixed points of both T2 and L can be established by
+upper-bounding L (for example, with the approaches in Examples 3 and 4) by an A0,1,2-
+neural network T and by using the results of Section 3.
+Remark 36 The existence of a fixed point of an (A0)-neural network can be established
+using Fact 34, but the fixed point iteration of such a network does not necessarily converge
+to its fixed point.
+Below, we discuss applications of the analytical results derived in this paper.
+6. Applications
+6.1 Autoencoders
+For all experiments in this section, we trained a two-layered autoencoder with input and
+output layers of dimension k = 784 and hidden layer with k1 = 200 neurons.4 The networks
+were trained for 30 epochs using the ADAM optimization algorithm with a learning rate of
+0.005. The batch size was set to 64, and, as a loss function, the mean squared error was
+chosen. To enforce nonnegativity of the weights and biases, the negative values were clipped
+to zero after each iteration of the ADAM algorithm. The experiments were performed on
+both the entire MNIST dataset and a subset containing only the digit “zero,” which we refer
+to as the ZERO dataset. We considered various constraints on the weights and biases, so,
+to simplify notation, we use the following acronyms in the text that follows:
+4. The source code is available at the following link: https://github.com/mateuszgabor/nn_networks.
+21
+
+
+===== PAGE 22 =====
+Piotrowski, Cavalcante, Gabor
+• NN denotes an autoencoder with nonnegative weights and nonnegative biases;
+• PN denotes an autoencoder with positive weights and nonnegative biases;
+• NR denotes an autoencoder with nonnegative weights and real-valued biases; and
+• RR denotes an autoencoder with real-valued weights and real-valued biases.
+6.1.1 Sigmoid NN
+In this setup, the autoencoder T uses the sigmoid activation functions in both layers. Thus,
+according to Corollary 9, point 3, T is an (A0,1,2,3)-neural network. The sigmoid activation
+function is in the list (L1) in Remark 6, and, hence, from Proposition 11, point 2, and
+Corollary 13, the spectral radius of T is ρ(T∞) = 0. Thus, from Corollary 15, T has a
+unique and positive fixed point. Moreover, it follows from Fact 31 that this fixed point can
+be computed with the fixed point iteration of T starting at x1 = 0. The fixed points obtained
+on the MNIST and ZERO datasets are presented in Figure 1.
+(a)
+(b)
+Figure 1: The unique fixed points of an autoencoder with sigmoid activation functions and
+nonnegative weights and biases on (a) the full MNIST dataset and (b) the ZERO dataset.
+6.1.2 Tanh NN
+In this setup, the autoencoder T uses hyperbolic tangent activation functions in both layers.
+Thus, according to Corollary 9, point 1, T is an (A0,1,2)-neural network. The hyperbolic
+tangent activation function is in the list (L1) in Remark 6, hence, from Proposition 11,
+point 2, and Corollary 13, the spectral radius of T is ρ(T∞) = 0. Thus, from Corollary 14,
+T has at least one fixed point. Moreover, it follows from Fact 31 that the least fixed point
+of T can be computed using the fixed point iteration of T starting at x1 = 0. We have
+also checked that the other fixed points of T can be obtained for different positive starting
+points of the fixed point iteration of T. However, the sufficient condition of lower- and upper-
+primitivity of T at its fixed point given in Lemma 26 was not satisfied by T, thus the shape
+of the fixed point set of T could not be determined. Numerically, the fixed points obtained
+in the MNIST and ZERO datasets are shown in Figure 2. For the considered case, we have
+empirical evidence that the shape of the fixed point set is probably an interval, but there is
+no theory to prove formally this claim at this moment, and this topic should be investigated
+in future studies.
+22
+
+
+===== PAGE 23 =====
+title
+(a)
+(b)
+Figure 2: Sample fixed points of an autoencoder with hyperbolic tangent activation functions
+and with nonnegative weights and biases on (a) the full MNIST dataset and (b) the ZERO
+dataset.
+6.1.3 Tanh PN
+In this setup, we modified slightly the autoencoder T in Section 6.1.2 by clipping the negative
+coefficients of the weights in training to 0.001 instead of 0. The resulting autoencoder T
+has a primitive Jacobian matrix evaluated at a fixed point of T. Hence, by Lemma 26 and
+Remark 23, such an autoencoder is both lower- and upper-primitive on the whole Fix(T).
+Thus, from Proposition 22, we deduce that Fix(T) is an interval and that the fixed point
+iteration of T converges to u ∈Fix(T) for any positive starting point x1 ≫0. Figure 3
+depicts fixed points of T obtained for various positive starting points of the fixed point
+iteration. We note that the fixed points are very similar to the fixed points obtained for the
+autoencoder in Section 6.1.2.
+6.1.4 ReLU spectral NN
+In this setup, the autoencoder T used the ReLU activation function in both layers. Thus,
+according to Corollary 9, point 1, T is an (A0,1,2)-neural network. The ReLU activation
+function is in the list (L2) in Remark 6. Hence, from Proposition 11, point 1, and Corol-
+lary 13, the spectral radius of T is ρ(T∞) = max{λ ∈R+ : Q1
+i=n Wix = λx}. After training,
+we obtained a neural network T with ρ(T∞) = 1.01 > 1 for both the MNIST and ZERO
+datasets. In such a case, according to (Cavalcante and Stańczak, 2019, Proposition 2), the
+fixed-point of T may only exist on the boundary of the cone. Indeed, we have numerical
+evidence that, in this case, the only fixed point of T is the zero vector.
+Moreover, the
+obtained autoencoder had a high test loss compared to other setups. Therefore, to obtain
+a nondegenerate fixed point set of T, we enforced the spectral radius of the autoencoder
+23
+
+
+===== PAGE 24 =====
+Piotrowski, Cavalcante, Gabor
+(a)
+(b)
+Figure 3: Sample fixed points of an autoencoder with a primitive Jacobian, positive weights,
+nonnegative biases, and hyperbolic tangent activation functions on (a) the full MNIST
+dataset and (b) the ZERO dataset.
+to be less than 1 using spectral normalization Miyato et al. (2018), which normalizes all
+weight values by the largest singular value of the weight matrix. Indeed, the spectral radius
+obtained by the autoencoder T trained with spectral normalization on the MNIST dataset
+is ρ(T∞) = 0.93, and, on the ZERO dataset, we have ρ(T∞) = 0.91. Thus, from Corollary
+14, T has at least one fixed point. Moreover, it follows from Fact 31 that the least fixed
+point of T can be computed with the fixed point iteration of T starting at x1 = 0. We have
+also checked that the other fixed points of T can be obtained for different positive starting
+points of the fixed point iteration of T. However, similarly to the Tanh NN autoencoder in
+Section 6.1.2 above, the sufficient condition of lower- and upper-primitivity of T at its fixed
+point given in Lemma 26 was not satisfied by T, thus the shape of the fixed point set of T
+could not be determined. Numerically, the fixed points obtained in the MNIST and ZERO
+datasets are shown in Figure 4. For this case under consideration, the shape of the fixed
+point set is probably an interval, but, as already mentioned, at this moment there is no
+theory to prove formally this claim.
+6.1.5 ReLU spectral PN
+In this setup, we modified slightly the autoencoder T in Section 6.1.4 by clipping the negative
+coefficients of the weights during training to 0.001 instead of 0. The resulting autoencoder
+T has a primitive Jacobian matrix evaluated at a fixed point of T. Hence, by Lemma 26 and
+Remark 23, such an autoencoder is both lower- and upper-primitive on the whole Fix(T).
+Thus, from Proposition 22, we conclude that Fix(T) is an interval and that the fixed point
+24
+
+
+===== PAGE 25 =====
+title
+(a)
+(b)
+Figure 4: Sample fixed points of an autoencoder with nonnegative weights and biases and
+with ReLU activation functions using spectral normalization on (a) the MNIST dataset and
+(b) the ZERO dataset.
+iteration of T converges to some u ∈Fix(T) for any positive starting point x1 ≫0. Figure 5
+presents sample fixed points of T obtained for various positive starting points of the fixed
+point iteration.
+(a)
+(b)
+Figure 5: Sample fixed points of an autoencoder with primitive Jacobian, positive weights,
+nonnegative biases, and ReLU activation functions on (a) the MNIST dataset and (b) the
+ZERO dataset.
+25
+
+
+===== PAGE 26 =====
+Piotrowski, Cavalcante, Gabor
+6.1.6 Tanh + Swish NN
+In this setup, the autoencoder T2 used the hyperbolic tangent activation functions in the
+first layer and the Swish activation functions in the second layer.
+Such an autoencoder
+satisfies Assumption 29 for S = ∅and P = {1, 2}, and thus it is an (A0,1)-neural network by
+Corollary 30. Then, following Example 4, this autoencoder is pointwise upper-bounded by
+an autoencoder L constructed by replacing the Swish activation functions with the ReLU
+activation functions in the second layer, and we verify that L is an (A0,1,2)-neural network.
+Therefore, using Proposition 11, point 2, and Corollary 13, we obtain that ρ(L∞) = 0, and,
+consequently, from Corollary 14 we know that Fix(L)̸ = ∅. Hence, from Fact 34, we conclude
+that the autoencoder T2 has at least one fixed point, and, from Fact 31, we obtain that the
+least fixed point of T2 is the limit of the sequence constructed via the fixed point iteration
+of T2 starting at x1 = 0. We have also checked that the other fixed points of T2 can be
+obtained for different positive starting points of the fixed point iteration of T2. The sample
+fixed points obtained for T2 are depicted in Figure 6.
+(a)
+(b)
+Figure 6: Sample fixed points of an autoencoder with nonnegative weights and biases and
+with the hyperbolic tangent and Swish activation functions on (a) the MNIST dataset and
+(b) the ZERO dataset.
+6.1.7 ReLU + Sigmoid NR
+In this setup, the autoencoder T2 had nonnegative weights and real-valued biases, and it
+used ReLU activation functions in the first layer and sigmoid activation functions in the
+second layer.
+Such an autoencoder satisfies Assumption 29 for S = {1, 2} and P = ∅,
+and thus it is an (A0,1)-neural network by Corollary 30. Then, following Example 3, such
+an autoencoder is pointwise upper-bounded by the autoencoder L with the same structure
+but with negative biases replaced with zeros. By doing so, L is an (A0,1,2)-neural network.
+Therefore, using Proposition 11, point 2, and Corollary 13, we verify that ρ(L∞) = 0.
+Consequently, from Corollary 14 we deduce that Fix(L)̸ = ∅. Hence, from Fact 34 we
+26
+
+
+===== PAGE 27 =====
+title
+conclude that the autoencoder T2 has at least one fixed point, and, from Fact 31, we know
+that the least fixed point of T2 can be computed using the fixed point iteration of T2 starting
+at x1 = 0. We have also checked that the other fixed points of T2 can be computed for
+different positive starting points of the fixed point iteration of T2. The sample fixed points
+obtained for T2 are depicted in Figure 7.
+(a)
+(b)
+Figure 7: Sample fixed points of an autoencoder with only nonnegative weights and with
+the ReLU and sigmoid activation functions on (a) the MNIST dataset and (b) the ZERO
+dataset.
+6.1.8 ReLU + Sigmoid RR
+In this setup, the autoencoder T2 had real-valued weights and biases, and it used ReLU acti-
+vation functions in the first layer and sigmoid activation functions in the second layer. Thus,
+the autoencoder satisfies Assumption 32, and, hence, by Corollary 33, T2 is an (A0)-neural
+network. By replacing negative weights and biases with zeros, we obtain from Corollary 9,
+point 3, an (A0,1,2,3)-neural network L that upper-bounds T2. From Proposition 11, point 2,
+and Corollary 13, we have that ρ(L∞) = 0, and, from Corollary 15, we conclude that L has
+a unique and positive fixed point. We note that L is in particular an (A0,1)-neural network,
+which follows from the relations (A0,1,2,3) ⊂(A0,1,2) ⊂(A0,1). Therefore, using Fact 34 and
+Remark 35, we conclude that Fix(T2)̸ = ∅. However, as stated in Remark 36, the fixed point
+iteration of T2 does not necessarily converge to its fixed point. Indeed, using the fixed point
+iteration of T2 for various starting points, we obtained fixed points for the MNIST dataset,
+but not for the ZERO dataset. The sample fixed points obtained on the MNIST dataset are
+depicted in Figure 8.
+27
+
+
+===== PAGE 28 =====
+Piotrowski, Cavalcante, Gabor
+Figure 8: The sample fixed points of an autoencoder with real-valued weights and biases on
+the MNIST dataset.
+Table 1: Empirical mean of the test loss for different configurations of the autoencoders.
+The test loss is averaged over 10 runs of the autoencoder training. The deviations shown in
+the table indicate the standard error of the mean, extending one standard error above and
+below the empirical mean.
+Configuration
+Test loss
+Sigmoid NN 6.1.1
+0.2308 ± 2.3 · 10−6
+Tanh NN 6.1.2
+0.0063 ± 3.9 · 10−6
+Tanh PN 6.1.3
+0.0246 ± 5.6 · 10−5
+ReLU spectral NN 6.1.4
+0.0061 ± 1.1 · 10−5
+ReLU spectral PN 6.1.5
+0.0059 ± 1.3 · 10−5
+Tanh + Swish NN 6.1.6
+0.0041 ± 2.5 · 10−6
+ReLU + Sigmoid NR 6.1.7
+0.0031 ± 4.7 · 10−5
+ReLU + Sigmoid RR 6.1.8
+0.0042 ± 7.7 · 10−5
+Table 2: Empirical mean for the spectral radii, products of spectral norms of weight matrices,
+and spectral norms of product of weight matrices for different configurations of autoencoders.
+The deviations shown in the table indicate the standard error of the mean, extending one
+standard error above and below the empirical mean. All values have been computed by
+considering 10 runs of the autoencoder training.
+Configuration
+ρ(T∞)
+∥W1∥· ∥W2∥
+∥W2 · W1∥
+Sigmoid NN 6.1.1
+0.00
+6.26 ± 0.07
+5.23 ± 0.03
+Tanh NN 6.1.2
+0.00
+373.9 ± 3.8
+95.2 ± 0.6
+Tanh PN 6.1.3
+0.00
+35.5 ± 0.6
+31.9 ± 0.5
+ReLU spectral NN 6.1.4
+0.988 ± 3.7 · 10−4
+1.066 ± 4.7 · 10−4
+0.999 ± 4.3 · 10−4
+ReLU spectral PN 6.1.5
+0.987 ± 7.7 · 10−5
+1.001 ± 3.5 · 10−5
+0.999 ± 2.9 · 10−5
+Tanh + Swish NN 6.1.6
+—
+15.8 ± 0.09
+8.96 ± 0.04
+ReLU + Sigmoid NR 6.1.7
+—
+123.3 ± 0.7
+100.7 ± 0.6
+ReLU + Sigmoid RR 6.1.8
+—
+271.5 ± 0.1
+214.7 ± 1.0
+6.1.9 Connections between the existence of fixed points, the nonlinear
+spectral radius, and the spectral norm of the weight matrices
+The fixed points obtained in the above simulations on the MNIST dataset resemble a noisy
+average of input classes, which is visually very different from any reasonable input signal (i.e.,
+handwritten digits from 0 to 9). In scenarios of this type, fast convergence of the autoencoder
+28
+
+
+===== PAGE 29 =====
+title
+iterations to the set of fixed points is undesirable because the output of the autoencoder can
+be seen as the first iteration of a fixed point algorithm. Fast convergence of the autoencoders
+leads to significant differences between the autoencoder input (the handwritten digits) and
+the output. To optimize the performance of nonnegative autoencoders, a natural strategy
+is to ensure slow convergence to fixed points for samples of the expected input classes.
+We discuss this promising but challenging research line in more detail in Section 7.1.1.
+However, to provide precise mathematical statements that motivate this discussion, we need
+a clear understanding of some key properties: the nonlinear spectral radius and the weight
+matrices of the trained neural networks. To this end, we show in Table 1 the performance
+of the autoencoders considered in this section, and in Table 2 we show key characteristics
+of these autoencoders with respect to spectral norms of weight matrices and the nonlinear
+spectral radius. The important aspect to highlight is that previous studies deriving sufficient
+conditions for the existence of fixed points (and convergence of the fixed point iteration to
+the fixed points) would require the spectral norm of the product of weight matrices to be
+strictly less than one, which is a condition often violated in the experiments depicted in
+Table 2. However, we have verified numerically the existence of fixed points regardless of
+the values taken by these weight matrices, and these numerical results are consistent with
+the theory discussed in, for example, Section 3.3.2.
+We have also verified that, for the
+autoencoders for which the concept of nonlinear spectral radius is well defined, the best
+performing autoencoders have spectral radius close to one. This aspect will be crucial for
+the discussion later in Section 7.1.1.
+6.2 Deep equilibrium models
+As discussed in the Introduction, fixed point analysis plays a pivotal role in the development
+of deep equilibrium models. In these models, we typically need to guarantee existence and
+uniqueness of the fixed point, in addition to establishing convergence of the fixed point
+iteration. In our recent study in Gabor et al. (2024), we leverage the theoretical framework
+laid out in the preceding sections to achieve these objectives.
+More specifically, in that
+study, we use the results related to (A0,1,2,3)-mappings to construct a deep equilibrium model
+that is guaranteed to have a unique fixed point. Furthermore, we also establish geometric
+convergence of fixed point iteration based of the results in Piotrowski and Cavalcante (2022).
+We refer readers to Gabor et al. (2024) for details.
+7. Future research directions
+Current studies indicate that obtaining simple and general results about the shape of the
+fixed point set of generic (A0,1)-neural networks can be difficult. As an example, a very recent
+result Reich and Zaslavski (2023) shows that, even for the simple case of (A1) (continuous
+and monotonic) self-mappings defined on an interval [a, b], i.e., nondecreasing functions
+f : [a, b] →[a, b], the problem of determining explicitly Fix(f) is a highly non-trivial task.
+In particular, (Reich and Zaslavski, 2023, Theorem 2.2) asserts that, for any integer n ≥2,
+there exists an open and everywhere dense set of such functions for which the cardinality
+of Fix(f) is lower bounded by n. Furthermore, any uniqueness conditions on fixed points
+of (A0,1,2)-mappings, beyond those presented in this paper, must clearly preclude simple
+29
+
+
+===== PAGE 30 =====
+Piotrowski, Cavalcante, Gabor
+cases such as the identity mapping Id: Rk
++ →Rk
++, which is the simplest example of an
+(A0,1,2)-mapping with an uncountable number of fixed points (Fix(Id) = Rk
++).
+Two additional important questions, especially from an application perspective, are the
+following:
+(i) determine the sets of approximate fixed points, that is, find x ∈Rk
++ such that T(x) ≈x
+(in some sense), where T is the nonnegative neural network under consideration; and
+(ii) lift the restriction of nonnegative inputs and outputs.
+Below we discuss potential research directions toward these goals.
+7.1 Approximate fixed points
+At first glance, the imposition of a nonnegativity constraint on neural networks, as explored
+in this study and inspired by biological mechanisms, might seem to significantly impair their
+performance. We might expect, for instance, that this constraint could dramatically hinder
+the ability of neural networks to reconstruct input data perfectly. Nevertheless, we argue
+that achieving perfect signal reconstruction is unnecessary for a wide array of applications.
+To support this viewpoint, we refer to the analogy of human cognition, where the brain
+is understood to process sensory information to a level considered “adequate,” rather than
+aiming for “perfection.” This viewpoint is consistent with established computational neu-
+roscience principles Doya et al. (2007); Arbib and Bonaiuto (2016); Poggio and Anselmi
+(2016).
+Using this analogy, we posit that autoencoders subjected to nonnegativity constraints
+can, with proper training, process input data “sufficiently well” in some applications of
+practical interest. This assertion is supported by empirical evidence Lemme et al. (2012);
+Ayinde and Zurada (2018), and our discussions in previous sections link this practical aspect
+with theoretical insights using simple autoencoders on the MNIST dataset. In particular, as
+briefly mentioned in Section 6.1.9, viewing the output of an autoencoder as the first iteration
+of a fixed point algorithm offers a natural strategy for developing autoencoders that closely
+emulate an ideal encoder-decoder model, which compresses and reconstructs perfectly input
+signals. The nuances of this strategy are explored in the next two subsections.
+7.1.1 Slow convergence to fixed points
+Let us consider the input-output relation x 7→T(x) of a nonnegative autoencoder T as the
+first iteration of the fixed point algorithm xn+1
+df.= T n(x) for n ∈N. From this fixed point
+theory viewpoint, an autoencoder T is expected to provide good reconstruction performance
+(x ≈T(x)) if the fixed point algorithm xn+1 = T n(x) generates slowly converging or diverg-
+ing sequences. Building on the theoretical foundations laid out in prior sections, we now
+introduce simple, analytically justified heuristics designed to fulfill this objective.
+For the special case of a positive concave autoencoder T,5 which belongs to the subclass
+of (A0,1,2,3)-autoencoders, the results in (Piotrowski and Cavalcante, 2022, Remark 8) and
+5. For example, autoencoders T of the form (6) that satisfies T(0) ≫0 and that uses activation functions
+constructed with continuous scalar concave activation functions from lists (L1)-(L2) in Remark 6. The
+Sigmoid NN autoencoder considered in Section 6.1.1 is an example of a positive concave neural network.
+See also Corollary 20.
+30
+
+
+===== PAGE 31 =====
+title
+(Cavalcante and Stańczak, 2018, Proposition 5) derive a contraction factor c ∈[0, 1) that
+indicates the rate of geometric convergence of the fixed point iteration of T to its unique fixed
+point in Euclidean spaces. The closer c is to one, the slower the convergence speed of the
+fixed point algorithm is expected to be, and, hence, the better reconstruction performance
+we may expect from the autoencoder. While a contraction factor c close to the value one does
+not provide us with formal guarantees of small progress at the first iteration, we illustrate
+via a simple numerical experiment that designing autoencoders experiencing potentially slow
+convergence or divergence in their fixed point iterations is a useful strategy to enhance their
+performance.
+In more detail, for positive concave autoencoders, the contraction factor c is lower
+bounded by the spectral radius ρ(T∞), and ρ(T∞) < 1 if and only if the autoencoder is
+c-Lipschitz continuous with c < 1 in a neighborhood of the fixed point with respect to
+Thompson’s metric described in Definition 37 in the Appendix Piotrowski and Cavalcante
+(2022). If ρ(T∞) > 0, it follows from (11) that we can modify the autoencoder T to have
+its spectral radius to an arbitrary nonnegative value u by simply rescaling the weights of
+any layer by u/ρ(T∞), so, based on the above arguments, we should set u to a value close
+to one to improve the performance of autoencoders. This idea is similar to spectral normal-
+ization of neural network layers, but our motivation for normalization is uniquely grounded
+in fixed point theory, providing further theoretical justifications even in nonlinear settings.
+To demonstrate that this principle can also be exploited by autoencoders that are not nec-
+essarily positive and concave, we conducted an experiment with the trained (A0,1,2)-ReLU
+spectral PN autoencoder T from Section 6.1.5. We rescaled the weights of the first layer of
+T to obtain 25 instances of the autoencoder T with spectral radii [0.92, 0.93, 0.94, . . . , 1.2].
+The results are shown in Figure 9, and we verify that the test loss indeed achieves its min-
+imum value if the spectral radius is close to one. More precisely, if 1 −ϵ < c < 1 for some
+sufficiently small ϵ > 0, we may expect slowly converging fixed point iterations. On the
+other hand, if 1 ≤c < 1+ϵ, Figure 9 suggests that autoencoders with slowly diverging fixed
+point iterations are also able to produce good approximate fixed points.
+The above considerations constitute only a sample starting point of a much deeper anal-
+ysis that is necessary to establish approximate fixed points of more general nonnegative
+neural networks. As another example of a possible direction towards this goal, we note
+that, for the ReLU spectral PN autoencoder considered above, if W1W2 is diagonalizable
+and the input classes are (approximately) within the subspace spanned by the eigenvec-
+tors of W1W2 corresponding to eigenvalues approximately equal to one, we should observe
+the “slow-convergence” behaviour described above, and, consequently, good reconstruction
+performance of the autoencoder.
+7.1.2 Lipschitz continuity in normed vector spaces
+Many of the networks we have considered in the previous sections are in fact c-Lipschitz
+continuous with c ≤1 with respect to Thompson’s metric defined in the Appendix. However,
+we now show that, in normed vector spaces – which are arguably the spaces of most practical
+significance for engineers – providing bounds on the Lipschitz constant is not likely to succeed
+because the best Lipschitz constant can be prohibitively large in Euclidean settings. This
+insight provides us with information about the output variability in response to minor input
+31
+
+
+===== PAGE 32 =====
+Piotrowski, Cavalcante, Gabor
+Figure 9: Empirical mean of the test loss as a function of the spectral radius for the ReLU
+spectral PN autoencoder described in Section 6.1.5 on the MNIST dataset. The test loss
+is averaged over 10 runs of the autoencoder training. The error bars indicate the standard
+error of the mean, extending one standard error above and below the empirical mean.
+modifications in Euclidean settings. Importantly, it also also provides us with a means of
+evaluating the robustness of neural networks against adversarial attacks.
+More precisely, the result in (Combettes and Pesquet, 2020a, Section 2) shows that
+all activation functions from lists (L1)-(L2) in Remark 6 are nonexpansive in a Hilbert
+space. Thus, from (Combettes and Pesquet, 2020b, Proposition 4.3), we deduce that neural
+networks satisfying the conditions in Definitions 3-4, and, in particular, those considered in
+Sections 3-5, are Lipschitz continuous, and the corresponding Lipschitz constant θ in the
+standard Euclidean space can be bounded by the spectral norm ∥· ∥of the weight matrices
+W1, . . . , Wn, or, more precisely:
+∥
+1
+Y
+i=n
+Wi∥≤θ ≤
+n
+Y
+i=1
+∥Wi∥.
+(17)
+The results presented in Table 2 at the end of Section 6.1 show that, for n = 2, the lower
+bound of the spectral norm ∥Q1
+i=n Wi∥(achievable by neural networks with nonnegative
+weights (Combettes and Pesquet, 2020b, Section 5.3)) is too large to obtain meaningful
+bounds for ∥T(x) −x∥around its fixed point(s) x⋆∈Fix(T), where the vector norm ∥· ∥
+is the standard Euclidean norm.
+Therefore, a more subtle argument, perhaps based on
+local Lipschitz continuity for specific input classes, should be considered for exploiting the
+continuity of T with the aim of determining all inputs x satisfying T(x) ≈x, or, equivalently,
+∥T(x) −x∥≈0.
+7.2 Extending the current results beyond nonnegativity
+This study mostly focuses on monotonic neural networks with nonnegative inputs and out-
+puts, but a well-known pre- and post-processing step enables us to extend the above results
+32
+
+
+===== PAGE 33 =====
+title
+to a particular class of monotonic neural networks with inputs and outputs possibly taking
+values in the whole real line. More precisely, let T : int(Rk
++) →int(Rk
++) be a neural network
+with a structure that can be analyzed with the theory in this study. To train and operate
+a neural network of this type with inputs and outputs taking values in Rk, we can proceed
+as follows. Let L : int(Rk
++) →Rk : x 7→[log(x1), . . . , log(xk)] and E : Rk →int(Rk
++) : x 7→
+[exp(x1), . . . , exp(xk)] denote, respectively, the coordinate-wise log and exponential map-
+pings. Now, consider the neural network defined by N : Rk →Rk : x 7→L(T(E(x))); i.e.,
+we first map an input in Rk to int(Rk
++) with the exponential mapping, process the mapped
+input with the original positive neural network T, and then map the output of T back to Rk
+with the log mapping. Some properties of N can be directly deduced from T. For example,
+we verify that N has a fixed point if and only if T also has a fixed point. Furthermore, the
+uniqueness of the fixed point of T implies the uniqueness of the fixed point of N. These are
+all properties that can be verified with the theory described in the previous sections. From
+a mathematical perspective, the mapping L is the known isometry between Thompson’s
+metric space (int(Rk
++), dT ) (see Definition 37) and the normed vector space (Rk, ∥·∥∞), and
+further properties of the neural network N are strongly connected to the theory of topical
+mappings (Lemmens and Nussbaum, 2012, Sect. 1.5).
+8. Conclusion
+We have shown that the behavior of many neural networks that can be seen as self-mappings
+with nonnegative weights (as often proposed in the literature) can be rigorously analyzed
+with the framework of nonlinear Perron-Frobenius theory. We also demonstrated that the
+concept of the spectral radius of asymptotic mappings is useful for determining whether a
+neural network has an empty or nonempty fixed point set, and, for an autoencoder, we recall
+that its fixed point set corresponds to the inputs that can be perfectly reconstructed at the
+output. Our conditions for the existence of fixed points of nonnegative neural networks
+are weaker than those previously considered in the literature, which are often based on
+arguments in convex analysis in Hilbert spaces.
+Acknowledgments and Disclosure of Funding
+The authors are grateful to anonymous reviewers for their constructive comments which
+surely promoted the readability of the revised manuscript. This work was in part supported
+by the National Centre for Research and Development of Poland (NCBR) under grant EIG
+CONCERT-JAPAN/04/2021 and by the Federal Ministry of Education and Research of
+Germany under grant 01DR21009 and the programme “Souverän. Digital. Vernetzt.” Joint
+project 6G-RIC, project identification numbers: 16KISK020K and 16KISK030.
+A. Known results
+Definition 37 We define Thompson’s metric by
+dT : int(Rk
++) × int(Rk
++)
+→[0, ∞)
+(x, y)
+7→ln(max{M(x, y), M(y, x)}),
+(18)
+33
+
+
+===== PAGE 34 =====
+Piotrowski, Cavalcante, Gabor
+where
+M : int(Rk
++) × int(Rk
++)
+→[0, ∞)
+(x, y)
+7→inf{β > 0 | x ≤βy}.
+We call the metric space (int(Rk
++), dT ) the Thompson metric space.
+Proposition 38 ((Cavalcante and Stańczak, 2019, Proposition 1)) Let T : Rk
++ →Rk
++
+be an (A0,1,2)-mapping. If ρ(T∞) < 1, then Fix(T)̸ = ∅.
+Proposition 39 ((Cavalcante et al., 2019, Proposition 4)) Let T : Rk
++ →int(Rk
++) be
+an (A0,1,2,3)-mapping. Then Fix(T)̸ = ∅if and only if ρ(T∞) < 1.
+Proposition 40 ((Cavalcante et al., 2019, Fact 1(ii))) Let T : Rk
++ →Rk
++ be an (A0,1,2,3)-
+mapping. Then Fix(T)̸ = ∅is either a singleton or the empty set.
+B. Construction of monotonic and weakly scalable mappings
+The following general lemma introduces building blocks to construct (A0,1,2)-mappings, or
+even (A0,1,2,3)-mappings. It extends (Oshime, 1992, Proposition 2.3) to mappings that are
+not necessarily self-mappings.
+Lemma 41
+1. Let f1 : Rs
++ →Rp
++ and f2 : Rs
++ →Rp
++ be (A0)-mappings and let α, β ≥0. Consider the
+following mappings:
+x 7→(αf1 + βf2)(x),
+(19)
+x 7→max{f1(x), f2(x)},
+(20)
+x 7→min{f1(x), f2(x)}.
+(21)
+Then we have:
+(a) If f1, f2 are (A0,1)-mappings, then so are the mappings in (19)-(21).
+(b) If f1, f2 are (A0,1,2)-mappings, then so are the mappings in (19)-(21).
+(c) If f1 in as (A0,1,2)-mapping and f2 is an (A0,1,2,3)-mapping, α ≥0 and β > 0,
+then the mapping in (19) is an (A0,1,2,3)-mapping.
+(d) if f1, f2 are (A0,1,2,3)-mappings, then so are the mappings in (20)-(21).
+2. Let g: Rp
++ →Rr
++ be an (A0)-mapping and consider the following mapping:
+x 7→(g ◦f1)(x).
+(22)
+(a) If f1, g are (A0,1)-mappings, then so is the mapping in (22).
+(b) If f1, g are strictly monotonic, then so is the mapping in (22).
+(c) If f1 is an (A0,2)-mapping and g is an (A0,1,2)-mapping, then the mapping in (22)
+is an (A0,2)-mapping.
+34
+
+
+===== PAGE 35 =====
+title
+(d) If f1 is an (A0,2)-mapping and g is an (A0,1,2,3)-mapping, then the mapping in
+(22) is an (A0,2,3)-mapping.
+(e) If f1 is an (A0,2,3)-mapping, and g is a strictly monotonic (A0,2)-mapping, then
+the mapping in (22) is an (A0,2,3)-mapping.
+Proof
+Part 1: Properties of mappings in (19)-(21)
+1.(a)
+Let x, ˜x ∈Rs
++ be such that x ≤˜x, let α, β ≥0, and let f1, f2 be (A0,1)-mappings.
+Then αf1(x) ≤αf1(˜x) and βf2(x) ≤βf2(˜x). By adding these two inequalities we ob-
+tain monotonicity of x 7→(αf1 + βf2)(x). Furthermore, we also have max{f1(x), f2(x)} ≤
+max{f1(˜x), f2(˜x)} and min{f1(x), f2(x)} ≤min{f1(˜x), f2(˜x)}.
+1.(b)
+Let x ∈Rs
++, let α, β ≥0, and let f1, f2 be (A0,1,2)-mappings. Fix ρ ≥1. Then
+αf1(ρx) ≤αρf1(x) and βf2(ρx) ≤βρf2(x). By adding these two inequalities we obtain
+weak scalability of x 7→(αf1 + βf2)(x). Furthermore, we have max{f1(ρx), f2(ρx)} ≤
+max{ρf1(x), ρf2(x)} = ρ max{f1(x), f2(x)}, with the same arguments for weak scalability
+of min{f1(ρx), f2(ρx)}.
+1.(c)
+Let f1 be an (A0,1,2)-mapping and f2 be an (A0,1,2,3)-mapping, with α ≥0 and
+β > 0, and let ρ > 1. Then αf1(ρx) ≤αρf1(x) and βf2(ρx) ≪βρf2(x). By adding these
+two inequalities we obtain scalability of x 7→(αf1 + βf2)(x).
+1.(d)
+We have max{f1(ρx), f2(ρx)} ≪max{ρf1(x), ρf2(x)} = ρ max{f1(x), f2(x)}, with
+the same arguments for scalability of min{f1(ρx), f2(ρx)}.
+Part 2: Properties of mapping in (22)
+2.(a)
+Let x, ˜x ∈Rs
++ be such that x ≤˜x and let f1, g be (A0,1)-mappings. Then f1(x) ≤
+f1(˜x), and, hence, g(f1(x)) ≤g(f1(˜x)).
+2.(b)
+As above.
+2.(c)
+Let x ∈Rs
++, and let f1 be an (A0,2)-mapping and g be an (A0,1,2)-mapping. Fix
+ρ ≥1. From weak scalability of f1, we have f1(ρx) ≤ρf1(x), and, from monotonicity of g,
+we deduce g(f1(ρx)) ≤g(ρf1(x)). Weak scalability of g yields g(ρf1(x)) ≤ρg(f1(x)).
+2.(d)
+Let x ∈Rs
++, and let f1 be an (A0,2)-mapping and g be an (A0,1,2,3)-mapping. Fix
+ρ > 1. As above, we have g(f1(ρx)) ≤g(ρf1(x)). Then, from scalability of g, it follows that
+g(ρf1(x)) ≪ρg(f1(x)).
+2.(e)
+Let x ∈Rs
++, and let f1 be an (A0,2,3)-mapping, and g be a strictly monotonic
+(A0,2)-mapping.
+Fix ρ > 1. By our assumptions, we have f1(ρx) ≪ρf1(x), and, from
+strict monotonicity of g, we have g(f1(ρx)) ≪g(ρf1(x)). Weak scalability of g implies
+g(ρf1(x)) ≤ρg(f1(x)), and the proof is completed. ■
+C. Proof of Lemma 8
+Proof We use the results of Lemma 41 to prove points 1)-7) as follows:
+1) Put f1(x) = Wx and g(x) = x + b, and note that f1 is an (A0,1,2)-mapping if W is
+nonnegative, whereas g is a strictly monotonic (A0,2)-mapping for b ≥0. Then, from 2(a)
+35
+
+
+===== PAGE 36 =====
+Piotrowski, Cavalcante, Gabor
+in Lemma 41, the affine mapping yi = Wixi−1 + bi is monotonic, and from 2(d) in Lemma
+41, it is also weakly scalable.
+2)
+From point 1)
+we have that yi = Wixi−1 + bi is an (A0,1,2)-mapping. To prove
+scalability, we note that, if b ≫0, then g(x) = x+b is a strictly monotonic (A0,2,3)-mapping.
+The desired assertion now follows from 2(e) in Lemma 41.
+3) Monotonicity of Ti follows from 2(a) in Lemma 41 and its weak scalability from 2(d)
+in Lemma 41.
+4) Monotonicity of Ti follows from point 3) above. Scalability of Ti follows from 2(e)
+in Lemma 41.
+5) Monotonicity of Ti follows from point 3) above. Scalability of Ti follows from 2(f)
+in Lemma 41.
+6) Monotonicity and weak scalability of T follows from, respectively, an application of
+2(a) and 2(d) in Lemma 41 to consecutive layers of T.
+7)
+Monotonicity of T follows from point 6)
+above. To prove scalability, verify from
+2(e) in Lemma 41 that a subnetwork of T composed of the first i0 layers of T is scalable.
+Scalability of T now follows from an application of 2(f) in Lemma 41 to consecutive layers
+of T, starting with the i0 + 1-st layer. ■
+References
+J. Adler and O. Öktem.
+Solving ill-posed inverse problems using iterative deep neural
+networks. Inverse Problems, 33(12):124007, 2017.
+A. Ali and F. Yangyu. Automatic modulation classification using deep learning based on
+sparse autoencoders with nonnegativity constraints. IEEE Signal Processing Letters, 24
+(11):1626–1630, 2017.
+M. A. Arbib and J. J. Bonaiuto. From Neuron to Cognition via Computational Neuroscience.
+MIT Press, 2016.
+B. O. Ayinde and J. M. Zurada. Deep learning of constrained autoencoders for enhanced
+understanding of data. IEEE Transactions on Neural Networks and Learning Systems, 29
+(9):3969–3979, 2018.
+S. Bai, J. Z. Kolter, and V. Koltun. Deep equilibrium models. Advances in Neural Infor-
+mation Processing Systems, 32, 2019.
+S. Bai, V. Koltun, and J. Z. Kolter. Multiscale deep equilibrium models. In H. Larochelle,
+M. Ranzato, R. Hadsell, M.F. Balcan, and H. Lin, editors, Advances in Neural Information
+Processing Systems, volume 33, pages 5238–5250. Curran Associates, Inc., 2020.
+M. Benning and M. Burger. Modern regularization methods for inverse problems. Acta
+Numerica, 27:1–111, May 2018.
+H. Boche and M. Schubert. Concave and convex interference functions—general charac-
+terizations and applications. IEEE Transactions on Signal Processing, 56(10):4951–4965,
+2008.
+36
+
+
+===== PAGE 37 =====
+title
+A. D. Burbanks, R. D. Nussbaum, and C. T. Sparrow. Extensions of order-preserving maps
+on a cone. Proc. Royal Society of Edinburgh Sect.A, 133(1):35–59, 2003.
+R. L. G. Cavalcante and S. Stańczak. Weakly standard interference mappings: Existence of
+fixed points and applications to power control in wireless networks. In ICASSP 2019 - 2019
+IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP),
+pages 4824–4828, 2019.
+R. L. G. Cavalcante, S. Stańczak, M. Schubert, A. Eisenbläter, and U. Türke.
+Toward
+energy-efficient 5G wireless communication technologies. IEEE Signal Processing Mag.,
+31(6):24–34, Nov. 2014.
+R. L. G. Cavalcante, Y. Shen, and S. Stańczak. Elementary properties of positive concave
+mappings with applications to network planning and optimization. IEEE Transactions
+on Signal Processing, 64(7):1774–1783, 2016.
+R. L. .G. Cavalcante, M. Kasparick, and S. Stańczak. Max-min utility optimization in load
+coupled interference networks. IEEE Trans. Wireless Commun., 16(2):705–716, Feb. 2017.
+R. L. G. Cavalcante, Q. Liao, and S. Stańczak. Connections between spectral properties of
+asymptotic mappings and solutions to wireless network problems. IEEE Transactions on
+Signal Processing, 67(10):2747–2760, 2019.
+Renato Luís Garrido Cavalcante and S Stańczak. Spectral radii of asymptotic mappings
+and the convergence speed of the standard fixed point algorithm. In 2018 IEEE Interna-
+tional Conference on Acoustics, Speech and Signal Processing (ICASSP), pages 4509–4513.
+IEEE, 2018.
+Y. Chen, Y. Shi, and B. Zhang. Optimal control via neural networks: a convex approach.
+In The International Conference on Learning Representations (ICLR), 2019.
+J. Chorowski and J. M. Zurada. Learning understandable neural networks with nonnegative
+weight constraints. IEEE Transactions on Neural Networks and Learning Systems, 26(1):
+62–69, 2015.
+P. L. Combettes and J.-C. Pesquet.
+Deep neural network structures solving variational
+inequalities. Set-Valued and Variational Analysis, 28:491–518, September 2020a.
+P. L. Combettes and J.-C. Pesquet. Lipschitz certificates for layered network structures
+driven by averaged activation operators. SIAM Journal on Mathematics of Data Science,
+2(2):529–557, June 2020b.
+K. Doya, S. Ishii, A. Pouget, and R. P. N. Rao, editors.
+Bayesian Brain: Probabilistic
+Approaches to Neural Coding. MIT Press, 2007.
+M. Gabor, T. Piotrowski, and R. L. G. Cavalcante.
+Positive concave deep equilibrium
+models. 2024. arXiv:2402.04029 [cs.LG].
+D. Gilton, G. Ongie, and R. Willett. Deep equilibrium architectures for inverse problems in
+imaging. IEEE Transactions on Computational Imaging, 7:1123–1133, 2021.
+37
+
+
+===== PAGE 38 =====
+Piotrowski, Cavalcante, Gabor
+I. Goodfellow, Y. Bengio, and A. Courville. Deep Learning. The MIT Press, Cambridge,
+Massachusetts, 2016.
+E. Hosseini-Asl, J. M. Zurada, and O. Nasraoui. Deep learning of part-based representation
+of data using sparse autoencoders with nonnegativity constraints. IEEE Transactions on
+Neural Networks and Learning Systems, 27(12):2486–2498, 2015.
+Z. Huang, S. Bai, and J. Z. Kolter. In M. Ranzato, A. Beygelzimer, Y. Dauphin, P. S. Liang,
+and J. Wortman Vaughan, editors, Advances in Neural Information Processing Systems,
+volume 34, pages 9639–9650. Curran Associates, Inc., 2021.
+C. R. Johnson and R. Bru. The spectral radius of a product of nonnegative matrices. Linear
+Algebra and its Applications, 141:227–240, 1990.
+J. Kendall, R. Pantone, K. Manickavasagam, Y. Bengio, and B. Scellier. Training end-to-end
+analog neural networks with equilibrium propagation. 2020. arXiv:2006.01981 [cs.NE].
+U. Krause. Positive dynamical systems in discrete time: theory, models, and applications,
+volume 62. Walter de Gruyter GmbH & Co KG, 2015.
+Y. A. LeCun, Y. Bengio, and G. Hinton. Deep learning. Nature, 521:436–444, 2015.
+D. D. Lee and H. S. Seung. Learning the parts of objects by nonnegative matrix factorization.
+Nature, 401(6755):788–791, 1999.
+A. Lemme, R. F. Reinhart, and J. J. Steil. Online learning and generalization of parts-based
+image representations by non-negative sparse autoencoders. Neural Networks, 33:194–203,
+2012.
+B. Lemmens and R. Nussbaum.
+Nonlinear Perron-Frobenius Theory.
+Cambridge Univ.
+Press, 2012.
+C. D. Meyer. Matrix analysis and applied linear algebra, volume 71. SIAM, 2000.
+T. Miyato, T. Kataoka, M. Koyama, and Y. Yoshida. Spectral normalization for generative
+adversarial networks. In International Conference on Learning Representations, 2018.
+T. D. Nguyen, T. Tran, D. Phung, and S. Venkatesh. Learning parts-based representa-
+tions with nonnegative restricted Boltzmann machine. In Asian Conference on Machine
+Learning, pages 133–148. PMLR, 2013.
+G. Ongie, A. Jalal, C. A. Metzler, R. G. Baraniuk, A. G. Dimakis, and R. Willett. Deep
+learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in
+Information Theory, 1(1):39–56, 2020.
+Y. Oshime. Perron-Frobenius problem for weakly sublinear maps in a Euclidean positive
+orthant. Japan Journal of Industrial and Applied Mathematics, 9(313), 1992.
+M. Paliy, S. Strangio, P. Ruiu, and G. Iannaccone. Assessment of two-dimensional materials-
+based technology for analog neural networks. IEEE Journal on Exploratory Solid-State
+Computational Devices and Circuits, 7(2):141–149, 2021.
+38
+
+
+===== PAGE 39 =====
+title
+B. Palsson, J. R. Sveinsson, and M. O. Ulfarsson. Spectral-spatial hyperspectral unmixing
+using multitask learning. IEEE Access, 7:148861–148872, 2019.
+T. Piotrowski and R. L. G. Cavalcante. The fixed point iteration of positive concave map-
+pings converges geometrically if a fixed point exists: Implications to wireless systems.
+IEEE Transactions on Signal Processing, 70:4697–4710, 2022.
+T. A. Poggio and F. Anselmi. Visual Cortex and Deep Networks. MIT Press, 2016.
+S. Reich and A. J. Zaslavski. Most continuous and increasing functions on a compact real
+interval have infinitely many different fixed points. Journal of Fixed Point Theory and
+Applications volume, 25(25), 2023.
+W. Samek, G. Montavon, S. Lapuschkin, C. J. Anders, and K.-R. Müller. Explaining deep
+neural networks and beyond: A review of methods and applications. Proceedings of the
+IEEE, 109(3):247–278, 2021.
+M. Schubert and H. Boche. Interference Calculus - A General Framework for Interference
+Management and Network Utility Optimization. Springer, Berlin, 2011.
+M. Shashanka, B. Raj, and P. Smaragdis. Probabilistic latent variable models as nonnegative
+factorizations.
+Computational Intelligence and Neuroscience, 2008(Article ID 947438),
+2008.
+S. Shindoh. The structures of SINR regions for standard interference mappings. In 2019 58th
+Annual Conference of the Society of Instrument and Control Engineers of Japan (SICE),
+pages 1280–1285. IEEE, 2019.
+S. Shindoh. Some properties of SINR regions for standard interference mappings. SICE
+Journal of Control, Measurement, and System Integration, 13(3):50–56, 2020.
+Y. Su, A. Marinoni, J. Li, J. Plaza, and P. Gamba. Stacked nonnegative sparse autoencoders
+for robust hyperspectral unmixing. IEEE Geoscience and Remote Sensing Letters, 15(9):
+1427–1431, 2018.
+R. Tsuchida and C. S. Ong. Deep equilibrium models as estimators for continuous latent
+variables. In Francisco Ruiz, Jennifer Dy, and Jan-Willem van de Meent, editors, Proceed-
+ings of The 26th International Conference on Artificial Intelligence and Statistics, volume
+206 of Proceedings of Machine Learning Research, pages 1646–1671. PMLR, 2023.
+M. Woodford. Effective demand failures and the limits of monetary stabilization policy.
+American Economic Review, 112(5):1475–1521, May 2022.
+I. Yamada, M. Yukawa, and M. Yamagishi. Minimizing the Moreau envelope of nonsmooth
+convex functions over the fixed point set of certain quasi-nonexpansive mappings. In H. H.
+Bauschke, R. S. Burachik, P. L. Combettes, V. Elser, D. R. Luke, and H. Wolkowicz,
+editors, Fixed-Point Algorithms for Inverse Problems in Science and Engineering, pages
+345–390, New York, NY, 2011. Springer New York.
+39
+
+
+===== PAGE 40 =====
+Piotrowski, Cavalcante, Gabor
+L. You and D. Yuan. A note on decoding order in user grouping and power optimization for
+multi-cell NOMA with load coupling. IEEE Transactions on Wireless Communications,
+2020.
+S. Yu, M. Drton, and A. Shojaie. Generalized score matching for non-negative data. Journal
+of Machine Learning Research, 20(76):1–70, 2019.
+M. Zhou, Y. Cong, and B. Chen. Augmentable gamma belief networks. Journal of Machine
+Learning Research, 17(163):1–44, 2016.
+40

@@ -1,0 +1,61 @@
+{
+  "papers": [
+    {
+      "doc_id": "2103.14460",
+      "arxiv_id": "2103.14460",
+      "version": "2103.14460v1",
+      "title": "Unsupervised Multi-Index Semantic Hashing",
+      "authors": [
+        "Christian Hansen",
+        "Casper Hansen",
+        "Jakob Grue Simonsen",
+        "Stephen Alstrup",
+        "Christina Lioma"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The licence statement is printed on the first page of the downloaded PDF.",
+      "abstract_url": "https://arxiv.org/abs/2103.14460v1",
+      "pdf_url": "https://arxiv.org/pdf/2103.14460v1.pdf",
+      "pages": 10,
+      "sha256": "ea9a3274be75e261a7ba44141c3ff2055c0fdc1dd94ab971bdcb4996e9c82ac5",
+      "venue": "The Web Conference 2021 (WWW '21)"
+    },
+    {
+      "doc_id": "2103.14455",
+      "arxiv_id": "2103.14455",
+      "version": "2103.14455v1",
+      "title": "Projected Hamming Dissimilarity for Bit-Level Importance Coding in Collaborative Filtering",
+      "authors": [
+        "Christian Hansen",
+        "Casper Hansen",
+        "Jakob Grue Simonsen",
+        "Christina Lioma"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The licence statement is printed on the first page of the downloaded PDF.",
+      "abstract_url": "https://arxiv.org/abs/2103.14455v1",
+      "pdf_url": "https://arxiv.org/pdf/2103.14455v1.pdf",
+      "pages": 9,
+      "sha256": "67fe36aee5c0a7992ff910a6331bf07fdaf77b04ac6ce060550863dea0b26d96",
+      "venue": "The Web Conference 2021 (WWW '21)"
+    },
+    {
+      "doc_id": "2106.16239",
+      "arxiv_id": "2106.16239",
+      "version": "2106.16239v9",
+      "title": "Fixed points of nonnegative neural networks",
+      "authors": [
+        "Tomasz J. Piotrowski",
+        "Renato L. G. Cavalcante",
+        "Mateusz Gabor"
+      ],
+      "license": "CC BY 4.0",
+      "license_evidence": "The licence statement is printed on the first page of the downloaded PDF.",
+      "abstract_url": "https://arxiv.org/abs/2106.16239v9",
+      "pdf_url": "https://arxiv.org/pdf/2106.16239v9.pdf",
+      "pages": 40,
+      "sha256": "5d5caa94c388b2e797e0983146f5d61dca6ceb74aebeee9fba8ee3a7deb3e763",
+      "venue": "Journal of Machine Learning Research 25 (2024) 1-40"
+    }
+  ]
+}

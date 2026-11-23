@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mira"
+version = "1.0.0"
+description = "Multilingual (English and Urdu) research assistant over PDF papers, with retrieval comparisons and citation checks."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Shaiza Asghar", email = "shaizaasghar471@gmail.com" }]
+keywords = ["information-retrieval", "urdu", "question-answering", "pdf"]
+dependencies = [
+  "numpy>=1.26",
+  "pymupdf>=1.24.0",
+  "rank-bm25>=0.2.2",
+  "faiss-cpu>=1.8.0",
+  "sentence-transformers>=3.0.0",
+  "transformers>=4.44.0",
+  "huggingface_hub>=0.24.0",
+  "pyyaml>=6.0",
+  "matplotlib>=3.8.0",
+  "streamlit>=1.32.0",
+  "tqdm>=4.66.0",
+  "sentencepiece>=0.2.0",
+  "protobuf>=4.25.0",
+  "pandas>=2.2.0",
+  "llama-cpp-python>=0.2.90",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[project.scripts]
+mira = "mira.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

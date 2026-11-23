@@ -1,0 +1,56 @@
+# Defaults for the CPU-only multilingual research assistant.
+chunk:
+  chunk_words: 160
+  overlap_words: 40
+  min_words: 8
+
+embedding:
+  model_name: intfloat/multilingual-e5-small
+  query_prefix: "query: "
+  passage_prefix: "passage: "
+  batch_size: 16
+
+rerank:
+  model_name: cross-encoder/mmarco-mMiniLMv2-L12-H384-v1
+  pool: 20
+  batch_size: 8
+
+translation:
+  ur_en_model: Helsinki-NLP/opus-mt-ur-en
+  en_ur_model: Helsinki-NLP/opus-mt-en-ur
+  max_new_tokens: 128
+  enabled: true
+
+llm:
+  # local-gguf | transformers | openai
+  backend: local-gguf
+  gguf_path: models/qwen2.5-0.5b-instruct-q4_k_m.gguf
+  gguf_repo: Qwen/Qwen2.5-0.5B-Instruct-GGUF
+  gguf_filename: qwen2.5-0.5b-instruct-q4_k_m.gguf
+  transformers_model: Qwen/Qwen2.5-0.5B-Instruct
+  n_ctx: 3072
+  n_threads: 4
+  max_new_tokens: 160
+  temperature: 0.0
+  repeat_penalty: 1.1
+  seed: 0
+  passage_chars: 1100
+
+retrieval:
+  top_k: 5
+  candidate_k: 40
+  rrf_k: 60
+
+grounding:
+  # Fixed before looking at the test set. A sentence is kept when either
+  # threshold is met. The evidence gate is separate and is tuned on the pilot split.
+  lexical_threshold: 0.35
+  embedding_threshold: 0.82
+  min_gate_accuracy: 0.6
+
+evaluation:
+  primary_k: 5
+  ks: [5, 10]
+
+index_dir: data/indexes/benchmark
+results_dir: results

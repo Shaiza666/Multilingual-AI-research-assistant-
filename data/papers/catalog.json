@@ -1,0 +1,44 @@
+{
+  "note": "Pinned arXiv versions whose PDFs state a CC BY 4.0 licence for the paper. The download script checks that statement again.",
+  "papers": [
+    {
+      "doc_id": "2103.14460",
+      "arxiv_id": "2103.14460",
+      "version": "2103.14460v1",
+      "title": "Unsupervised Multi-Index Semantic Hashing",
+      "authors": [
+        "Christian Hansen",
+        "Casper Hansen",
+        "Jakob Grue Simonsen",
+        "Stephen Alstrup",
+        "Christina Lioma"
+      ],
+      "venue": "The Web Conference 2021 (WWW '21)"
+    },
+    {
+      "doc_id": "2103.14455",
+      "arxiv_id": "2103.14455",
+      "version": "2103.14455v1",
+      "title": "Projected Hamming Dissimilarity for Bit-Level Importance Coding in Collaborative Filtering",
+      "authors": [
+        "Christian Hansen",
+        "Casper Hansen",
+        "Jakob Grue Simonsen",
+        "Christina Lioma"
+      ],
+      "venue": "The Web Conference 2021 (WWW '21)"
+    },
+    {
+      "doc_id": "2106.16239",
+      "arxiv_id": "2106.16239",
+      "version": "2106.16239v9",
+      "title": "Fixed points of nonnegative neural networks",
+      "authors": [
+        "Tomasz J. Piotrowski",
+        "Renato L. G. Cavalcante",
+        "Mateusz Gabor"
+      ],
+      "venue": "Journal of Machine Learning Research 25 (2024) 1-40"
+    }
+  ]
+}
