@@ -52,6 +52,29 @@ The test file has 104 questions: 44 English answerable, 44 Urdu translations of 
 
 Retrieval metrics are macro-averages over the 88 answerable questions. Recall@k is the fraction of gold pages in the top k chunks. MRR uses the chunk rank of the first gold page. nDCG@k uses the first visit to each page inside the top k chunks. Token F1 is in the question language, and an abstention on an answerable question scores 0. Semantic score is the cosine of multilingual-e5 embeddings of the final answer and the reference; abstention scores 0. Exact match is the normalised full-string match. Bootstrap intervals are 1,000 resamples of questions. Citation page precision is the fraction of emitted citations whose page is a gold page. A sentence that mostly repeats the question is dropped. If the draft is unusable, the system can show the best retrieved sentence instead; generated-only F1 scores that fallback as 0.
 
+## Models
+
+Local answers use Qwen2.5 Instruct GGUF weights at Q4_K_M. `configs/default.yaml` expects one file per profile under `models/`. English questions use the 1.5B file (`quality`, the default). Urdu questions use the 3B file (`large`). The 0.5B file is the `fast` profile. Each repository publishes that quantisation as a single file, with the lowercase name below.
+
+| Profile | File the config expects | Repository | Direct download |
+| --- | --- | --- | --- |
+| `fast`, 0.5B | `models/qwen2.5-0.5b-instruct-q4_k_m.gguf` | [Qwen/Qwen2.5-0.5B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF) | [qwen2.5-0.5b-instruct-q4_k_m.gguf](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf) |
+| `quality`, 1.5B default | `models/qwen2.5-1.5b-instruct-q4_k_m.gguf` | [Qwen/Qwen2.5-1.5B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF) | [qwen2.5-1.5b-instruct-q4_k_m.gguf](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf) |
+| `large`, 3B for Urdu | `models/qwen2.5-3b-instruct-q4_k_m.gguf` | [Qwen/Qwen2.5-3B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF) | [qwen2.5-3b-instruct-q4_k_m.gguf](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf) |
+
+The same configuration also loads these Hugging Face models for retrieval and translation:
+
+- Embeddings: [intfloat/multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small)
+- Reranker: [cross-encoder/mmarco-mMiniLMv2-L12-H384-v1](https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1)
+- English-to-Urdu translation: [Helsinki-NLP/opus-mt-en-ur](https://huggingface.co/Helsinki-NLP/opus-mt-en-ur)
+- Urdu-to-English translation, used when an Urdu question is also searched in English: [Helsinki-NLP/opus-mt-ur-en](https://huggingface.co/Helsinki-NLP/opus-mt-ur-en)
+
+One command saves the three GGUF files into `models/` under the names above, and caches the embedding, reranker, and translation models:
+
+```bash
+python scripts/download_models.py
+```
+
 ## Setup
 
 ```bash
