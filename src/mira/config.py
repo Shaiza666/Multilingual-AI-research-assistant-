@@ -60,6 +60,8 @@ class LLMConfig:
     passage_chars: int = 1100
     profile: str = "quality"
     profiles: dict = field(default_factory=dict)
+    urdu_profile: str = ""
+    urdu_max_new_tokens: int = 48
 
 
 @dataclass

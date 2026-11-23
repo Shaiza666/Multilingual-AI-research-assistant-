@@ -26,6 +26,20 @@ def test_language_detection():
     assert detect_language("12345") == "unknown"
 
 
+def test_pdf_urdu_repairs_presentation_and_cmap_errors():
+    from mira.textnorm import normalize_display
+
+    broken = "کمپیوڻر ص\u01c0\u061dحیت ǂعداد \u0208"
+    repaired = normalize_display(broken)
+    assert "کمپیوٹر" in repaired
+    assert "صلاحیت" in repaired
+    assert "لاعداد" in repaired or "لا" in repaired
+    assert "\u06c2" in repaired
+    assert "\u01c0" not in repaired
+    assert "\ufb50" not in normalize_display("ﭘ")
+    assert normalize_display("ﭘ") == "پ"
+
+
 def test_display_text_keeps_arabic_kaf():
     from mira.textnorm import normalize_display
 

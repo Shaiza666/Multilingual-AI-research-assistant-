@@ -16,12 +16,15 @@ from mira.indexing import IndexStore
 from mira.metrics import (
     bootstrap_mean_ci,
     exact_match,
+    exact_match_normalized,
     hit_at_k,
     macro_average,
     ndcg_at_k,
     recall_at_k,
     reciprocal_rank,
     token_f1,
+    token_f1_either,
+    token_f1_normalized,
 )
 from mira.models import release
 from mira.pipeline import AskResult, ask
@@ -149,11 +152,17 @@ def _summarize_answers(rows: list[dict]) -> dict:
         "n_unanswerable": len(unanswerable),
         "f1": macro_average(answerable, "f1"),
         "f1_ci95": _ci(answerable, "f1"),
+        "f1_norm": macro_average(answerable, "f1_norm"),
+        "f1_norm_ci95": _ci(answerable, "f1_norm"),
+        "f1_either": macro_average(answerable, "f1_either"),
+        "f1_either_ci95": _ci(answerable, "f1_either"),
         "f1_generated": macro_average(answerable, "f1_generated"),
         "semantic": macro_average(answerable, "semantic"),
         "semantic_ci95": _ci(answerable, "semantic"),
         "content_f1": macro_average(answerable, "content_f1"),
         "exact_match": macro_average(answerable, "em"),
+        "exact_match_normalized": macro_average(answerable, "em_norm"),
+        "exact_match_normalized_ci95": _ci(answerable, "em_norm"),
         "abstention_accuracy": macro_average(rows, "abstention_correct"),
         "answerable_coverage": macro_average(answerable, "answered"),
         "unanswerable_abstention_rate": macro_average(unanswerable, "abstained_flag"),
@@ -194,9 +203,12 @@ def _score_answer(item: QAItem, result: AskResult, index: IndexStore) -> dict:
         row.update(
             {
                 "f1": 0.0,
+                "f1_norm": 0.0,
+                "f1_either": 0.0,
                 "f1_generated": 0.0,
                 "content_f1": 0.0,
                 "em": 0.0,
+                "em_norm": 0.0,
                 "citation_existence": None,
                 "citation_gold": None,
                 "raw_citation_existence": citation_existence_precision(result.raw_answer, known),
@@ -213,6 +225,10 @@ def _score_answer(item: QAItem, result: AskResult, index: IndexStore) -> dict:
     row.update(
         {
             "f1": token_f1(result.answer, item.answer, item.language),
+            "f1_norm": token_f1_normalized(result.answer, item.answer, item.language),
+            "f1_either": token_f1_either(
+                result.answer, item.answer, item.answer_en or item.answer, item.language
+            ),
             "f1_generated": (
                 token_f1(result.answer, item.answer, item.language)
                 if result.answer_mode == "generated"
@@ -220,6 +236,7 @@ def _score_answer(item: QAItem, result: AskResult, index: IndexStore) -> dict:
             ),
             "content_f1": token_f1(result.english_answer, item.answer_en or item.answer, "en"),
             "em": exact_match(result.answer, item.answer, item.language),
+            "em_norm": exact_match_normalized(result.answer, item.answer, item.language),
             "citation_existence": citation_existence_precision(result.answer, known),
             "citation_gold": citation_page_precision(result.answer, chunk_pages, item.gold_set()),
             "raw_citation_existence": citation_existence_precision(result.raw_answer, known),
@@ -361,6 +378,15 @@ def run_evaluation(
             generate(cfg, [{"role": "user", "content": "Reply with OK."}], cache=None)
             warmup_s = time.perf_counter() - started
             logger.info("Warmup %s took %.1f s", profile, warmup_s)
+            if cfg.llm.urdu_profile and cfg.llm.urdu_profile != cfg.llm.profile:
+                from mira.config import apply_profile
+
+                apply_profile(cfg, cfg.llm.urdu_profile)
+                logger.info("Warming up Urdu profile %s (%s)", cfg.llm.profile, cfg.llm.gguf_path)
+                started = time.perf_counter()
+                generate(cfg, [{"role": "user", "content": "Reply with OK."}], cache=None)
+                logger.info("Urdu warmup took %.1f s", time.perf_counter() - started)
+                apply_profile(cfg, profile)
         answer_summary: dict = {}
         latency: dict = {}
         semantic_rows: list[tuple] = []
@@ -368,6 +394,8 @@ def run_evaluation(
             answer_rows: list[tuple[QAItem, dict]] = []
             retrieve_times: list[float] = []
             generate_times: list[float] = []
+            generate_times_en: list[float] = []
+            generate_times_ur: list[float] = []
             e2e_times: list[float] = []
             if skip_generate:
                 continue
@@ -393,6 +421,10 @@ def run_evaluation(
                 retrieve_times.append(result.timings_ms.get("retrieve", 0.0))
                 if "generate" in result.timings_ms:
                     generate_times.append(result.timings_ms["generate"])
+                    if item.language == "ur":
+                        generate_times_ur.append(result.timings_ms["generate"])
+                    else:
+                        generate_times_en.append(result.timings_ms["generate"])
                 e2e_times.append(sum(result.timings_ms.values()))
                 predictions.append(
                     {
@@ -420,6 +452,8 @@ def run_evaluation(
                     "retrieve_mean_ms": (sum(retrieve_times) / len(retrieve_times)) if retrieve_times else None,
                     "generate_median_ms": _median(generate_times),
                     "generate_mean_ms": (sum(generate_times) / len(generate_times)) if generate_times else None,
+                    "generate_median_ms_en": _median(generate_times_en),
+                    "generate_median_ms_ur": _median(generate_times_ur),
                     "e2e_median_ms": _median(e2e_times),
                     "n_generated": len(generate_times),
                     "n_scored": len(answer_rows),

@@ -25,6 +25,9 @@ llm:
   # local-gguf | transformers | openai
   backend: local-gguf
   profile: quality
+  # Urdu questions are answered by the larger local model. English stays on profile.
+  urdu_profile: large
+  urdu_max_new_tokens: 96
   gguf_path: models/qwen2.5-1.5b-instruct-q4_k_m.gguf
   gguf_repo: Qwen/Qwen2.5-1.5B-Instruct-GGUF
   gguf_filename: qwen2.5-1.5b-instruct-q4_k_m.gguf

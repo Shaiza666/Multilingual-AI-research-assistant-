@@ -1,7 +1,17 @@
 import math
 
 from mira.evaluate import tune_threshold
-from mira.metrics import bootstrap_mean_ci, exact_match, ndcg_at_k, recall_at_k, reciprocal_rank, token_f1
+from mira.metrics import (
+    bootstrap_mean_ci,
+    exact_match,
+    exact_match_normalized,
+    ndcg_at_k,
+    recall_at_k,
+    reciprocal_rank,
+    token_f1,
+    token_f1_either,
+    token_f1_normalized,
+)
 
 
 def test_page_recall_mrr_and_ndcg():
@@ -24,6 +34,24 @@ def test_token_f1_and_exact_match():
     assert token_f1("the cat sat", "cat sat on", "en") == pytest_approx(0.8)
     assert exact_match("The Cat", "cat", "en") == 1.0
     assert token_f1("", "cat", "en") == 0.0
+
+
+def test_urdu_normalization_strips_frame_and_accepts_either_script():
+    framed = "انگریزی ماخذ کے مطابق: Multi-Index Semantic Hashing. [paper::p1::c0]"
+    gold = "Multi-Index Semantic Hashing"
+    raw = token_f1(framed, gold, "ur")
+    fair = token_f1_normalized(framed, gold, "ur")
+    assert fair > raw
+    assert exact_match_normalized(framed, gold, "ur") == 1.0
+    assert exact_match(framed, gold, "ur") == 0.0
+    urdu_gold = "بیچ نارملائزیشن موجودہ منی بیچ کا اوسط استعمال کرتی ہے۔"
+    english = "Batch normalization uses the mean of the current mini-batch."
+    either = token_f1_either(english, urdu_gold, "Batch normalization uses the mean of the current mini-batch.", "ur")
+    assert either == pytest_approx(1.0)
+    assert token_f1(english, urdu_gold, "ur") < either
+    year = "1950ء میں ایلن ٹورنگ نے ٹورنگ ٹیسٹ کی تجویز پیش کی۔"
+    assert token_f1(year, "1950", "ur") == 0.0
+    assert token_f1_normalized(year, "1950", "ur") > 0.0
 
 
 def test_gate_uses_the_gap_midpoint_and_stays_off_when_scores_overlap():

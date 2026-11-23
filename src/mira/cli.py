@@ -115,7 +115,7 @@ def build_parser() -> argparse.ArgumentParser:
     ask.add_argument("question")
     ask.add_argument("--index", default="data/indexes/benchmark")
     ask.add_argument("--config", default="configs/default.yaml")
-    ask.add_argument("--method", default="hybrid_translate_rerank")
+    ask.add_argument("--method", default="hybrid_rerank")
     ask.add_argument("--top-k", type=int, default=None)
     ask.add_argument("--thresholds", default=None)
     ask.add_argument("--no-gate", action="store_true")

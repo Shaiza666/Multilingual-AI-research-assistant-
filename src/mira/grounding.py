@@ -226,7 +226,8 @@ def best_extractive_sentence(
     for chunk_id, text in passages[:limit_chunks]:
         for sentence in split_sentences(text):
             tokens = content_tokens(sentence)
-            if len(tokens) < 6:
+            words = sentence.split()
+            if len(tokens) < 4 or len(words) > 45:
                 continue
             if is_question_echo(sentence, question):
                 continue
@@ -310,8 +311,8 @@ def ground_answer(
     kept: list[str] = []
     dropped: list[SentenceJudgement] = []
     for item in judgements:
-        if item.supported and item.best_chunk_id:
-            kept.append(f"{item.sentence} [{item.best_chunk_id}]")
+        if item.supported and item.best_chunk_id and not kept:
+            kept.append(f"{_clip_words(item.sentence, 28)} [{item.best_chunk_id}]")
         else:
             dropped.append(item)
     if not kept:
@@ -332,6 +333,13 @@ def ground_answer(
         judgements=judgements,
         dropped=dropped,
     )
+
+
+def _clip_words(text: str, limit: int) -> str:
+    words = text.split()
+    if len(words) <= limit:
+        return text.strip()
+    return " ".join(words[:limit]).rstrip(".,;:") + "."
 
 
 def _dot(left: list[float], right: list[float]) -> float:

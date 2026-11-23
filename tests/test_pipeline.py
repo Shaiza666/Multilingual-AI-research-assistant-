@@ -5,7 +5,7 @@ import numpy as np
 from mira.config import load_config
 from mira.grounding import ABSTAIN_TOKEN
 from mira.indexing import IndexStore
-from mira.pipeline import Runtime, ask
+from mira.pipeline import Runtime, _has_urdu_words, ask
 from mira.types import Chunk
 
 
@@ -78,3 +78,9 @@ def test_not_found_from_generator_abstains():
         runtime=Runtime(generate=lambda _messages: ABSTAIN_TOKEN),
     )
     assert result.abstained is True
+
+
+def test_latin_technical_terms_do_not_hide_urdu_words():
+    mixed = "BERT کا مخفف Bidirectional Encoder Representations from Transformers ہے۔"
+    assert _has_urdu_words(mixed) is True
+    assert _has_urdu_words("BERT stands for Bidirectional Encoder Representations from Transformers.") is False

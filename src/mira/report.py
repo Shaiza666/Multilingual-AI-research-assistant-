@@ -299,15 +299,37 @@ def write_report(metrics: dict, out_dir: Path) -> None:
                 )
             )
         lines.append("")
+        lines.append("Raw F1 and EM above are unchanged. The next table strips citations and the bilingual frame, then folds Urdu letters, digits, and punctuation. `F1 either` is the better of that score against the question-language reference and against the English reference. It is not a replacement for raw F1.")
+        lines.append("")
+        lines.append("| method | group | F1 norm | F1 norm 95% CI | EM norm | F1 either | F1 either 95% CI |")
+        lines.append("| --- | --- | ---: | --- | ---: | ---: | --- |")
+        for row in answer_rows:
+            if row["group"] not in {"all", "en", "ur", "urdu_doc"}:
+                continue
+            nci = row.get("f1_norm_ci95")
+            eci = row.get("f1_either_ci95")
+            lines.append(
+                "| {method} | {group} | {fn} | {nci} | {em} | {fe} | {eci} |".format(
+                    method=row["method"],
+                    group=row["group"],
+                    fn=_fmt(row.get("f1_norm")),
+                    nci="n/a" if not nci else f"{_fmt(nci[0])}–{_fmt(nci[1])}",
+                    em=_fmt(row.get("exact_match_normalized")),
+                    fe=_fmt(row.get("f1_either")),
+                    eci="n/a" if not eci else f"{_fmt(eci[0])}–{_fmt(eci[1])}",
+                )
+            )
+        lines.append("")
         lines.append("## Latency")
         lines.append("")
         lines.append("Retrieve times below are measured. A generate median near 0.1 ms means the draft was read from the generation cache, not that the model ran in a tenth of a millisecond.")
         lines.append("")
-        lines.append("| method | retrieve median ms | generate median ms | end-to-end median ms | generations |")
-        lines.append("| --- | ---: | ---: | ---: | ---: |")
+        lines.append("| method | retrieve median ms | generate median ms | English generate ms | Urdu generate ms | end-to-end median ms | generations |")
+        lines.append("| --- | ---: | ---: | ---: | ---: | ---: | ---: |")
         for row in latency_rows:
             lines.append(
                 f"| {row['method']} | {_fmt(row.get('retrieve_median_ms'), 1)} | {_fmt(row.get('generate_median_ms'), 1)} | "
+                f"{_fmt(row.get('generate_median_ms_en'), 1)} | {_fmt(row.get('generate_median_ms_ur'), 1)} | "
                 f"{_fmt(row.get('e2e_median_ms'), 1)} | {row.get('n_generated')} |"
             )
         lines.append("")

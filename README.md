@@ -34,7 +34,7 @@ flowchart LR
   Fuse --> Rerank[Cross-encoder rerank]
   Rerank --> Gate{Evidence gate}
   Gate -->|weak| Abstain[Abstain]
-  Gate -->|enough| LLM[Qwen2.5 0.5B Instruct]
+  Gate -->|enough| LLM[Qwen2.5 1.5B, or 3B for Urdu]
   LLM --> Ground[Drop unsupported sentences]
   Ground --> Lang[Translate the answer into Urdu when needed]
   Lang --> Out[Answer with document, page, and chunk ids]
@@ -97,75 +97,54 @@ A one-page original sample note, in English and Urdu, is at `data/samples/sample
 
 ## Measured results
 
-Two measured runs are reported. They are not the same question set, so the second is not a paired improvement on the first.
+Two runs of the same 104-question file are compared below. Both use the 14-question pilot only to set the evidence gate. The gate rule did not change: only hybrid reranking separates, at threshold −3.24, with pilot accuracy 1.0. Hardware for both runs: Intel Xeon, 4 logical CPUs at 2.4 GHz, 15.63 GiB RAM, Python 3.12.3, PyTorch 2.15.0+cpu. The later run had no exceptions.
 
-The earlier run used 3 papers and 32 test questions, Qwen2.5 0.5B, and a gate that sat on the lowest separable pilot score. Its best token F1 was 0.261 (hybrid). Hybrid plus reranking had Recall@5 0.917 but F1 0.184, answerable coverage 0.625, and citation page precision 0.144. Exact match was 0.000.
+The later run repairs the Urdu article after PDF extraction. NFKC folds Arabic presentation forms, and four extraction substitutions restore Urdu letters that the font map had replaced (`ڻ` to `ٹ`, the lam-alef clicks, and `Ȉ` to `ۂ`). Parentheses are swapped only in mostly Arabic text. The index was rebuilt: 658 chunks. Page Recall@5 for hybrid reranking is still 0.875 overall and 0.875 on the 8 questions about that article.
 
-The current run uses 9 papers, one Urdu article, 104 test questions, and 14 pilot questions. The index has 658 chunks. The gate uses the midpoint of a clean pilot gap, a repeated question is dropped, and a citation prefers the best-ranked supporting chunk. Hardware: Intel Xeon, 4 logical CPUs at 2.4 GHz, 15.63 GiB RAM, Python 3.12.3, PyTorch 2.15.0+cpu. No question raised an exception.
+Urdu questions are answered by Qwen2.5 3B Instruct Q4. English questions stay on Qwen2.5 1.5B Instruct Q4. The prompt asks for one short sentence and tells the model to keep names and numbers in Latin script. A sentence that already contains Urdu words is kept even when the Latin terms are longer. If the draft is still English, `opus-mt-en-ur` translates it with those terms masked and then restored. On this run, 12 of the 52 Urdu questions still kept the English sentence because that translation failed the name check. A separate NLLB model was not part of this measured run.
 
-### Retrieval
+Raw token F1 is the same whitespace overlap as before. Normalized F1 splits digits from attached Urdu letters, so `1950ء` can match `1950`, and it drops citations and the bilingual frame. `F1 either` is the better normalized F1 against the question-language reference or the English reference. Raw F1 is still reported.
 
-95% bootstrap intervals are on the all-question Recall@5.
+### Urdu answers, hybrid reranking, 52 Urdu questions
 
-| method | Recall@5 | 95% CI | English | Urdu | MRR | nDCG@5 |
-| --- | ---: | --- | ---: | ---: | ---: | ---: |
-| bm25 | 0.398 | 0.307–0.511 | 0.591 | 0.205 | 0.244 | 0.275 |
-| dense | 0.727 | 0.636–0.818 | 0.818 | 0.636 | 0.527 | 0.575 |
-| hybrid | 0.648 | 0.545–0.750 | 0.727 | 0.568 | 0.434 | 0.481 |
-| hybrid_rerank | 0.875 | 0.807–0.943 | 0.932 | 0.818 | 0.734 | 0.772 |
-| hybrid_translate | 0.648 | 0.557–0.750 | 0.727 | 0.568 | 0.431 | 0.480 |
-| hybrid_translate_rerank | 0.784 | 0.693–0.864 | 0.932 | 0.636 | 0.641 | 0.670 |
-
-![Retrieval metrics](results/figures/retrieval_metrics.png)
-
-![Recall by language](results/figures/retrieval_by_language.png)
-
-Hybrid plus reranking is the best retriever. English Recall@5 ties it with translated-and-reranked hybrid at 0.932. Urdu Recall@5 is 0.818 after reranking, 0.636 for dense retrieval, and 0.205 for BM25L. On the 8 questions about the Urdu article, hybrid plus reranking has Recall@5 0.875, so keyword search is no longer the only way to hit Urdu text, but BM25L does reach 0.500 there, against 0.205 on Urdu questions overall. Paraphrase Recall@5 is 0.364 for BM25L, 0.659 for dense retrieval, and 0.841 after reranking. Urdu-to-English query translation does not beat reranking the original question (Urdu Recall@5 0.568 versus 0.818).
-
-Only the reranker had a clean gap on the 14-question pilot, so only that gate is enabled. Its threshold is −3.24, the midpoint between the strongest unanswerable pilot logit and the weakest answerable one. On the test set that gate keeps answerable coverage at 0.943 and abstains on 0.938 of unanswerable questions.
-
-### Answers with Qwen2.5 1.5B
-
-This is the default `quality` profile. Exact match is 0.000 for every method: the references are short facts, and the drafts add framing words. Semantic score is the multilingual embedding cosine; abstention scores 0. Token F1 still scores an abstention on an answerable question as 0.
-
-| method | F1 | 95% CI | English | Urdu | semantic | generated-only F1 | citation page precision | abstention accuracy |
+| | raw F1 | 95% CI | normalized F1 | semantic | exact match | normalized EM | citation page precision | abstention accuracy |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| bm25 | 0.110 | 0.072–0.154 | 0.198 | 0.022 | 0.408 | 0.110 | 0.329 | 0.500 |
-| dense | 0.201 | 0.157–0.246 | 0.319 | 0.084 | 0.838 | 0.183 | 0.471 | 0.875 |
-| hybrid | 0.189 | 0.148–0.233 | 0.305 | 0.072 | 0.839 | 0.171 | 0.385 | 0.837 |
-| hybrid_rerank | 0.217 | 0.174–0.264 | 0.360 | 0.074 | 0.817 | 0.194 | 0.669 | 0.942 |
-| hybrid_translate | 0.180 | 0.139–0.226 | 0.305 | 0.056 | 0.839 | 0.163 | 0.397 | 0.837 |
-| hybrid_translate_rerank | 0.205 | 0.158–0.254 | 0.362 | 0.048 | 0.799 | 0.187 | 0.571 | 0.808 |
+| Previous run, 1.5B for every question | 0.074 | 0.049–0.099 | — | 0.787 | 0.000 | — | 0.585 | 0.923 |
+| This run, 3B for Urdu questions | 0.125 | 0.079–0.179 | 0.183 | 0.779 | 0.000 | 0.000 | 0.525 | 0.904 |
 
-![Answer F1](results/figures/answer_f1.png)
+The raw-F1 intervals overlap. The point estimate rose from 0.074 to 0.125. Normalized F1 on this run is 0.183 (95% CI 0.122–0.255). `F1 either` is 0.219 (95% CI 0.158–0.287). Semantic cosine moved from 0.787 to 0.779. Exact match is still 0.000: the references are short phrases and the answers are sentences. Citation page precision fell from 0.585 to 0.525. Answerable coverage is 0.909, and 0.875 of Urdu unanswerable questions are refused.
 
-![Abstention](results/figures/abstention.png)
+On the 8 questions about the Urdu article, raw F1 moved from 0.105 (95% CI 0.051–0.160) to 0.216 (95% CI 0.111–0.337). Normalized F1 there is 0.338 (95% CI 0.198–0.484). Citation page precision on that slice is 1.000. Recall@5 is unchanged at 0.875, so the gain is in the text and the answer, not in finding a different page.
 
-On this set the best retriever is also the best end-to-end system. Hybrid plus reranking has the highest F1 (0.217), the highest abstention accuracy (0.942), and citation page precision 0.669. On the earlier 32-question run that same method's citation page precision was 0.144, because the citation was attached to the chunk with the largest overlap rather than the best-ranked supporting chunk, and the gate refused too many answerable questions (coverage 0.625). Generated-only F1 for hybrid plus reranking is 0.194, so the retrieved-sentence fallback adds a small amount on top of the draft.
+Two answers from this run: `BERT کا مخفف Bidirectional Encoder Representations from Transformers ہے۔` with citation `N19-1423::p1::c0` (raw F1 0.556, normalized F1 0.714), and `1950ء میں ایلن ٹورنگ نے ٹورنگ ٹیسٹ کی تجویز پیش کی۔` with citation `urdu-ai::p1::c1`. The second contains the gold year, but raw F1 is 0.000 because `1950ء` is one whitespace token. Normalized F1 treats the year as `1950`.
 
-Urdu token F1 stays low (0.074 for the best retriever, 0.084 for dense retrieval). The semantic score on those same Urdu answers is 0.787 for hybrid plus reranking. Many Urdu answers keep the English source sentence inside an Urdu frame when the translation model does not preserve names and numbers, so token overlap with a translated reference is small while the embedding still sees the fact. An English success is "BERT stands for Bidirectional Encoder Representations from Transformers" with citation `N19-1423::p1::c0` (token F1 0.588, semantic cosine 0.900). The unanswerable photosynthesis question is refused.
+### All 104 questions, hybrid reranking
 
-English questions about the Urdu article are not solved reliably: the Turing-test year question was refused under hybrid plus reranking. On the 8-question Urdu-article slice, that method's Recall@5 is 0.875, token F1 is 0.105, and citation page precision is 1.000.
+| | raw F1 | 95% CI | English F1 | Urdu F1 | semantic | citation page precision |
+| --- | ---: | --- | ---: | ---: | ---: | ---: |
+| Previous run | 0.217 | 0.174–0.264 | 0.360 | 0.074 | 0.817 | 0.669 |
+| This run | 0.228 | 0.184–0.272 | 0.331 | 0.125 | 0.808 | 0.646 |
 
-### Model size
+English raw F1 is lower (0.331, 95% CI 0.264–0.392) after the shorter prompt. Normalized exact match on all 104 questions is 0.023, and on English questions it is 0.045. Raw exact match remains 0.000.
 
-Same retrieval, full 104-question answers. The scoring pass reused cached drafts, so the generate column in `results/latency.csv` (about 0.1 ms) is a cache hit and is not model speed. Retrieval medians in that file are real: BM25L 0.9 ms, dense 8.3 ms, hybrid 9.8 ms, hybrid plus reranking 523 ms.
+Urdu raw F1 by retriever on this run: BM25L 0.060, dense 0.130, hybrid 0.074, hybrid rerank 0.125, translated hybrid 0.069, translated hybrid plus rerank 0.114. Dense retrieval has the higher Urdu semantic score, 0.851 against 0.779 after reranking.
 
-A separate cold sample, cache disabled, used hybrid plus reranking on three questions that actually called the model (BERT expansion, MISH expansion, the Urdu MISH question) after one short warmup prompt. The COVID-19 question was refused by the gate and did not call the model.
+### Latency on this run
 
-| profile | parameters | F1 | English F1 | Urdu F1 | semantic | citation page precision | cold generate median (n=3) |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| fast | 0.5B Q4 | 0.159 | 0.279 | 0.039 | 0.806 | 0.623 | 3.69 s |
-| quality | 1.5B Q4 | 0.217 | 0.360 | 0.074 | 0.817 | 0.669 | 5.92 s |
-| large | 3B Q4 | 0.203 | 0.292 | 0.113 | 0.814 | 0.620 | 11.0 s |
+Generation times below are from the uncached pass. English questions use the 1.5B model and Urdu questions use the 3B model. Hybrid reranking, 84 generations:
 
-The three 0.5B calls took 4.65 s, 3.36 s, and 3.69 s. The three 1.5B calls took 5.92 s, 4.87 s, and 77.9 s. The 77.9 s call is the Urdu question while the Streamlit process was also loading models; the other two 1.5B calls were 4.9–5.9 s. The three 3B calls took 11.4 s, 9.31 s, and 11.0 s. The first 3B call after loading that file, a one-line warmup, took 84.1 s and is not in the median. On this sample the 0.5B and 1.5B English answers were "BERT stands for Bidirectional Encoder Representations from Transformers" and "MISH stands for Multi-Index Semantic Hashing". The 3B Urdu answer was "MISH کا مخفف Semantic Hashing ہے", which drops "Multi-Index".
+| | median |
+| --- | ---: |
+| Retrieve | 564 ms |
+| Generate, English | 6.45 s |
+| Generate, Urdu | 14.7 s |
+| End to end | 8.12 s |
+
+The Urdu model costs about 8.3 seconds more per generated answer than the English model on this machine. The first load of each file is not in those medians; the 1.5B warmup was 0.5 seconds because the file was already in the page cache. `hybrid_translate` English generate times in `results/latency.csv` are near 0.1 ms because those English prompts matched an earlier method and were read from the cache. They are not a generation speed.
+
+Full tables are in [results/RESULTS.md](results/RESULTS.md).
 
 ![Retrieval latency](results/figures/latency.png)
-
-1.5B has the best overall F1. 3B has the best Urdu token F1 (0.113) and its cold sample median is 11.0 s. 0.5B is the fast option. Full tables are in [results/RESULTS.md](results/RESULTS.md). Row-level outputs are in `results/predictions.jsonl`.
-
-Screenshots of the running app:
 
 ![Ask](docs/screenshots/ask.png)
 
@@ -173,12 +152,15 @@ Screenshots of the running app:
 
 ![Urdu answer](docs/screenshots/answer-ur.png)
 
+![Urdu answer about the Turing test](docs/screenshots/answer-ur-turing.png)
+
 ![Measured results](docs/screenshots/results.png)
 
 ## Limitations
 
-- Urdu questions are translations. Token F1 in Urdu stays under 0.12 even with the 3B model. The Marian English-to-Urdu model often fails to keep technical names, so many answers stay bilingual rather than fully Urdu.
-- Exact match is 0. The drafts add words around a short reference, which semantic cosine counts and exact match does not.
+
+- Urdu questions are translations. Raw Urdu F1 on this run is 0.125, and the 95% interval still overlaps the previous run. Twelve Urdu answers kept an English sentence because `opus-mt-en-ur` failed the name check. A separate NLLB model was not measured.
+- Raw exact match is 0.000. Normalized exact match is 0.023. The drafts are sentences around a short reference.
 - Gold pages are the annotated pages. A later page that repeats the fact still counts as a citation miss.
 - The evidence gate is fit on 14 pilot questions. Only the reranker separated answerable from unanswerable items, so the other methods do not abstain before generation. Hybrid retrieval's unanswerable abstention rate is 0.000.
 - The cross-encoder was not trained on Urdu. Its Urdu Recall@5 of 0.818 is specific to this set.

@@ -19,13 +19,15 @@ from mira.grounding import ABSTAIN_TOKEN
 
 logger = logging.getLogger("mira.generate")
 
-PROMPT_VERSION = "mira-prompt-v2"
+PROMPT_VERSION = "mira-prompt-v3"
 
 _SYSTEM = (
     "You answer questions about research papers using only the passages. "
     f"If the passages do not contain the answer, reply with exactly {ABSTAIN_TOKEN}. "
-    "Answer in the same language as the question. "
-    "Do not repeat or translate the question. State the fact the question asks for. "
+    "Answer in the same language as the question, in one short sentence. "
+    "Keep person names, dataset names, model names, numbers, and technical terms "
+    "in Latin script exactly as they appear in the passages. "
+    "Do not repeat or translate the question. "
     "After the answer, cite one passage id in square brackets. "
     "Do not use knowledge that is not in the passages."
 )
@@ -36,14 +38,12 @@ def build_messages(question: str, language: str, passages: list[tuple[str, str]]
     if language == "ur":
         example_user = (
             "Passages:\n"
-            "[demo::p1::c0] Batch normalization normalizes layer inputs using the mean and variance of the current mini-batch.\n\n"
-            "Question (Urdu): بیچ نارملائزیشن کون سے اعداد و شمار استعمال کرتی ہے؟\n\n"
-            f"Write the fact in Urdu. Do not repeat the question. Cite one passage id. "
-            f"If the answer is not in the passages, reply {ABSTAIN_TOKEN}."
+            "[demo::p1::c0] ALFA stands for Aligned Latent Factor Averaging and uses a learning rate of 0.005.\n\n"
+            "Question (Urdu): ALFA کس کا مخفف ہے اور لرننگ ریٹ کیا ہے؟\n\n"
+            "Write one short Urdu sentence. Keep names and numbers in Latin script. "
+            f"Cite one passage id. If the answer is missing, reply {ABSTAIN_TOKEN}."
         )
-        example_assistant = (
-            "بیچ نارملائزیشن موجودہ منی بیچ کا اوسط اور ویریئنس استعمال کرتی ہے۔ [demo::p1::c0]"
-        )
+        example_assistant = "ALFA کا مطلب Aligned Latent Factor Averaging ہے اور لرننگ ریٹ 0.005 ہے۔ [demo::p1::c0]"
     else:
         example_user = (
             "Passages:\n"
@@ -60,7 +60,8 @@ def build_messages(question: str, language: str, passages: list[tuple[str, str]]
         "Passages:\n"
         + "\n\n".join(blocks)
         + f"\n\nQuestion ({lang_name}): {question}\n\n"
-        + f"Write a short answer in {lang_name}. Do not repeat the question. Cite one passage id. "
+        + f"Write one short sentence in {lang_name}, at most 20 words. "
+        + "Keep names and numbers in Latin script. Do not repeat the question. Cite one passage id. "
         + f"If the answer is not in the passages, reply {ABSTAIN_TOKEN}."
     )
     return [

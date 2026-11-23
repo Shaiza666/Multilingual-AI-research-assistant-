@@ -15,7 +15,7 @@ import math
 import re
 from collections import Counter
 
-from mira.textnorm import normalize_for_index
+from mira.textnorm import normalize_for_index, tokenize
 
 _PUNCT = re.compile(r"[^\w\s\u0600-\u06ff]+", re.UNICODE)
 _EN_ARTICLES = frozenset({"a", "an", "the"})
@@ -97,6 +97,63 @@ def token_f1(prediction: str, gold: str, language: str) -> float:
 
 def exact_match(prediction: str, gold: str, language: str) -> float:
     return 1.0 if normalize_answer(prediction, language) == normalize_answer(gold, language) else 0.0
+
+
+_CITE = re.compile(r"\[[A-Za-z0-9.\-]+::p\d+::c\d+\]")
+_BILINGUAL_FRAME = "انگریزی ماخذ کے مطابق"
+
+
+def normalize_answer_fair(text: str, language: str) -> str:
+    """Urdu-aware normalization for the separate F1 and exact match.
+
+    Citations and the bilingual frame are removed. Digits are split from
+    attached Urdu letters, so ``1950ء`` matches ``1950``. Raw token F1 does
+    not use this split.
+    """
+    stripped = _CITE.sub(" ", text or "")
+    stripped = stripped.replace(_BILINGUAL_FRAME, " ")
+    tokens = tokenize(stripped)
+    if language == "en":
+        tokens = [tok for tok in tokens if tok not in _EN_ARTICLES]
+    return " ".join(tokens)
+
+
+def token_f1_normalized(prediction: str, gold: str, language: str) -> float:
+    pred_tokens = normalize_answer_fair(prediction, language).split()
+    gold_tokens = normalize_answer_fair(gold, language).split()
+    if not pred_tokens and not gold_tokens:
+        return 1.0
+    if not pred_tokens or not gold_tokens:
+        return 0.0
+    common = Counter(pred_tokens) & Counter(gold_tokens)
+    overlap = sum(common.values())
+    if overlap == 0:
+        return 0.0
+    precision = overlap / len(pred_tokens)
+    recall = overlap / len(gold_tokens)
+    return 2 * precision * recall / (precision + recall)
+
+
+def exact_match_normalized(prediction: str, gold: str, language: str) -> float:
+    return 1.0 if normalize_answer_fair(prediction, language) == normalize_answer_fair(gold, language) else 0.0
+
+
+def token_f1_either(prediction: str, gold: str, gold_en: str, language: str) -> float:
+    """Best normalized F1 against the question-language gold or the English gold.
+
+    This is a separate score. It credits an English technical term when the
+    Urdu reference is that same term in Latin script, and the reverse. Raw
+    token F1 is not changed.
+    """
+    primary = token_f1_normalized(prediction, gold, language)
+    other = (gold_en or "").strip()
+    if not other:
+        return primary
+    alternate = max(
+        token_f1_normalized(prediction, other, "en"),
+        token_f1_normalized(prediction, other, language),
+    )
+    return max(primary, alternate)
 
 
 def mean(values: list[float]) -> float | None:

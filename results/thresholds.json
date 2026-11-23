@@ -7,64 +7,64 @@
     "rule": "disabled",
     "n": 14,
     "gap": [
-      174.48663044318886,
-      39.71233522554102
+      174.78419477752746,
+      39.71158967817368
     ],
     "pilot_scores": [
       {
-        "score": 40.23484080719468,
+        "score": 40.23388199595852,
         "answerable": true
       },
       {
-        "score": 134.36802021431643,
+        "score": 134.56285398270978,
         "answerable": true
       },
       {
-        "score": 111.47057326795871,
+        "score": 111.4680344024169,
         "answerable": true
       },
       {
-        "score": 86.44895710780584,
+        "score": 87.11282364599036,
         "answerable": true
       },
       {
-        "score": 52.00416313289048,
+        "score": 52.00245882166498,
         "answerable": true
       },
       {
-        "score": 182.0580553451258,
+        "score": 183.03948913047665,
         "answerable": true
       },
       {
-        "score": 20.512010082929308,
+        "score": 20.511388963828352,
         "answerable": false
       },
       {
-        "score": 174.48663044318886,
+        "score": 174.78419477752746,
         "answerable": false
       },
       {
-        "score": 39.71233522554102,
+        "score": 39.71158967817368,
         "answerable": true
       },
       {
-        "score": 84.46248168798223,
+        "score": 84.62604648740883,
         "answerable": true
       },
       {
-        "score": 82.6184162237816,
+        "score": 82.61642445061868,
         "answerable": true
       },
       {
-        "score": 126.8827190528789,
+        "score": 127.08398396212108,
         "answerable": true
       },
       {
-        "score": 20.512010082929308,
+        "score": 20.511388963828352,
         "answerable": false
       },
       {
-        "score": 93.41031708864568,
+        "score": 93.59934948712987,
         "answerable": false
       }
     ]
@@ -78,7 +78,7 @@
     "n": 14,
     "gap": [
       0.794262170791626,
-      0.7923546433448792
+      0.790054976940155
     ],
     "pilot_scores": [
       {
@@ -94,7 +94,7 @@
         "answerable": true
       },
       {
-        "score": 0.7923546433448792,
+        "score": 0.790054976940155,
         "answerable": true
       },
       {
@@ -147,8 +147,8 @@
     "rule": "disabled",
     "n": 14,
     "gap": [
-      0.02821869488536155,
-      0.02804284323271665
+      0.02928692699490662,
+      0.025625000000000002
     ],
     "pilot_scores": [
       {
@@ -164,7 +164,7 @@
         "answerable": true
       },
       {
-        "score": 0.032266458495966696,
+        "score": 0.0315136476426799,
         "answerable": true
       },
       {
@@ -172,7 +172,7 @@
         "answerable": true
       },
       {
-        "score": 0.02804284323271665,
+        "score": 0.025625000000000002,
         "answerable": true
       },
       {
@@ -180,7 +180,7 @@
         "answerable": false
       },
       {
-        "score": 0.02821869488536155,
+        "score": 0.026151315789473682,
         "answerable": false
       },
       {
@@ -204,7 +204,7 @@
         "answerable": false
       },
       {
-        "score": 0.02623004235907462,
+        "score": 0.02928692699490662,
         "answerable": false
       }
     ]
@@ -296,7 +296,7 @@
         "answerable": true
       },
       {
-        "score": 0.04067318449340921,
+        "score": 0.0408008658008658,
         "answerable": true
       },
       {
@@ -304,7 +304,7 @@
         "answerable": true
       },
       {
-        "score": 0.03971066632658997,
+        "score": 0.0395601092654638,
         "answerable": true
       },
       {
@@ -366,7 +366,7 @@
         "answerable": true
       },
       {
-        "score": -6.704946517944336,
+        "score": -6.494717121124268,
         "answerable": true
       },
       {

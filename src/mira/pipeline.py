@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import re
 import time
 from dataclasses import dataclass, field
 
-from mira.config import Config
+from mira.config import Config, apply_profile
 from mira.generate import GenerationCache, build_messages, fit_passages, generate
 from mira.grounding import GroundingResult, best_extractive_sentence, ground_answer, parse_citation_ids
 from mira.indexing import IndexStore
@@ -46,6 +47,7 @@ class AskResult:
     warnings: list[str] = field(default_factory=list)
     cache_hit: bool = False
     answer_mode: str = "abstain"
+    model_path: str = ""
 
     def to_dict(self) -> dict:
         return {
@@ -66,6 +68,7 @@ class AskResult:
             "warnings": self.warnings,
             "cache_hit": self.cache_hit,
             "answer_mode": self.answer_mode,
+            "model_path": self.model_path,
         }
 
 
@@ -220,10 +223,11 @@ def ask(
     messages = build_messages(question, language, passages)
     started = time.perf_counter()
     cache_hit = False
+    model_path = cfg.llm.gguf_path
     if runtime.generate is not None:
         raw = runtime.generate(messages)
     else:
-        raw, cache_hit = generate(cfg, messages, cache)
+        raw, cache_hit, model_path = _generate_routed(cfg, language, messages, cache)
     timings["generate"] = (time.perf_counter() - started) * 1000
 
     passage_map = {item.chunk.chunk_id: item.chunk.text for item in retrieved}
@@ -284,7 +288,7 @@ def ask(
         warnings.append(f"Draft was not usable; showing a retrieved sentence (cosine {support:.2f}).")
 
     final = english_answer
-    if language == "ur" and detect_language(strip_for_language(final)) != "ur":
+    if language == "ur" and not _has_urdu_words(strip_for_language(final)):
         final = _bilingual_urdu(english_answer, runtime, warnings, timings)
     return AskResult(
         question=question,
@@ -304,7 +308,37 @@ def ask(
         timings_ms=timings,
         warnings=warnings,
         cache_hit=cache_hit,
+        model_path=model_path,
     )
+
+
+def _generate_routed(cfg: Config, language: str, messages: list[dict], cache: GenerationCache | None):
+    """Use the Urdu profile for Urdu questions and restore the caller's model."""
+    saved = (
+        cfg.llm.profile,
+        cfg.llm.gguf_path,
+        cfg.llm.gguf_repo,
+        cfg.llm.gguf_filename,
+        cfg.llm.max_new_tokens,
+    )
+    try:
+        if language == "ur" and cfg.llm.urdu_profile:
+            apply_profile(cfg, cfg.llm.urdu_profile)
+            cfg.llm.max_new_tokens = min(saved[4], cfg.llm.urdu_max_new_tokens or saved[4])
+        elif language == "ur":
+            cfg.llm.max_new_tokens = min(saved[4], cfg.llm.urdu_max_new_tokens or saved[4])
+        text, hit = generate(cfg, messages, cache)
+        return text, hit, cfg.llm.gguf_path
+    finally:
+        cfg.llm.profile, cfg.llm.gguf_path, cfg.llm.gguf_repo, cfg.llm.gguf_filename, cfg.llm.max_new_tokens = saved
+
+
+def _has_urdu_words(text: str) -> bool:
+    """True when the answer uses Urdu words, even if Latin terms outnumber them."""
+    from mira.textnorm import tokenize
+
+    urdu_tokens = [tok for tok in tokenize(text) if any("\u0600" <= ch <= "\u06ff" for ch in tok)]
+    return len(urdu_tokens) >= 2
 
 
 def strip_for_language(text: str) -> str:
@@ -328,6 +362,27 @@ def _translation_ok(source: str, translated: str) -> bool:
     lowered = translated.lower()
     kept = sum(1 for token in tokens if token.lower() in lowered)
     return kept / len(tokens) >= 0.34
+
+
+_TERM = re.compile(r"[A-Za-z][A-Za-z0-9.+-]{1,}|\d[\d.,%]*")
+
+
+def protect_latin_terms(text: str) -> tuple[str, list[str]]:
+    """Hide Latin names and numbers so a translator cannot drop them."""
+    terms: list[str] = []
+
+    def _replace(match) -> str:
+        terms.append(match.group(0))
+        return f" XX{len(terms) - 1} "
+
+    return _TERM.sub(_replace, text), terms
+
+
+def restore_latin_terms(text: str, terms: list[str]) -> str:
+    restored = text
+    for index, term in enumerate(terms):
+        restored = restored.replace(f"XX{index}", term)
+    return restored
 
 
 def _bilingual_urdu(english_answer: str, runtime: Runtime, warnings: list[str], timings: dict[str, float]) -> str:
@@ -362,7 +417,8 @@ def _translate_preserving_citations(text: str, translate) -> str:
         if detect_language(bare) == "ur":
             translated = bare
         else:
-            translated = translate(bare, "en-ur").strip()
+            protected, terms = protect_latin_terms(bare)
+            translated = restore_latin_terms(translate(protected, "en-ur").strip(), terms)
         if cites:
             translated = translated.rstrip() + " " + " ".join(f"[{cid}]" for cid in cites)
         pieces.append(translated)

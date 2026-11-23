@@ -110,10 +110,36 @@ def _fold_digits(text: str) -> str:
     return "".join(chars)
 
 
+# PDF text extraction sometimes emits Arabic presentation forms and, for the
+# Naskh font used by the Urdu article, a few Urdu letters as unrelated code points.
+# NFKC folds the presentation forms. The pairs below repair the remaining ones.
+_PDF_URDU_REPAIRS = (
+    ("\u01c0\u061d", "لا"),  # lam-alef extracted as a click plus end-of-text
+    ("\u01c2", "لا"),  # lam-alef extracted as a click
+    ("\u06bb", "\u0679"),  # Urdu tteh extracted as noon ghunna
+    ("\u0208", "\u06c2"),  # heh-goal with hamza extracted as a Latin I
+)
+
+
+def repair_urdu_pdf_text(text: str) -> str:
+    """Map known bad PDF code points back to Urdu letters.
+
+    Parentheses are swapped only when the string is mostly Arabic script,
+    because a right-to-left text run reverses them.
+    """
+    for source, target in _PDF_URDU_REPAIRS:
+        text = text.replace(source, target)
+    latin, arabic = script_counts(text)
+    if arabic > latin and arabic >= 8:
+        text = text.translate(str.maketrans("()", ")("))
+    return text
+
+
 def normalize_display(text: str) -> str:
     """Clean text for storage and display without folding Urdu letters."""
     # NFKC turns Arabic presentation forms from PDF extraction back into letters.
     text = unicodedata.normalize("NFKC", text)
+    text = repair_urdu_pdf_text(text)
     text = text.replace("\u00ad", "")
     text = text.replace("\xa0", " ")
     text = _BIDI.sub("", text)
