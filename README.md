@@ -1,5 +1,7 @@
 # Multilingual AI Research Assistant
 
+[![CI](https://github.com/Shaiza666/Multilingual-AI-research-assistant-/actions/workflows/ci.yml/badge.svg)](https://github.com/Shaiza666/Multilingual-AI-research-assistant-/actions/workflows/ci.yml)
+
 Author: Shaiza Asghar ([Shaiza666](https://github.com/Shaiza666))
 
 MIRA answers questions about research PDFs in English or Urdu. It retrieves a page-aware passage, drafts an answer with a small local instruct model, and keeps a sentence only when that passage supports it. If the evidence is weak, it says the answer is not in the indexed documents.
@@ -97,11 +99,28 @@ python -m mira.cli ingest data/papers/pdf --index data/indexes/benchmark
 python -m mira.cli ask "What does MISH stand for?" --method hybrid_rerank
 python -m mira.cli ask "MISH کس کا مخفف ہے؟" --method hybrid_rerank
 python -m mira.cli evaluate --profiles fast quality large --out results
-pytest
+pytest -q
 streamlit run src/mira/app.py --server.port 8741
 ```
 
-`make install`, `make download-models`, `make download-papers`, `make ingest`, `make evaluate`, `make test`, and `make app` wrap the same steps.
+`make install`, `make download-models`, `make download-papers`, `make ingest`, `make evaluate`, `make test`, `make lint`, and `make app` wrap the same steps.
+
+## Tests
+
+The offline suite skips tests marked `models`. Those tests need GGUF weights, a Hugging Face download, or network access. CI runs this suite on CPU and does not download models:
+
+```bash
+PYTHONPATH=src pytest -q -m "not models"
+ruff check src tests
+```
+
+The full suite also runs any tests marked `models`:
+
+```bash
+PYTHONPATH=src pytest -q
+```
+
+`make test` runs the full suite. `make lint` runs the same ruff check.
 
 To use an OpenAI-compatible server instead of the local GGUF model:
 

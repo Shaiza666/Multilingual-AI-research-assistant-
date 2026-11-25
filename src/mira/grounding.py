@@ -97,9 +97,7 @@ def is_question_echo(sentence: str, question: str) -> bool:
     ques_lang = "ur" if detect_language(question) == "ur" else "en"
     ns = normalize_answer(sentence, sent_lang)
     nq = normalize_answer(question, ques_lang)
-    if ns and nq and (ns == nq or ns in nq or (nq in ns and len(ns.split()) <= len(nq.split()) + 2)):
-        return True
-    return False
+    return bool(ns and nq and (ns == nq or ns in nq or (nq in ns and len(ns.split()) <= len(nq.split()) + 2)))
 
 
 def lexical_support(claim: str, evidence: str) -> float:
@@ -114,9 +112,7 @@ def lexical_support(claim: str, evidence: str) -> float:
 def is_supported(lexical: float, embedding: float | None, lexical_threshold: float, embedding_threshold: float) -> bool:
     if lexical >= lexical_threshold:
         return True
-    if embedding is not None and embedding >= embedding_threshold:
-        return True
-    return False
+    return embedding is not None and embedding >= embedding_threshold
 
 
 def strip_citations(text: str) -> str:

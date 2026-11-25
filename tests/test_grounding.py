@@ -2,7 +2,6 @@ from mira.grounding import (
     citation_existence_precision,
     citation_page_precision,
     ground_answer,
-    is_question_echo,
     is_supported,
     lexical_support,
 )

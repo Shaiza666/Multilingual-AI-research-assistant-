@@ -41,7 +41,7 @@ class IndexStore:
         )
 
     @classmethod
-    def load(cls, directory: str | Path) -> "IndexStore":
+    def load(cls, directory: str | Path) -> IndexStore:
         path = Path(directory)
         chunks_path = path / "chunks.jsonl"
         meta_path = path / "meta.json"

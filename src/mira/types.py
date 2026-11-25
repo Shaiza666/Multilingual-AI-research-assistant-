@@ -18,7 +18,7 @@ class Chunk:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Chunk":
+    def from_dict(cls, data: dict) -> Chunk:
         return cls(
             chunk_id=str(data["chunk_id"]),
             doc_id=str(data["doc_id"]),

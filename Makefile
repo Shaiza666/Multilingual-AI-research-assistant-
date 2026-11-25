@@ -3,7 +3,7 @@ PIP ?= .venv/bin/pip
 export PYTHONPATH := src:$(PYTHONPATH)
 export TOKENIZERS_PARALLELISM := false
 
-.PHONY: install download-models download-papers ingest evaluate test app sample hardware
+.PHONY: install download-models download-papers ingest evaluate test lint app sample hardware
 
 install:
 	python3 -m venv .venv
@@ -28,7 +28,10 @@ evaluate:
 	$(PYTHON) -m mira.cli evaluate --index data/indexes/benchmark --gold data/qa/gold.json --pilot data/qa/pilot.json --out results
 
 test:
-	$(PYTHON) -m pytest
+	$(PYTHON) -m pytest -q
+
+lint:
+	$(PYTHON) -m ruff check src tests
 
 app:
 	$(PYTHON) -m streamlit run src/mira/app.py --server.port 8741 --server.address 127.0.0.1

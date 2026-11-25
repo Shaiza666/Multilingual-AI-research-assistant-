@@ -393,7 +393,7 @@ def _bilingual_urdu(english_answer: str, runtime: Runtime, warnings: list[str], 
         started = time.perf_counter()
         try:
             translated = _translate_preserving_citations(english_answer, runtime.translate)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             warnings.append(f"Urdu answer translation failed ({exc}).")
         timings["translate_answer"] = (time.perf_counter() - started) * 1000
     if translated and _translation_ok(english_answer, translated):

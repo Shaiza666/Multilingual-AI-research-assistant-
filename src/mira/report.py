@@ -68,7 +68,6 @@ def _latency_chart(path: Path, methods: list[str], retrieve: list[float | None],
 
     x = np.arange(len(methods))
     fig, ax = plt.subplots(figsize=(10, 4.8))
-    width = 0.36
     ax.bar(x, [0 if v is None else v for v in retrieve], width=0.6, label="retrieve median", color="#1F4E79")
     ax.set_xticks(x, methods, rotation=20, ha="right")
     ax.set_ylabel("milliseconds")
